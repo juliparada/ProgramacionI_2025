@@ -1,0 +1,10 @@
+C:\Users\yeimy\Desktop\ProgramacionI_2025\ProyectodeCalculadora\ProyectodeCalculadora\bin\Debug\ProyectodeCalculadora.exe.config
+C:\Users\yeimy\Desktop\ProgramacionI_2025\ProyectodeCalculadora\ProyectodeCalculadora\bin\Debug\ProyectodeCalculadora.exe
+C:\Users\yeimy\Desktop\ProgramacionI_2025\ProyectodeCalculadora\ProyectodeCalculadora\bin\Debug\ProyectodeCalculadora.pdb
+C:\Users\yeimy\Desktop\ProgramacionI_2025\ProyectodeCalculadora\ProyectodeCalculadora\obj\Debug\ProyectodeCalculadora.csproj.AssemblyReference.cache
+C:\Users\yeimy\Desktop\ProgramacionI_2025\ProyectodeCalculadora\ProyectodeCalculadora\obj\Debug\ProyectodeCalculadora.Form1.resources
+C:\Users\yeimy\Desktop\ProgramacionI_2025\ProyectodeCalculadora\ProyectodeCalculadora\obj\Debug\ProyectodeCalculadora.Properties.Resources.resources
+C:\Users\yeimy\Desktop\ProgramacionI_2025\ProyectodeCalculadora\ProyectodeCalculadora\obj\Debug\ProyectodeCalculadora.csproj.GenerateResource.cache
+C:\Users\yeimy\Desktop\ProgramacionI_2025\ProyectodeCalculadora\ProyectodeCalculadora\obj\Debug\ProyectodeCalculadora.csproj.CoreCompileInputs.cache
+C:\Users\yeimy\Desktop\ProgramacionI_2025\ProyectodeCalculadora\ProyectodeCalculadora\obj\Debug\ProyectodeCalculadora.exe
+C:\Users\yeimy\Desktop\ProgramacionI_2025\ProyectodeCalculadora\ProyectodeCalculadora\obj\Debug\ProyectodeCalculadora.pdb
