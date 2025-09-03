@@ -1,0 +1,10 @@
+C:\Users\yeimy\Desktop\ProgramacionI_2025\Parcial_I\ParcialI\ParcialI\obj\Debug\ParcialI.csproj.AssemblyReference.cache
+C:\Users\yeimy\Desktop\ProgramacionI_2025\Parcial_I\ParcialI\ParcialI\obj\Debug\ParcialI.Form1.resources
+C:\Users\yeimy\Desktop\ProgramacionI_2025\Parcial_I\ParcialI\ParcialI\obj\Debug\ParcialI.Properties.Resources.resources
+C:\Users\yeimy\Desktop\ProgramacionI_2025\Parcial_I\ParcialI\ParcialI\obj\Debug\ParcialI.csproj.GenerateResource.cache
+C:\Users\yeimy\Desktop\ProgramacionI_2025\Parcial_I\ParcialI\ParcialI\obj\Debug\ParcialI.csproj.CoreCompileInputs.cache
+C:\Users\yeimy\Desktop\ProgramacionI_2025\Parcial_I\ParcialI\ParcialI\bin\Debug\ParcialI.exe.config
+C:\Users\yeimy\Desktop\ProgramacionI_2025\Parcial_I\ParcialI\ParcialI\bin\Debug\ParcialI.exe
+C:\Users\yeimy\Desktop\ProgramacionI_2025\Parcial_I\ParcialI\ParcialI\bin\Debug\ParcialI.pdb
+C:\Users\yeimy\Desktop\ProgramacionI_2025\Parcial_I\ParcialI\ParcialI\obj\Debug\ParcialI.exe
+C:\Users\yeimy\Desktop\ProgramacionI_2025\Parcial_I\ParcialI\ParcialI\obj\Debug\ParcialI.pdb
