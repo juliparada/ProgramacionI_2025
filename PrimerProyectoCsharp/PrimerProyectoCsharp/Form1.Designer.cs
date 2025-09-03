@@ -72,7 +72,8 @@ namespace PrimerProyectoCsharp
             "Masa",
             "Volumen",
             "Almacenamiento",
-            "Tiempo"});
+            "Tiempo",
+            "Área"});
             this.cboTipoConversor.Location = new System.Drawing.Point(104, 36);
             this.cboTipoConversor.Name = "cboTipoConversor";
             this.cboTipoConversor.Size = new System.Drawing.Size(121, 21);

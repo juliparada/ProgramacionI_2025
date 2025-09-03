@@ -24,6 +24,7 @@ namespace PrimerProyectoCsharp
        Volumen
        Almacenamiento
        Tiempo
+       Área
         */
         String[][] etiquetas = new string[][] {
             new string[]{"Dolar", "Pesos Mexicanos", "Quetzal", "Lempira", "Colon SV", "Cordobas", "Colon CR"}, //Monedas
@@ -32,6 +33,7 @@ namespace PrimerProyectoCsharp
             new string[]{"Galon Us", "Litros", "Pinta Us", "Ml"}, //Volumen
             new string[]{"GB", "Bit", "Byte", "KB", "MG", "TB"}, //Almacenamiento
             new string[]{"Dia", "Segundos", "Minutos", "Horas", "Semana", "Meses", "Año"}, //Tiempo
+            new string[]{"Km2", "Mt2", "Milla cuadrada", "Yarda Cuadrada", "Pie cuadrado", "Pulgada Cuadrada", "Hectarea"}//Área
         };
 
         //funcionalidad
@@ -42,6 +44,7 @@ namespace PrimerProyectoCsharp
             new double []{1, 3.78541, 8, 3785.41}, //Volumen
             new double []{1, 8e+9, 1e+9, 1e+6, 1000, 0.001}, //Almacenamiento
             new double []{1, 86400, 1440, 24, 0.142857, 0.0328767, 0.00273973}, //Tiempo
+            new double []{1, 1e+6, 0.386102, 1.196e+6, 1.076e+7, 1.55e+9, 100} //Área
         };
         private void btnConvertir_Click(object sender, EventArgs e){
             double cantidad = double.Parse(txtCantidadConversor.Text);
