@@ -8,3 +8,16 @@ C:\Users\yeimy\Desktop\ProgramacionI_2025\PrimerProyectoCsharp\PrimerProyectoCsh
 C:\Users\yeimy\Desktop\ProgramacionI_2025\PrimerProyectoCsharp\PrimerProyectoCsharp\obj\Debug\PrimerProyectoCsharp.csproj.CoreCompileInputs.cache
 C:\Users\yeimy\Desktop\ProgramacionI_2025\PrimerProyectoCsharp\PrimerProyectoCsharp\obj\Debug\PrimerProyectoCsharp.exe
 C:\Users\yeimy\Desktop\ProgramacionI_2025\PrimerProyectoCsharp\PrimerProyectoCsharp\obj\Debug\PrimerProyectoCsharp.pdb
+C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\bin\Debug\db_academica.mdf
+C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\bin\Debug\db_academica_log.ldf
+C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\bin\Debug\PrimerProyectoCsharp.exe.config
+C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\bin\Debug\PrimerProyectoCsharp.exe
+C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\bin\Debug\PrimerProyectoCsharp.pdb
+C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\obj\Debug\PrimerProyectoCsharp.csproj.AssemblyReference.cache
+C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\obj\Debug\PrimerProyectoCsharp.exe.config
+C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\obj\Debug\PrimerProyectoCsharp.Form1.resources
+C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\obj\Debug\PrimerProyectoCsharp.Properties.Resources.resources
+C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\obj\Debug\PrimerProyectoCsharp.csproj.GenerateResource.cache
+C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\obj\Debug\PrimerProyectoCsharp.csproj.CoreCompileInputs.cache
+C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\obj\Debug\PrimerProyectoCsharp.exe
+C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\obj\Debug\PrimerProyectoCsharp.pdb
