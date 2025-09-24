@@ -10,63 +10,67 @@ using System.Data.SqlClient; //Esta librería me permite trabajar con SQL Server
 namespace PrimerProyectoCsharp
 {
     internal class Conexion{
-        //Definir miembros de la clase, atributos y métodos.
+        //Definir los miembros de la clase, atributos y metodos.
+        SqlConnection objConexion = new SqlConnection(); //Conectarme a la BD.
+        SqlCommand objComando = new SqlCommand(); //Ejecutar SQL en la BD. Lectura, Actualizacion, Eliminacion, Insercion.
+        SqlDataAdapter objAdaptador = new SqlDataAdapter(); //un puente entre la BD y la aplicacion.
+        DataSet objDs = new DataSet(); //Es una representacion de la arquitectura de la BD en memoria.
 
-        //Atributos
-        SqlConnection objConexion = new SqlConnection(); //Conectarme a la BD (agarro datos)
-        SqlCommand objComandos = new SqlCommand(); //Ejecutar comandos SQL (ejecuto sentencias) lectura, eliminación, actualizar, etc
-        SqlDataAdapter objAdaptador = new SqlDataAdapter(); //Puente entre la BD y la aplicación 
-        DataSet objDs = new DataSet(); //Representación de la arquitectura de la BD en memoria (tablas, relaciones, etc)
-
-        public Conexion(){ //Constructor: se llama así porque el método tiene el mismo nombre de la clase(Inicializador de los atributos)
+        public Conexion()
+        { //Constructor. inicializador de los atributos
             String cadenaConexion = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\db_academica.mdf;Integrated Security=True";
-            objConexion.ConnectionString = cadenaConexion;//Definimos valor 
-            objConexion.Open(); //Abro la conexión a la BD
+            objConexion.ConnectionString = cadenaConexion;
+            objConexion.Open(); //Abrir la conexion a la BD
         }
+        public DataSet obtenerDatos()
+        {
+            objDs.Clear(); //Limpiar el DataSet
+            objComando.Connection = objConexion; //Establecer la conexion para ejecutar los comandos.
 
-        public DataSet obtenerDatos(){
-            objDs.Clear(); //Limpio el DataSet
-            objComandos.Connection = objConexion; //Establezco la conexión para ejecutar comandos
+            objAdaptador.SelectCommand = objComando; //Establecer el comando de seleccion
 
-            objAdaptador.SelectCommand = objComandos; //Establezco el comando de selección
+            objComando.CommandText = "SELECT * FROM alumnos";
+            objAdaptador.Fill(objDs, "alumnos");//Tomando los datos de la BD y llenando el DataSet
 
-            objComandos.CommandText = "SELECT * FROM alumnos"; // "SELECT(seleccione) *(TODOS los campos"idAlumnos, direccion, telefono, nombre") FROM(de la tabla) Alumnos"
-            objAdaptador.Fill(objDs, "alumnos"); //Tomo los datos de la BD y los lleno en el DataSet
-
-            return objDs;//Devolvemos el DataSet con los datos
+            return objDs;
         }
-
-        public string administrarDatosAlumnos(String[] datos, string accion){
+        public string administrarDatosAlumnos(String[] datos, String accion)
+        {
             String sql = "";
-            if (accion== "nuevo"){
-                sql = "INSERT INTO alumnos (codigo, nombre, direccion, telefono) VALUES (@codigo, @nombre, @direccion, @telefono)";
-            }else if (accion== "modificar"){
+            if (accion == "nuevo")
+            {
+                sql = "INSERT INTO alumnos(codigo,nombre,direccion,telefono) VALUES (@codigo, @nombre, @direccion, @telefono)";
+            }
+            else if (accion == "modificar")
+            {
                 sql = "UPDATE alumnos SET codigo=@codigo, nombre=@nombre, direccion=@direccion, telefono=@telefono WHERE idAlumno=@idAlumno";
-            }else if (accion== "eliminar"){
+            }
+            else if (accion == "eliminar")
+            {
                 sql = "DELETE FROM alumnos WHERE idAlumno=@idAlumno";
             }
             return ejecutarSQL(sql, datos);
         }
+        private String ejecutarSQL(String sql, String[] datos)
+        {
+            try
+            {
+                objComando.Connection = objConexion;
+                objComando.CommandText = sql;
 
-        private String ejecutarSQL(String sql, String[] datos){ //try catch para manejar errores
-            try { 
-                objComandos.Connection = objConexion; //Establezco la conexión para ejecutar comandos
-                objComandos.CommandText = sql; //Establezco el comando de selección
+                objComando.Parameters.Clear();
+                objComando.Parameters.AddWithValue("@idAlumno", datos[0]);
+                objComando.Parameters.AddWithValue("@codigo", datos[1]);
+                objComando.Parameters.AddWithValue("@nombre", datos[2]);
+                objComando.Parameters.AddWithValue("@direccion", datos[3]);
+                objComando.Parameters.AddWithValue("@telefono", datos[4]);
 
-                objComandos.Parameters.Clear(); //Limpio los parámetros anteriores
-
-                objComandos.Parameters.AddWithValue("@idAlumno", datos[0]);
-                objComandos.Parameters.AddWithValue("@codigo", datos[1]);
-                objComandos.Parameters.AddWithValue("@nombre", datos[2]);
-                objComandos.Parameters.AddWithValue("@direccion", datos[3]);
-                objComandos.Parameters.AddWithValue("@telefono", datos[4]);
-
-                return objComandos.ExecuteNonQuery().ToString();//Ejecuta el comando y devuelve la cantidad de filas afectadas
+                return objComando.ExecuteNonQuery().ToString();
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return ex.Message;
             }
-
         }
     }
 }

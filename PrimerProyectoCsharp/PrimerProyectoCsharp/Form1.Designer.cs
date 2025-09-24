@@ -50,9 +50,19 @@ namespace PrimerProyectoCsharp
             this.btnEliminarAlumno = new System.Windows.Forms.Button();
             this.btnModificarAlumno = new System.Windows.Forms.Button();
             this.btnAgregarAlumno = new System.Windows.Forms.Button();
+            this.grbBusquedaAlumnos = new System.Windows.Forms.GroupBox();
+            this.grdAlumnos = new System.Windows.Forms.DataGridView();
+            this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.codigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.direccion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tel = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txtBuscarAlumno = new System.Windows.Forms.TextBox();
             this.grbDatosAlumnos.SuspendLayout();
             this.grbNavegacionAlumnos.SuspendLayout();
             this.gbrEdición.SuspendLayout();
+            this.grbBusquedaAlumnos.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grdAlumnos)).BeginInit();
             this.SuspendLayout();
             // 
             // grbDatosAlumnos
@@ -72,7 +82,7 @@ namespace PrimerProyectoCsharp
             this.grbDatosAlumnos.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grbDatosAlumnos.Location = new System.Drawing.Point(26, 27);
             this.grbDatosAlumnos.Name = "grbDatosAlumnos";
-            this.grbDatosAlumnos.Size = new System.Drawing.Size(412, 245);
+            this.grbDatosAlumnos.Size = new System.Drawing.Size(354, 270);
             this.grbDatosAlumnos.TabIndex = 0;
             this.grbDatosAlumnos.TabStop = false;
             this.grbDatosAlumnos.Text = "DATOS";
@@ -81,7 +91,7 @@ namespace PrimerProyectoCsharp
             // 
             this.idAlumno.AutoSize = true;
             this.idAlumno.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.idAlumno.Location = new System.Drawing.Point(146, 67);
+            this.idAlumno.Location = new System.Drawing.Point(100, 67);
             this.idAlumno.Name = "idAlumno";
             this.idAlumno.Size = new System.Drawing.Size(16, 16);
             this.idAlumno.TabIndex = 9;
@@ -91,7 +101,7 @@ namespace PrimerProyectoCsharp
             // 
             this.lblidAlumno.AutoSize = true;
             this.lblidAlumno.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblidAlumno.Location = new System.Drawing.Point(33, 67);
+            this.lblidAlumno.Location = new System.Drawing.Point(22, 67);
             this.lblidAlumno.Name = "lblidAlumno";
             this.lblidAlumno.Size = new System.Drawing.Size(25, 18);
             this.lblidAlumno.TabIndex = 8;
@@ -100,7 +110,7 @@ namespace PrimerProyectoCsharp
             // txtTelefonoAlumno
             // 
             this.txtTelefonoAlumno.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTelefonoAlumno.Location = new System.Drawing.Point(149, 186);
+            this.txtTelefonoAlumno.Location = new System.Drawing.Point(103, 186);
             this.txtTelefonoAlumno.Name = "txtTelefonoAlumno";
             this.txtTelefonoAlumno.Size = new System.Drawing.Size(224, 22);
             this.txtTelefonoAlumno.TabIndex = 7;
@@ -109,7 +119,7 @@ namespace PrimerProyectoCsharp
             // 
             this.lblTelefonoAlumno.AutoSize = true;
             this.lblTelefonoAlumno.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTelefonoAlumno.Location = new System.Drawing.Point(33, 192);
+            this.lblTelefonoAlumno.Location = new System.Drawing.Point(22, 192);
             this.lblTelefonoAlumno.Name = "lblTelefonoAlumno";
             this.lblTelefonoAlumno.Size = new System.Drawing.Size(76, 18);
             this.lblTelefonoAlumno.TabIndex = 6;
@@ -118,7 +128,7 @@ namespace PrimerProyectoCsharp
             // txtDireccionAlumno
             // 
             this.txtDireccionAlumno.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDireccionAlumno.Location = new System.Drawing.Point(149, 158);
+            this.txtDireccionAlumno.Location = new System.Drawing.Point(103, 158);
             this.txtDireccionAlumno.Name = "txtDireccionAlumno";
             this.txtDireccionAlumno.Size = new System.Drawing.Size(224, 22);
             this.txtDireccionAlumno.TabIndex = 5;
@@ -127,7 +137,7 @@ namespace PrimerProyectoCsharp
             // 
             this.lblDireccionAlumno.AutoSize = true;
             this.lblDireccionAlumno.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDireccionAlumno.Location = new System.Drawing.Point(33, 164);
+            this.lblDireccionAlumno.Location = new System.Drawing.Point(22, 164);
             this.lblDireccionAlumno.Name = "lblDireccionAlumno";
             this.lblDireccionAlumno.Size = new System.Drawing.Size(80, 18);
             this.lblDireccionAlumno.TabIndex = 4;
@@ -136,7 +146,7 @@ namespace PrimerProyectoCsharp
             // txtNombreAlumno
             // 
             this.txtNombreAlumno.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtNombreAlumno.Location = new System.Drawing.Point(149, 130);
+            this.txtNombreAlumno.Location = new System.Drawing.Point(103, 130);
             this.txtNombreAlumno.Name = "txtNombreAlumno";
             this.txtNombreAlumno.Size = new System.Drawing.Size(224, 22);
             this.txtNombreAlumno.TabIndex = 3;
@@ -145,7 +155,7 @@ namespace PrimerProyectoCsharp
             // 
             this.lblNombreAlumno.AutoSize = true;
             this.lblNombreAlumno.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNombreAlumno.Location = new System.Drawing.Point(33, 136);
+            this.lblNombreAlumno.Location = new System.Drawing.Point(22, 136);
             this.lblNombreAlumno.Name = "lblNombreAlumno";
             this.lblNombreAlumno.Size = new System.Drawing.Size(67, 18);
             this.lblNombreAlumno.TabIndex = 2;
@@ -154,7 +164,7 @@ namespace PrimerProyectoCsharp
             // txtCodigoAlumno
             // 
             this.txtCodigoAlumno.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCodigoAlumno.Location = new System.Drawing.Point(149, 102);
+            this.txtCodigoAlumno.Location = new System.Drawing.Point(103, 102);
             this.txtCodigoAlumno.Name = "txtCodigoAlumno";
             this.txtCodigoAlumno.Size = new System.Drawing.Size(224, 22);
             this.txtCodigoAlumno.TabIndex = 1;
@@ -163,7 +173,7 @@ namespace PrimerProyectoCsharp
             // 
             this.lblCodigoAlumno.AutoSize = true;
             this.lblCodigoAlumno.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCodigoAlumno.Location = new System.Drawing.Point(33, 102);
+            this.lblCodigoAlumno.Location = new System.Drawing.Point(22, 102);
             this.lblCodigoAlumno.Name = "lblCodigoAlumno";
             this.lblCodigoAlumno.Size = new System.Drawing.Size(62, 18);
             this.lblCodigoAlumno.TabIndex = 0;
@@ -178,9 +188,9 @@ namespace PrimerProyectoCsharp
             this.grbNavegacionAlumnos.Controls.Add(this.btnAnteriorAlumno);
             this.grbNavegacionAlumnos.Controls.Add(this.btnPrimeroAlumno);
             this.grbNavegacionAlumnos.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grbNavegacionAlumnos.Location = new System.Drawing.Point(26, 288);
+            this.grbNavegacionAlumnos.Location = new System.Drawing.Point(26, 328);
             this.grbNavegacionAlumnos.Name = "grbNavegacionAlumnos";
-            this.grbNavegacionAlumnos.Size = new System.Drawing.Size(412, 100);
+            this.grbNavegacionAlumnos.Size = new System.Drawing.Size(354, 100);
             this.grbNavegacionAlumnos.TabIndex = 1;
             this.grbNavegacionAlumnos.TabStop = false;
             this.grbNavegacionAlumnos.Text = "NAVEGACIÓN";
@@ -189,7 +199,7 @@ namespace PrimerProyectoCsharp
             // 
             this.lblnRegistroAlumnos.AutoSize = true;
             this.lblnRegistroAlumnos.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblnRegistroAlumnos.Location = new System.Drawing.Point(169, 47);
+            this.lblnRegistroAlumnos.Location = new System.Drawing.Point(149, 47);
             this.lblnRegistroAlumnos.Name = "lblnRegistroAlumnos";
             this.lblnRegistroAlumnos.Size = new System.Drawing.Size(45, 18);
             this.lblnRegistroAlumnos.TabIndex = 9;
@@ -198,7 +208,7 @@ namespace PrimerProyectoCsharp
             // btnUltimoAlumno
             // 
             this.btnUltimoAlumno.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnUltimoAlumno.Location = new System.Drawing.Point(330, 40);
+            this.btnUltimoAlumno.Location = new System.Drawing.Point(297, 40);
             this.btnUltimoAlumno.Name = "btnUltimoAlumno";
             this.btnUltimoAlumno.Size = new System.Drawing.Size(43, 31);
             this.btnUltimoAlumno.TabIndex = 3;
@@ -209,7 +219,7 @@ namespace PrimerProyectoCsharp
             // btnSiguienteAlumno
             // 
             this.btnSiguienteAlumno.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSiguienteAlumno.Location = new System.Drawing.Point(281, 40);
+            this.btnSiguienteAlumno.Location = new System.Drawing.Point(248, 40);
             this.btnSiguienteAlumno.Name = "btnSiguienteAlumno";
             this.btnSiguienteAlumno.Size = new System.Drawing.Size(43, 31);
             this.btnSiguienteAlumno.TabIndex = 2;
@@ -220,7 +230,7 @@ namespace PrimerProyectoCsharp
             // btnAnteriorAlumno
             // 
             this.btnAnteriorAlumno.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAnteriorAlumno.Location = new System.Drawing.Point(66, 40);
+            this.btnAnteriorAlumno.Location = new System.Drawing.Point(73, 40);
             this.btnAnteriorAlumno.Name = "btnAnteriorAlumno";
             this.btnAnteriorAlumno.Size = new System.Drawing.Size(43, 31);
             this.btnAnteriorAlumno.TabIndex = 1;
@@ -231,7 +241,7 @@ namespace PrimerProyectoCsharp
             // btnPrimeroAlumno
             // 
             this.btnPrimeroAlumno.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPrimeroAlumno.Location = new System.Drawing.Point(15, 40);
+            this.btnPrimeroAlumno.Location = new System.Drawing.Point(22, 40);
             this.btnPrimeroAlumno.Name = "btnPrimeroAlumno";
             this.btnPrimeroAlumno.Size = new System.Drawing.Size(43, 31);
             this.btnPrimeroAlumno.TabIndex = 0;
@@ -246,9 +256,9 @@ namespace PrimerProyectoCsharp
             this.gbrEdición.Controls.Add(this.btnModificarAlumno);
             this.gbrEdición.Controls.Add(this.btnAgregarAlumno);
             this.gbrEdición.Font = new System.Drawing.Font("Calibri", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gbrEdición.Location = new System.Drawing.Point(487, 288);
+            this.gbrEdición.Location = new System.Drawing.Point(386, 328);
             this.gbrEdición.Name = "gbrEdición";
-            this.gbrEdición.Size = new System.Drawing.Size(341, 100);
+            this.gbrEdición.Size = new System.Drawing.Size(571, 100);
             this.gbrEdición.TabIndex = 4;
             this.gbrEdición.TabStop = false;
             this.gbrEdición.Text = "EDICIÓN";
@@ -256,9 +266,9 @@ namespace PrimerProyectoCsharp
             // btnEliminarAlumno
             // 
             this.btnEliminarAlumno.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEliminarAlumno.Location = new System.Drawing.Point(221, 40);
+            this.btnEliminarAlumno.Location = new System.Drawing.Point(425, 40);
             this.btnEliminarAlumno.Name = "btnEliminarAlumno";
-            this.btnEliminarAlumno.Size = new System.Drawing.Size(92, 31);
+            this.btnEliminarAlumno.Size = new System.Drawing.Size(119, 31);
             this.btnEliminarAlumno.TabIndex = 2;
             this.btnEliminarAlumno.Text = "ELIMINAR";
             this.btnEliminarAlumno.UseVisualStyleBackColor = true;
@@ -267,9 +277,9 @@ namespace PrimerProyectoCsharp
             // btnModificarAlumno
             // 
             this.btnModificarAlumno.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnModificarAlumno.Location = new System.Drawing.Point(115, 40);
+            this.btnModificarAlumno.Location = new System.Drawing.Point(220, 40);
             this.btnModificarAlumno.Name = "btnModificarAlumno";
-            this.btnModificarAlumno.Size = new System.Drawing.Size(99, 31);
+            this.btnModificarAlumno.Size = new System.Drawing.Size(119, 31);
             this.btnModificarAlumno.TabIndex = 1;
             this.btnModificarAlumno.Text = "MODIFICAR";
             this.btnModificarAlumno.UseVisualStyleBackColor = true;
@@ -280,18 +290,96 @@ namespace PrimerProyectoCsharp
             this.btnAgregarAlumno.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnAgregarAlumno.Location = new System.Drawing.Point(15, 40);
             this.btnAgregarAlumno.Name = "btnAgregarAlumno";
-            this.btnAgregarAlumno.Size = new System.Drawing.Size(94, 31);
+            this.btnAgregarAlumno.Size = new System.Drawing.Size(119, 31);
             this.btnAgregarAlumno.TabIndex = 0;
             this.btnAgregarAlumno.Text = "NUEVO";
             this.btnAgregarAlumno.UseVisualStyleBackColor = true;
             this.btnAgregarAlumno.Click += new System.EventHandler(this.btnAgregarAlumno_Click);
+            // 
+            // grbBusquedaAlumnos
+            // 
+            this.grbBusquedaAlumnos.BackColor = System.Drawing.Color.DarkGray;
+            this.grbBusquedaAlumnos.Controls.Add(this.grdAlumnos);
+            this.grbBusquedaAlumnos.Controls.Add(this.txtBuscarAlumno);
+            this.grbBusquedaAlumnos.Enabled = false;
+            this.grbBusquedaAlumnos.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grbBusquedaAlumnos.Location = new System.Drawing.Point(386, 27);
+            this.grbBusquedaAlumnos.Name = "grbBusquedaAlumnos";
+            this.grbBusquedaAlumnos.Size = new System.Drawing.Size(571, 270);
+            this.grbBusquedaAlumnos.TabIndex = 5;
+            this.grbBusquedaAlumnos.TabStop = false;
+            this.grbBusquedaAlumnos.Text = "BUSQUEDA ALUMNOS";
+            // 
+            // grdAlumnos
+            // 
+            this.grdAlumnos.AllowUserToAddRows = false;
+            this.grdAlumnos.AllowUserToDeleteRows = false;
+            this.grdAlumnos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.grdAlumnos.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.id,
+            this.codigo,
+            this.nombre,
+            this.direccion,
+            this.tel});
+            this.grdAlumnos.Location = new System.Drawing.Point(15, 67);
+            this.grdAlumnos.Name = "grdAlumnos";
+            this.grdAlumnos.ReadOnly = true;
+            this.grdAlumnos.Size = new System.Drawing.Size(540, 182);
+            this.grdAlumnos.TabIndex = 3;
+            // 
+            // id
+            // 
+            this.id.DataPropertyName = "idAlumno";
+            this.id.HeaderText = "ID";
+            this.id.Name = "id";
+            this.id.ReadOnly = true;
+            this.id.Visible = false;
+            // 
+            // codigo
+            // 
+            this.codigo.DataPropertyName = "codigo";
+            this.codigo.HeaderText = "CODIGO";
+            this.codigo.Name = "codigo";
+            this.codigo.ReadOnly = true;
+            // 
+            // nombre
+            // 
+            this.nombre.DataPropertyName = "nombre";
+            this.nombre.HeaderText = "NOMBRE";
+            this.nombre.Name = "nombre";
+            this.nombre.ReadOnly = true;
+            this.nombre.Width = 150;
+            // 
+            // direccion
+            // 
+            this.direccion.DataPropertyName = "direccion";
+            this.direccion.HeaderText = "DIRECCION";
+            this.direccion.Name = "direccion";
+            this.direccion.ReadOnly = true;
+            this.direccion.Width = 200;
+            // 
+            // tel
+            // 
+            this.tel.DataPropertyName = "telefono";
+            this.tel.HeaderText = "TEL";
+            this.tel.Name = "tel";
+            this.tel.ReadOnly = true;
+            // 
+            // txtBuscarAlumno
+            // 
+            this.txtBuscarAlumno.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtBuscarAlumno.Location = new System.Drawing.Point(15, 34);
+            this.txtBuscarAlumno.Name = "txtBuscarAlumno";
+            this.txtBuscarAlumno.Size = new System.Drawing.Size(540, 22);
+            this.txtBuscarAlumno.TabIndex = 2;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(882, 425);
+            this.ClientSize = new System.Drawing.Size(979, 465);
+            this.Controls.Add(this.grbBusquedaAlumnos);
             this.Controls.Add(this.gbrEdición);
             this.Controls.Add(this.grbNavegacionAlumnos);
             this.Controls.Add(this.grbDatosAlumnos);
@@ -303,6 +391,9 @@ namespace PrimerProyectoCsharp
             this.grbNavegacionAlumnos.ResumeLayout(false);
             this.grbNavegacionAlumnos.PerformLayout();
             this.gbrEdición.ResumeLayout(false);
+            this.grbBusquedaAlumnos.ResumeLayout(false);
+            this.grbBusquedaAlumnos.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grdAlumnos)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -330,6 +421,14 @@ namespace PrimerProyectoCsharp
         private System.Windows.Forms.Button btnModificarAlumno;
         private System.Windows.Forms.Button btnAgregarAlumno;
         private System.Windows.Forms.Label lblnRegistroAlumnos;
+        private System.Windows.Forms.GroupBox grbBusquedaAlumnos;
+        private System.Windows.Forms.DataGridView grdAlumnos;
+        private System.Windows.Forms.TextBox txtBuscarAlumno;
+        private System.Windows.Forms.DataGridViewTextBoxColumn id;
+        private System.Windows.Forms.DataGridViewTextBoxColumn codigo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nombre;
+        private System.Windows.Forms.DataGridViewTextBoxColumn direccion;
+        private System.Windows.Forms.DataGridViewTextBoxColumn tel;
     }
 }
 
