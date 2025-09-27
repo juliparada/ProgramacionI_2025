@@ -301,7 +301,6 @@ namespace PrimerProyectoCsharp
             this.grbBusquedaAlumnos.BackColor = System.Drawing.Color.DarkGray;
             this.grbBusquedaAlumnos.Controls.Add(this.grdAlumnos);
             this.grbBusquedaAlumnos.Controls.Add(this.txtBuscarAlumno);
-            this.grbBusquedaAlumnos.Enabled = false;
             this.grbBusquedaAlumnos.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grbBusquedaAlumnos.Location = new System.Drawing.Point(386, 27);
             this.grbBusquedaAlumnos.Name = "grbBusquedaAlumnos";

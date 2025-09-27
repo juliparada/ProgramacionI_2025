@@ -72,5 +72,10 @@ namespace PrimerProyectoCsharp
                 return ex.Message;
             }
         }
+
+        internal string administrarDatosDocentes(string[] docente, string accion)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
