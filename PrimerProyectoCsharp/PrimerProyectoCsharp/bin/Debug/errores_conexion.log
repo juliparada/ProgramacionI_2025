@@ -1,0 +1,94 @@
+2025-09-30 20:23:17 - Error al obtener datos: No se ha inicializado la propiedad ConnectionString.
+System.InvalidOperationException: No se ha inicializado la propiedad ConnectionString.
+   en System.Data.SqlClient.SqlConnection.PermissionDemand()
+   en System.Data.SqlClient.SqlConnectionFactory.PermissionDemand(DbConnection outerConnection)
+   en System.Data.ProviderBase.DbConnectionInternal.TryOpenConnectionInternal(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   en System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   en System.Data.SqlClient.SqlConnection.TryOpenInner(TaskCompletionSource`1 retry)
+   en System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   en System.Data.SqlClient.SqlConnection.Open()
+   en PrimerProyectoCsharp.Conexion.obtenerDatos() en C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\Conexion.cs:línea 41
+--------------------------------------------------
+2025-09-30 20:29:07 - Error en ejecutarSQL: Conversion failed when converting the nvarchar value 'hh' to data type int.
+System.Data.SqlClient.SqlException (0x80131904): Conversion failed when converting the nvarchar value 'hh' to data type int.
+   en System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   en System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   en System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   en System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   en System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   en System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   en System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   en System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   en System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   en PrimerProyectoCsharp.Conexion.ejecutarSQL(SqlCommand cmd) en C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\Conexion.cs:línea 248
+ClientConnectionId:22d35fe7-5877-49e3-9bb8-37ff9c2a225d
+Error Number:245,State:1,Class:16
+--------------------------------------------------
+2025-09-30 20:56:14 - Error en ejecutarSQL: String or binary data would be truncated in table 'C:\USERS\YEIMY\DESKTOP\PROGRAMACIONI_2025.GIT\PRIMERPROYECTOCSHARP\PRIMERPROYECTOCSHARP\BIN\DEBUG\DB_ACADEMICA.MDF.dbo.alumnos', column 'codigo'. Truncated value: 'USIS472948'.
+The statement has been terminated.
+System.Data.SqlClient.SqlException (0x80131904): String or binary data would be truncated in table 'C:\USERS\YEIMY\DESKTOP\PROGRAMACIONI_2025.GIT\PRIMERPROYECTOCSHARP\PRIMERPROYECTOCSHARP\BIN\DEBUG\DB_ACADEMICA.MDF.dbo.alumnos', column 'codigo'. Truncated value: 'USIS472948'.
+The statement has been terminated.
+   en System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   en System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   en System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   en System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   en System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   en System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   en System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   en System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   en System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   en PrimerProyectoCsharp.Conexion.ejecutarSQL(SqlCommand cmd) en C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\Conexion.cs:línea 229
+ClientConnectionId:81df1563-6552-4cfe-aee3-e1f156b0fb55
+Error Number:2628,State:1,Class:16
+--------------------------------------------------
+2025-09-30 20:56:14 - Error general en administrarDatosAlumnos: Error al ejecutar la operación en la base de datos.
+System.Exception: Error al ejecutar la operación en la base de datos. ---> System.Data.SqlClient.SqlException: String or binary data would be truncated in table 'C:\USERS\YEIMY\DESKTOP\PROGRAMACIONI_2025.GIT\PRIMERPROYECTOCSHARP\PRIMERPROYECTOCSHARP\BIN\DEBUG\DB_ACADEMICA.MDF.dbo.alumnos', column 'codigo'. Truncated value: 'USIS472948'.
+The statement has been terminated.
+   en System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   en System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   en System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   en System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   en System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   en System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   en System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   en System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   en System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   en PrimerProyectoCsharp.Conexion.ejecutarSQL(SqlCommand cmd) en C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\Conexion.cs:línea 229
+   --- Fin del seguimiento de la pila de la excepción interna ---
+   en PrimerProyectoCsharp.Conexion.ejecutarSQL(SqlCommand cmd) en C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\Conexion.cs:línea 239
+   en PrimerProyectoCsharp.Conexion.administrarDatosAlumnos(String[] datos, String accion) en C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\Conexion.cs:línea 102
+--------------------------------------------------
+2025-09-30 20:56:17 - Error en ejecutarSQL: String or binary data would be truncated in table 'C:\USERS\YEIMY\DESKTOP\PROGRAMACIONI_2025.GIT\PRIMERPROYECTOCSHARP\PRIMERPROYECTOCSHARP\BIN\DEBUG\DB_ACADEMICA.MDF.dbo.alumnos', column 'codigo'. Truncated value: 'USIS472948'.
+The statement has been terminated.
+System.Data.SqlClient.SqlException (0x80131904): String or binary data would be truncated in table 'C:\USERS\YEIMY\DESKTOP\PROGRAMACIONI_2025.GIT\PRIMERPROYECTOCSHARP\PRIMERPROYECTOCSHARP\BIN\DEBUG\DB_ACADEMICA.MDF.dbo.alumnos', column 'codigo'. Truncated value: 'USIS472948'.
+The statement has been terminated.
+   en System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   en System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   en System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   en System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   en System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   en System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   en System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   en System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   en System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   en PrimerProyectoCsharp.Conexion.ejecutarSQL(SqlCommand cmd) en C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\Conexion.cs:línea 229
+ClientConnectionId:81df1563-6552-4cfe-aee3-e1f156b0fb55
+Error Number:2628,State:1,Class:16
+--------------------------------------------------
+2025-09-30 20:56:17 - Error general en administrarDatosAlumnos: Error al ejecutar la operación en la base de datos.
+System.Exception: Error al ejecutar la operación en la base de datos. ---> System.Data.SqlClient.SqlException: String or binary data would be truncated in table 'C:\USERS\YEIMY\DESKTOP\PROGRAMACIONI_2025.GIT\PRIMERPROYECTOCSHARP\PRIMERPROYECTOCSHARP\BIN\DEBUG\DB_ACADEMICA.MDF.dbo.alumnos', column 'codigo'. Truncated value: 'USIS472948'.
+The statement has been terminated.
+   en System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   en System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   en System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   en System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   en System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   en System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   en System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   en System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   en System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   en PrimerProyectoCsharp.Conexion.ejecutarSQL(SqlCommand cmd) en C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\Conexion.cs:línea 229
+   --- Fin del seguimiento de la pila de la excepción interna ---
+   en PrimerProyectoCsharp.Conexion.ejecutarSQL(SqlCommand cmd) en C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\Conexion.cs:línea 239
+   en PrimerProyectoCsharp.Conexion.administrarDatosAlumnos(String[] datos, String accion) en C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\Conexion.cs:línea 102
+--------------------------------------------------

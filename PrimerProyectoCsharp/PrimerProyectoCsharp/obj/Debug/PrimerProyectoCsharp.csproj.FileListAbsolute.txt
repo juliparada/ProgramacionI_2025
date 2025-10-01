@@ -9,7 +9,6 @@ C:\Users\yeimy\Desktop\ProgramacionI_2025\PrimerProyectoCsharp\PrimerProyectoCsh
 C:\Users\yeimy\Desktop\ProgramacionI_2025\PrimerProyectoCsharp\PrimerProyectoCsharp\obj\Debug\PrimerProyectoCsharp.exe
 C:\Users\yeimy\Desktop\ProgramacionI_2025\PrimerProyectoCsharp\PrimerProyectoCsharp\obj\Debug\PrimerProyectoCsharp.pdb
 C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\bin\Debug\db_academica.mdf
-C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\bin\Debug\db_academica_log.ldf
 C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\bin\Debug\PrimerProyectoCsharp.exe.config
 C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\bin\Debug\PrimerProyectoCsharp.exe
 C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\bin\Debug\PrimerProyectoCsharp.pdb
@@ -23,3 +22,6 @@ C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyect
 C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\obj\Debug\PrimerProyectoCsharp.pdb
 C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\obj\Debug\PrimerProyectoCsharp.FrmPrincipal.resources
 C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\obj\Debug\PrimerProyectoCsharp.Form2Docente.resources
+C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\bin\Debug\db_academica_log.ldf
+C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\obj\Debug\PrimerProyectoCsharp.FrmMateria.resources
+C:\Users\yeimy\Desktop\ProgramacionI_2025.git\PrimerProyectoCsharp\PrimerProyectoCsharp\obj\Debug\PrimerProyectoCsharp.FrmPeriodos.resources

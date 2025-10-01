@@ -66,7 +66,7 @@
             // 
             // grbDatosDocente
             // 
-            this.grbDatosDocente.BackColor = System.Drawing.Color.Silver;
+            this.grbDatosDocente.BackColor = System.Drawing.Color.LightSteelBlue;
             this.grbDatosDocente.Controls.Add(this.idDocente);
             this.grbDatosDocente.Controls.Add(this.lblidDocente);
             this.grbDatosDocente.Controls.Add(this.txtTelefonoDocente);
@@ -180,7 +180,7 @@
             // 
             // grbNavegacionDocente
             // 
-            this.grbNavegacionDocente.BackColor = System.Drawing.Color.Silver;
+            this.grbNavegacionDocente.BackColor = System.Drawing.Color.LightSteelBlue;
             this.grbNavegacionDocente.Controls.Add(this.lblnRegistroDocente);
             this.grbNavegacionDocente.Controls.Add(this.btnUltimoDocente);
             this.grbNavegacionDocente.Controls.Add(this.btnSiguienteDocente);
@@ -213,6 +213,7 @@
             this.btnUltimoDocente.TabIndex = 3;
             this.btnUltimoDocente.Text = ">|";
             this.btnUltimoDocente.UseVisualStyleBackColor = true;
+            this.btnUltimoDocente.Click += new System.EventHandler(this.btnUltimoDocente_Click);
             // 
             // btnSiguienteDocente
             // 
@@ -234,6 +235,7 @@
             this.btnAnteriorDocente.TabIndex = 1;
             this.btnAnteriorDocente.Text = "<";
             this.btnAnteriorDocente.UseVisualStyleBackColor = true;
+            this.btnAnteriorDocente.Click += new System.EventHandler(this.btnAnteriorDocente_Click);
             // 
             // btnPrimeroDocente
             // 
@@ -244,10 +246,11 @@
             this.btnPrimeroDocente.TabIndex = 0;
             this.btnPrimeroDocente.Text = "|<";
             this.btnPrimeroDocente.UseVisualStyleBackColor = true;
+            this.btnPrimeroDocente.Click += new System.EventHandler(this.btnPrimeroDocente_Click);
             // 
             // grbBusquedaDocente
             // 
-            this.grbBusquedaDocente.BackColor = System.Drawing.Color.Silver;
+            this.grbBusquedaDocente.BackColor = System.Drawing.Color.LightSteelBlue;
             this.grbBusquedaDocente.Controls.Add(this.grdDocentes);
             this.grbBusquedaDocente.Controls.Add(this.txtBuscarDocente);
             this.grbBusquedaDocente.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -262,7 +265,7 @@
             // 
             this.grdDocentes.AllowUserToAddRows = false;
             this.grdDocentes.AllowUserToDeleteRows = false;
-            this.grdDocentes.BackgroundColor = System.Drawing.Color.Silver;
+            this.grdDocentes.BackgroundColor = System.Drawing.Color.Lavender;
             this.grdDocentes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grdDocentes.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.id,
@@ -275,6 +278,7 @@
             this.grdDocentes.ReadOnly = true;
             this.grdDocentes.Size = new System.Drawing.Size(540, 182);
             this.grdDocentes.TabIndex = 3;
+            this.grdDocentes.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdDocentes_CellClick);
             // 
             // id
             // 
@@ -317,14 +321,15 @@
             // txtBuscarDocente
             // 
             this.txtBuscarDocente.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBuscarDocente.Location = new System.Drawing.Point(15, 34);
+            this.txtBuscarDocente.Location = new System.Drawing.Point(15, 39);
             this.txtBuscarDocente.Name = "txtBuscarDocente";
             this.txtBuscarDocente.Size = new System.Drawing.Size(540, 22);
             this.txtBuscarDocente.TabIndex = 2;
+            this.txtBuscarDocente.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtBuscarDocente_KeyUp);
             // 
             // gbrEdición
             // 
-            this.gbrEdición.BackColor = System.Drawing.Color.Silver;
+            this.gbrEdición.BackColor = System.Drawing.Color.LightSteelBlue;
             this.gbrEdición.Controls.Add(this.btnEliminarDocente);
             this.gbrEdición.Controls.Add(this.btnModificarDocente);
             this.gbrEdición.Controls.Add(this.btnAgregarDocente);
@@ -345,6 +350,7 @@
             this.btnEliminarDocente.TabIndex = 2;
             this.btnEliminarDocente.Text = "ELIMINAR";
             this.btnEliminarDocente.UseVisualStyleBackColor = true;
+            this.btnEliminarDocente.Click += new System.EventHandler(this.btnEliminarDocente_Click);
             // 
             // btnModificarDocente
             // 
@@ -355,6 +361,7 @@
             this.btnModificarDocente.TabIndex = 1;
             this.btnModificarDocente.Text = "MODIFICAR";
             this.btnModificarDocente.UseVisualStyleBackColor = true;
+            this.btnModificarDocente.Click += new System.EventHandler(this.btnModificarDocente_Click);
             // 
             // btnAgregarDocente
             // 
@@ -365,11 +372,13 @@
             this.btnAgregarDocente.TabIndex = 0;
             this.btnAgregarDocente.Text = "NUEVO";
             this.btnAgregarDocente.UseVisualStyleBackColor = true;
+            this.btnAgregarDocente.Click += new System.EventHandler(this.btnAgregarDocente_Click);
             // 
             // Form2Docente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(977, 425);
             this.Controls.Add(this.gbrEdición);
             this.Controls.Add(this.grbBusquedaDocente);
@@ -377,6 +386,7 @@
             this.Controls.Add(this.grbDatosDocente);
             this.Name = "Form2Docente";
             this.Text = "ADMINISTRACION DOCENTE";
+            this.Load += new System.EventHandler(this.Form2Docente_Load);
             this.grbDatosDocente.ResumeLayout(false);
             this.grbDatosDocente.PerformLayout();
             this.grbNavegacionDocente.ResumeLayout(false);

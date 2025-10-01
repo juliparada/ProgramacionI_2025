@@ -67,7 +67,7 @@ namespace PrimerProyectoCsharp
             // 
             // grbDatosAlumnos
             // 
-            this.grbDatosAlumnos.BackColor = System.Drawing.Color.DarkGray;
+            this.grbDatosAlumnos.BackColor = System.Drawing.Color.LightGreen;
             this.grbDatosAlumnos.Controls.Add(this.idAlumno);
             this.grbDatosAlumnos.Controls.Add(this.lblidAlumno);
             this.grbDatosAlumnos.Controls.Add(this.txtTelefonoAlumno);
@@ -181,7 +181,7 @@ namespace PrimerProyectoCsharp
             // 
             // grbNavegacionAlumnos
             // 
-            this.grbNavegacionAlumnos.BackColor = System.Drawing.Color.DarkGray;
+            this.grbNavegacionAlumnos.BackColor = System.Drawing.Color.LightGreen;
             this.grbNavegacionAlumnos.Controls.Add(this.lblnRegistroAlumnos);
             this.grbNavegacionAlumnos.Controls.Add(this.btnUltimoAlumno);
             this.grbNavegacionAlumnos.Controls.Add(this.btnSiguienteAlumno);
@@ -251,7 +251,7 @@ namespace PrimerProyectoCsharp
             // 
             // gbrEdición
             // 
-            this.gbrEdición.BackColor = System.Drawing.Color.DarkGray;
+            this.gbrEdición.BackColor = System.Drawing.Color.LightGreen;
             this.gbrEdición.Controls.Add(this.btnEliminarAlumno);
             this.gbrEdición.Controls.Add(this.btnModificarAlumno);
             this.gbrEdición.Controls.Add(this.btnAgregarAlumno);
@@ -298,7 +298,7 @@ namespace PrimerProyectoCsharp
             // 
             // grbBusquedaAlumnos
             // 
-            this.grbBusquedaAlumnos.BackColor = System.Drawing.Color.DarkGray;
+            this.grbBusquedaAlumnos.BackColor = System.Drawing.Color.LightGreen;
             this.grbBusquedaAlumnos.Controls.Add(this.grdAlumnos);
             this.grbBusquedaAlumnos.Controls.Add(this.txtBuscarAlumno);
             this.grbBusquedaAlumnos.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -313,6 +313,7 @@ namespace PrimerProyectoCsharp
             // 
             this.grdAlumnos.AllowUserToAddRows = false;
             this.grdAlumnos.AllowUserToDeleteRows = false;
+            this.grdAlumnos.BackgroundColor = System.Drawing.Color.DarkSeaGreen;
             this.grdAlumnos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.grdAlumnos.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.id,
@@ -371,12 +372,13 @@ namespace PrimerProyectoCsharp
             this.txtBuscarAlumno.Name = "txtBuscarAlumno";
             this.txtBuscarAlumno.Size = new System.Drawing.Size(540, 22);
             this.txtBuscarAlumno.TabIndex = 2;
+            this.txtBuscarAlumno.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtBuscarAlumno_KeyUp);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.BackColor = System.Drawing.Color.DarkSeaGreen;
             this.ClientSize = new System.Drawing.Size(979, 465);
             this.Controls.Add(this.grbBusquedaAlumnos);
             this.Controls.Add(this.gbrEdición);
