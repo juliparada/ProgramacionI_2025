@@ -36,6 +36,7 @@
             this.docentesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.materiaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.periodosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.notasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,7 +62,8 @@
             // salirToolStripMenuItem
             // 
             this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
-            this.salirToolStripMenuItem.Size = new System.Drawing.Size(96, 22);
+            this.salirToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F4)));
+            this.salirToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
             this.salirToolStripMenuItem.Text = "Salir";
             this.salirToolStripMenuItem.Click += new System.EventHandler(this.salirToolStripMenuItem_Click);
             // 
@@ -71,38 +73,56 @@
             this.alumnosToolStripMenuItem,
             this.docentesToolStripMenuItem,
             this.materiaToolStripMenuItem,
-            this.periodosToolStripMenuItem});
+            this.periodosToolStripMenuItem,
+            this.notasToolStripMenuItem});
             this.aplicacionesToolStripMenuItem.Name = "aplicacionesToolStripMenuItem";
             this.aplicacionesToolStripMenuItem.Size = new System.Drawing.Size(86, 20);
             this.aplicacionesToolStripMenuItem.Text = "Aplicaciones";
             // 
             // alumnosToolStripMenuItem
             // 
+            this.alumnosToolStripMenuItem.Image = global::PrimerProyectoCsharp.Properties.Resources.alumnos;
             this.alumnosToolStripMenuItem.Name = "alumnosToolStripMenuItem";
+            this.alumnosToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
             this.alumnosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.alumnosToolStripMenuItem.Text = "Alumnos";
             this.alumnosToolStripMenuItem.Click += new System.EventHandler(this.alumnosToolStripMenuItem_Click);
             // 
             // docentesToolStripMenuItem
             // 
+            this.docentesToolStripMenuItem.Image = global::PrimerProyectoCsharp.Properties.Resources.docentes;
             this.docentesToolStripMenuItem.Name = "docentesToolStripMenuItem";
+            this.docentesToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
             this.docentesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.docentesToolStripMenuItem.Text = "Docentes";
             this.docentesToolStripMenuItem.Click += new System.EventHandler(this.docentesToolStripMenuItem_Click);
             // 
             // materiaToolStripMenuItem
             // 
+            this.materiaToolStripMenuItem.Image = global::PrimerProyectoCsharp.Properties.Resources.materia;
             this.materiaToolStripMenuItem.Name = "materiaToolStripMenuItem";
+            this.materiaToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
             this.materiaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.materiaToolStripMenuItem.Text = "Materia";
             this.materiaToolStripMenuItem.Click += new System.EventHandler(this.materiaToolStripMenuItem_Click);
             // 
             // periodosToolStripMenuItem
             // 
+            this.periodosToolStripMenuItem.Image = global::PrimerProyectoCsharp.Properties.Resources.periodo;
             this.periodosToolStripMenuItem.Name = "periodosToolStripMenuItem";
+            this.periodosToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
             this.periodosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.periodosToolStripMenuItem.Text = "Periodos";
             this.periodosToolStripMenuItem.Click += new System.EventHandler(this.periodosToolStripMenuItem_Click);
+            // 
+            // notasToolStripMenuItem
+            // 
+            this.notasToolStripMenuItem.Image = global::PrimerProyectoCsharp.Properties.Resources.notas;
+            this.notasToolStripMenuItem.Name = "notasToolStripMenuItem";
+            this.notasToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.notasToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.notasToolStripMenuItem.Text = "Notas";
+            this.notasToolStripMenuItem.Click += new System.EventHandler(this.notasToolStripMenuItem_Click);
             // 
             // FrmPrincipal
             // 
@@ -135,5 +155,6 @@
         private System.Windows.Forms.ToolStripMenuItem docentesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem materiaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem periodosToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem notasToolStripMenuItem;
     }
 }

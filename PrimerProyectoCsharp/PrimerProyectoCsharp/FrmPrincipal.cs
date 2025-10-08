@@ -55,5 +55,16 @@ namespace PrimerProyectoCsharp
 
         }
 
+        private void notasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmNotas objNota = new FrmNotas();
+            objNota.MdiParent = this;
+            objNota.Show();
+        }
+
+        private void detallesDeNotasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

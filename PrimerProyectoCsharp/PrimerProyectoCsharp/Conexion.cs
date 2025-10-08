@@ -10,9 +10,10 @@ using System.IO;
 namespace PrimerProyectoCsharp
 {
     // Clase para gestionar la conexión y operaciones con la base de datos
-    internal class Conexion
+    public class Conexion
     {
-        SqlConnection objConexion = new SqlConnection();
+        public SqlConnection objConexion = new SqlConnection();
+        public SqlDataAdapter objAdaptador = new SqlDataAdapter();
 
         public Conexion()
         {
@@ -257,6 +258,11 @@ namespace PrimerProyectoCsharp
             {
                 // Si falla el log, no hacer nada para no interrumpir la aplicación
             }
+        }
+
+        internal string ejecutarSQL(string sql)
+        {
+            throw new NotImplementedException();
         }
     }
 }
