@@ -1,0 +1,2 @@
+wwwroot\img\logo.png
+wwwroot\views\index.html
