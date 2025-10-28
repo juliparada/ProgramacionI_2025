@@ -1,5 +1,10 @@
-wwwroot\img\crear.jpg
 wwwroot\img\Inicio.jpg
+wwwroot\views\DatosPacientes.html
 wwwroot\img\registrate.jpg
+wwwroot\img\crear.jpg
 wwwroot\views\UsuarioPacientes.html
 wwwroot\views\registrate.html
+wwwroot\views\historial_de_citas.html
+wwwroot\views\agenda.html
+wwwroot\img\agenga.jpg
+wwwroot\img\libro.jpg

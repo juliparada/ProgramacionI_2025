@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Citas</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .contenedor {
+            background-color: #f9f9f9;
+            width: 420px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 30px 40px;
+        }
+
+        .titulo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+            .titulo h2 {
+                font-size: 24px;
+                color: #333;
+            }
+
+            .titulo img {
+                width: 30px;
+                height: 30px;
+            }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #444;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+            input:focus {
+                border-color: #5a49e3;
+            }
+
+        .btn {
+            display: inline-block;
+            text-decoration: none; /* Quita la línea */
+            background-color: #5a49e3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+            .btn:hover {
+                background-color: #4637b8;
+            }
+
+        @media (max-width: 480px) {
+            .contenedor {
+                width: 90%;
+                padding: 20px;
+            }
+
+            .titulo h2 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <div class="titulo">
+            <h2>Historial de Citas</h2>
+            <!-- Puedes cambiar la imagen o usar un emoji -->
+            <img src="icono-libro.png" alt="Icono libro">
+            <!-- O usa un emoji si no tienes imagen: 📖 -->
+        </div>
+
+        <form>
+            <label for="nombre">Nombre del paciente:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="motivo">Motivo:</label>
+            <input type="text" id="motivo" name="motivo" required>
+
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" name="fecha" required>
+
+            <a href="index.html" class="btn">Salir</a>
+        </form>
+    </div>
+</body>
+</html>

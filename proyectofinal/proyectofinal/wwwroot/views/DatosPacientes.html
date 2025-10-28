@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Médico</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 900px;
+            width: 100%;
+            background-color: #f9f9f9;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 40px;
+            gap: 40px;
+        }
+
+        .formulario {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+            .formulario h2 {
+                margin-bottom: 15px;
+                color: #333;
+            }
+
+        label {
+            font-weight: 600;
+            color: #444;
+        }
+
+        input {
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+            input:focus {
+                border-color: #5a49e3;
+            }
+
+        button{
+            margin-top: 15px;
+            background-color: #5a49e3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            
+        }
+
+            .btn:hover {
+                background-color: #4637b8;
+            }
+
+        .imagen img {
+            width: 280px;
+            max-width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+
+            .imagen img {
+                width: 200px;
+            }
+        }
+        a{
+            margin-top: 480px;
+        }
+        .nota {
+            font-size: 12px;
+            color: gray;
+            margin-top: 15px;
+        }
+
+            .nota::after {
+                content: " *";
+                color: red;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form class="formulario">
+            <h2>Datos Pacientes</h2>
+
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" required>
+
+            <label for="dui">DUI:</label>
+            <input type="text" id="dui" name="dui" required>
+
+            <label for="fecha">Fecha de Nacimiento:</label>
+            <input type="date" id="fecha" name="fecha" required>
+
+            <label for="telefono">Teléfono:</label>
+            <input type="tel" id="telefono" name="telefono" required>
+
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" name="direccion" required>
+
+            <button>Guardar datos</button>
+            <p class="nota">No olvides guardar tus datos antes de continuar</p>
+
+
+        </form>
+        <a href="UsuarioPacientes.html">
+            <button>Siguiente</button>
+        </a>
+
+        <div class="imagen">
+            <img src="/img/registrate.jpg" alt="Ilustración médico">
+        </div>
+    </div>
+</body>
+</html>
