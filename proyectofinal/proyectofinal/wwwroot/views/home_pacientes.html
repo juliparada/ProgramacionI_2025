@@ -1,0 +1,298 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda - Dr. Cordero</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #cfcfcf;
+            margin: 0;
+            padding: 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 92%;
+            margin: 30px auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        th, td {
+            border: 1px solid #aaa;
+            padding: 10px;
+            text-align: center;
+        }
+
+            /* Columna de horas */
+            th.hora, td.hora {
+                background: #f3f3f3;
+                width: 140px;
+                font-weight: 700;
+            }
+
+        /* Encabezado */
+        .titulo {
+            font-family: "Brush Script MT", cursive;
+            font-size: 2em;
+            font-style: italic;
+            background-color: #f9f9f9;
+            border: none;
+            text-align: center;
+            height: 60px;
+            vertical-align: middle;
+        }
+
+        /* Menú (fila) - centrado debajo del título */
+        .menu {
+            background-color: #efefef;
+            font-weight: bold;
+            text-align: center;
+            height: auto;
+            padding: 12px 0;
+            position: relative; /* permite posicionar iconos en la esquina */
+        }
+
+        /* Contenedor para centrar barra de botones */
+        .menu-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 4px 12px;
+        }
+
+        /* Botones mejorados */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(90deg,#5a49e3 0%, #4637b8 100%);
+            color: #fff;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 14px rgba(70,55,160,0.12);
+            transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+            text-decoration: none;
+            white-space: nowrap;
+            font-size: 0.95rem;
+        }
+
+            .btn.secondary {
+                background: #fff;
+                color: #333;
+                border: 1px solid #ddd;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+                font-weight: 600;
+            }
+
+            .btn.download {
+                background: linear-gradient(90deg,#20b659 0%, #148a43 100%);
+                box-shadow: 0 6px 14px rgba(32,182,105,0.12);
+            }
+
+            .btn.invoice {
+                background: linear-gradient(90deg,#ff8a00 0%, #ff6a00 100%);
+                box-shadow: 0 6px 14px rgba(255,138,0,0.12);
+            }
+
+            .btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 12px 30px rgba(70,55,160,0.14);
+            }
+
+            .btn.secondary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            }
+
+            .btn:focus {
+                outline: 3px solid rgba(90,73,227,0.18);
+                outline-offset: 2px;
+            }
+
+        /* Contenedor de iconos en esquina derecha (pareja de iconos) */
+        .iconos {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .icono {
+            background: transparent;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 6px;
+            line-height: 1;
+        }
+
+            .icono:hover {
+                background: rgba(0,0,0,0.04);
+            }
+
+            .icono:focus {
+                outline: 3px solid rgba(90,73,227,0.18);
+            }
+
+        /* Días */
+        .dias {
+            background-color: #ddd;
+            font-weight: bold;
+        }
+
+        /* Celdas */
+        td.disponible {
+            background-color: #e7f5e7;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+
+        td.ocupado {
+            background-color: #ffd6d6;
+            color: #444;
+            font-weight: bold;
+        }
+
+        td:hover.disponible {
+            background-color: #c6eac6;
+        }
+
+        /* Responsividad: apilar botones en pantallas pequeñas */
+        @media (max-width: 640px) {
+            .menu-bar {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .iconos {
+                right: 8px;
+            }
+
+            th.hora, td.hora {
+                width: 110px;
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <!-- ahora hay 7 columnas (hora + 6 días) -->
+            <td colspan="7" class="titulo">Dr. Cordoba</td>
+        </tr>
+
+        <tr class="menu">
+            <td colspan="7">
+                <div class="menu-bar" role="toolbar" aria-label="Navegación principal">
+                    <button type="button" class="btn" onclick="location.href='agendacion.html'">Agenda</button>
+                    <button type="button" class="btn secondary" onclick="location.href='agenda_administracion.html'">Registro de pacientes</button>
+                    <button type="button" class="btn secondary" onclick="location.href='facturas.html'">Facturas</button>
+                </div>
+
+                <!-- Iconos en la esquina derecha cambiados a Descargas y Facturas -->
+                <div class="iconos" aria-hidden="false">
+                    <button class="icono" id="icon-descargas" aria-label="Descargas" title="Descargas">⬇️</button>
+                    <button class="icono" id="icon-facturas" aria-label="Facturas" title="Facturas">🧾</button>
+                </div>
+            </td>
+        </tr>
+
+        <tr class="dias">
+            <th class="hora">Hora</th>
+            <th>Lunes</th>
+            <th>Martes</th>
+            <th>Miércoles</th>
+            <th>Jueves</th>
+            <th>Viernes</th>
+            <th>Sábado</th>
+        </tr>
+
+        <tbody id="agenda-body"></tbody>
+    </table>
+
+    <script>// Número de filas (horarios)
+        const filas = 6;
+        const columnas = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+
+        // Horarios visibles por fila (formato: "HH:MM - HH:MM")
+        const franjasHorarias = [
+            "09:00 - 09:30",
+            "09:30 - 10:00",
+            "10:00 - 10:30",
+            "10:30 - 11:00",
+            "11:00 - 11:30",
+            "11:30 - 12:00"
+        ];
+
+        // Recuperar datos guardados (misma estructura: clave = Dia_indice)
+        let citas = JSON.parse(localStorage.getItem("citas")) || {};
+
+        const cuerpo = document.getElementById("agenda-body");
+
+        // Crear tabla: primera celda de cada fila es la franja horaria
+        for (let i = 0; i < filas; i++) {
+            const fila = document.createElement("tr");
+
+            // Celda de hora (izquierda)
+            const horaCelda = document.createElement("td");
+            horaCelda.classList.add('hora');
+            horaCelda.textContent = franjasHorarias[i] || '';
+            fila.appendChild(horaCelda);
+
+            columnas.forEach(dia => {
+                const celda = document.createElement("td");
+                const clave = ${dia}_${i};
+
+                if (citas[clave]) {
+                    // Día ocupado
+                    celda.textContent = citas[clave];
+                    celda.classList.add("ocupado");
+                } else {
+                    // Día disponible
+                    celda.textContent = "Disponible";
+                    celda.classList.add("disponible");
+
+                    celda.addEventListener("click", () => {
+                        const nombre = prompt(Agendar cita para ${dia} (${franjasHorarias[i]})\nIngrese nombre del paciente:);
+                        if (nombre) {
+                            // Guardamos el valor tal como antes (puedes cambiar para guardar objeto)
+                            citas[clave] = ${nombre} · ${franjasHorarias[i]};
+                            localStorage.setItem("citas", JSON.stringify(citas));
+                            celda.textContent = ${nombre} · ${franjasHorarias[i]};
+                            celda.classList.remove("disponible");
+                            celda.classList.add("ocupado");
+                        }
+                    });
+                }
+
+                fila.appendChild(celda);
+            });
+
+            cuerpo.appendChild(fila);
+        }
+
+        // Mantengo los botones principales iguales; los iconos en la esquina disparan las mismas acciones
+        document.getElementById('icon-descargas').addEventListener('click', () => {
+            // Abrir página de descargas (reemplaza por la ruta Razor si existe)
+            window.location.href = 'descargas.html';
+        });
+
+        document.getElementById('icon-facturas').addEventListener('click', () => {
+            // Abrir página de facturas
+            window.location.href = 'facturas.html';
+        });</script>
+</body>
+</html>
