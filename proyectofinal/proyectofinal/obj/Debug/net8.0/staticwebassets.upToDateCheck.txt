@@ -1,0 +1,5 @@
+wwwroot\img\crear.jpg
+wwwroot\img\Inicio.jpg
+wwwroot\img\registrate.jpg
+wwwroot\views\UsuarioPacientes.html
+wwwroot\views\registrate.html

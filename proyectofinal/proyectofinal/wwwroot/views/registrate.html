@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrate</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #C82909;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            zoom: 100%;
+        }
+
+        .contenedor {
+            background: white;
+            width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 200px 200px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            zoom: 120%;
+        }
+
+        .formulario {
+            flex: 1;
+        }
+
+        h2 {
+            font-size: 22px;
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+            h2::before {
+                content: "";
+                position: absolute;
+                left: -25px;
+                color: black;
+            }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 90%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        .nota {
+            font-size: 12px;
+            color: gray;
+            margin-top: 15px;
+        }
+
+            .nota::after {
+                content: " *";
+                color: red;
+            }
+
+        button {
+            background-color: #4a24ea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            margin-top: 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .doctor {
+            width: 120px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <div class="formulario">
+            <h2>Crea una cuenta</h2>
+            <p>Resgistrate</p>
+
+            <label>Correo:</label>
+            <input type="email" placeholder="Introduce tu correo">
+
+            <label>Contraseña:</label>
+            <input type="password" placeholder="Introduce tu contraseña">
+
+            <p class="nota">No olvides guardar tus datos</p>
+
+            <button>Siguiente</button>
+        </div>
+        <img src="/img/crear.jpg" width="300" height="500"
+    </div>
+</body>
+</html>

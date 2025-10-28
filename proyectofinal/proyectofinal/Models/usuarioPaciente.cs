@@ -8,7 +8,7 @@ namespace proyectofinal.Models
         [Key]
         public int idPacienteUsuario { get; set; }
 
-        public char email { get; set; }
+        public string email { get; set; } = string.Empty;
         public string password { get; set; } = string.Empty;  
 
     }
