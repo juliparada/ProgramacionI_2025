@@ -6,6 +6,6 @@ wwwroot\img\registrate.jpg
 wwwroot\views\agenda.html
 wwwroot\views\DatosPacientes.html
 wwwroot\views\historial_de_citas.html
+wwwroot\views\home_pacientes.html
 wwwroot\views\registrate.html
 wwwroot\views\UsuarioPacientes.html
-wwwroot\views\home_pacientes.html
