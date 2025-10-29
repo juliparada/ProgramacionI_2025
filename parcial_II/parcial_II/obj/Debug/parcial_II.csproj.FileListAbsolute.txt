@@ -1,0 +1,6 @@
+C:\Users\yeimy\Desktop\Programación2025\parcial_II\parcial_II\obj\Debug\parcial_II.csproj.AssemblyReference.cache
+C:\Users\yeimy\Desktop\Programación2025\parcial_II\parcial_II\obj\Debug\parcial_II.Form1.resources
+C:\Users\yeimy\Desktop\Programación2025\parcial_II\parcial_II\obj\Debug\parcial_II.frmUsuarios.resources
+C:\Users\yeimy\Desktop\Programación2025\parcial_II\parcial_II\obj\Debug\parcial_II.Properties.Resources.resources
+C:\Users\yeimy\Desktop\Programación2025\parcial_II\parcial_II\obj\Debug\parcial_II.csproj.GenerateResource.cache
+C:\Users\yeimy\Desktop\Programación2025\parcial_II\parcial_II\obj\Debug\parcial_II.csproj.CoreCompileInputs.cache

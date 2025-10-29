@@ -16,5 +16,16 @@ namespace parcial_II
         {
             InitializeComponent();
         }
+        conexion objConexion = new conexion();
+        DataSet objDs = new DataSet();
+        DataTable objDt = new DataTable();
+
+        public int posicion = 0;
+        public string accion = "nuevo";
+
+        
+        private void Form1_Load(object sender, EventArgs e)
+        {
+        }
     }
 }
