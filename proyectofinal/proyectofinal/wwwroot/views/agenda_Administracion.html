@@ -1,0 +1,277 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agendar Citas</title>
+
+    <!-- Fuente Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #ffffff;
+            --card: #f9f9f9;
+            --accent: #5a49e3;
+            --accent-600: #4637b8;
+            --text: #222;
+            --muted: #6b7280;
+            --radius: 12px;
+            --gap: 16px;
+            --max-width: 920px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: "Poppins", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 12px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: var(--max-width);
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 28px;
+            box-shadow: 0 6px 24px rgba(16,24,40,0.06);
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 28px;
+            align-items: start;
+        }
+
+        /* Form */
+        .formulario {
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap);
+            width: 100%;
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .imagen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .imagen img {
+                width: 74px;
+                height: 74px;
+                object-fit: cover;
+                border-radius: 10px;
+                border: 2px solid rgba(90,73,227,0.06);
+            }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="time"],
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #e6e9ef;
+            background: #fff;
+            font-size: 0.95rem;
+            transition: box-shadow .12s ease, border-color .12s ease;
+        }
+
+            input:focus, select:focus {
+                outline: none;
+                border-color: var(--accent);
+                box-shadow: 0 6px 18px rgba(90,73,227,0.06);
+            }
+
+        .hint {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .actions {
+            margin-top: 8px;
+        }
+
+        .btn {
+            background: linear-gradient(90deg,var(--accent) 0%, var(--accent-600) 100%);
+            color: #fff;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+            .btn.secondary {
+                background: #fff;
+                color: var(--text);
+                border: 1px solid #e6e6ef;
+            }
+
+        /* Aside */
+        .aside {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 12px;
+            border: 1px solid #f0f0f5;
+            box-shadow: 0 4px 12px rgba(16,24,40,0.04);
+        }
+
+            .card h3 {
+                margin: 0 0 8px 0;
+                font-size: 1rem;
+            }
+
+            .card p {
+                margin: 0;
+                color: var(--muted);
+                line-height: 1.4;
+                font-size: 0.95rem;
+            }
+        /* Responsive */
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr 260px;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+
+            .imagen {
+                order: -1;
+                justify-content: flex-start;
+            }
+
+                .imagen img {
+                    width: 56px;
+                    height: 56px;
+                }
+        }
+
+        /* Accessibility helpers */
+        .sr-only {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="container">
+            <form class="formulario" method="post" action="agendacion.html" aria-label="Formulario de agendar citas">
+                <div class="header-row">
+                    <h2>Agenda</h2>
+                    <div class="imagen" aria-hidden="true">
+                        <img src="../img/calendario.jpg" alt="Icono calendario">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="nombre">Nombre del paciente</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Ej. María Pérez" required autocomplete="name">
+                </div>
+
+                <div class="form-group">
+                    <label for="motivo">Motivo</label>
+                    <input type="text" id="motivo" name="motivo" placeholder="Ej. Consulta general" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha">Fecha de nacimiento</label>
+                    <input type="date" id="fecha" name="fecha" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dia">Día</label>
+                    <select id="dia" name="dia" required>
+                        <option value="Lunes">Lunes</option>
+                        <option value="Martes">Martes</option>
+                        <option value="Miércoles">Miércoles</option>
+                        <option value="Jueves">Jueves</option>
+                        <option value="Viernes">Viernes</option>
+                        <option value="Sábado">Sábado</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="slot">Franja / fila (1 - 6)</label>
+                    <select id="slot" name="slot" required>
+                        <option value="1">1 — 09:00 - 09:30</option>
+                        <option value="2">2 — 09:30 - 10:00</option>
+                        <option value="3">3 — 10:00 - 10:30</option>
+                        <option value="4">4 — 10:30 - 11:00</option>
+                        <option value="5">5 — 11:00 - 11:30</option>
+                        <option value="6">6 — 11:30 - 12:00</option>
+                    </select>
+                    <div class="hint">Selecciona la fila donde aparecerá la cita en la tabla (1 = primera fila de horarios).</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="hora">Hora exacta (opcional)</label>
+                    <input type="time" id="hora" name="hora">
+                    <div class="hint">Si no rellenas la hora se usará la franja seleccionada.</div>
+                </div>
+
+                <div class="actions">
+                    <button type="submit"  class="btn">Guardar cita</button>
+                   
+
+                    <button type="reset" class="btn secondary">Limpiar</button>
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
