@@ -63,7 +63,7 @@
             }
 
         button {
-            margin-top: 15px;
+            margin-top: 40px;
             background-color: #5a49e3;
             color: white;
             border: none;
@@ -96,7 +96,6 @@
         }
 
         a {
-            
             margin-top: 495px;
             background-color: #5a49e3;
             color: white;
@@ -111,7 +110,7 @@
         .nota {
             font-size: 12px;
             color: gray;
-            margin-top: 15px;
+            margin-top: 0px;
         }
 
             .nota::after {
@@ -123,7 +122,7 @@
 <body>
     <div class="container">
         <form class="formulario">
-            <h2>Datos Pacientes</h2>
+            <h2>Datos del Empleado</h2>
 
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre" required>
@@ -133,14 +132,15 @@
 
             <label for="dui">DUI:</label>
             <input type="text" id="dui" name="dui" required>
-            <label for="fecha">Fecha de Nacimiento:</label>
-            <input type="date" id="fecha" name="fecha" required>
+
+            <label for="especialidad">Especialidad:</label>
+            <input type="text" id="especialidad" name="especialidad" required>
 
             <label for="telefono">Teléfono:</label>
             <input type="tel" id="telefono" name="telefono" required>
 
-            <label for="direccion">Dirección:</label>
-            <input type="text" id="direccion" name="direccion" required>
+            <label for="correo">Correo Personal:</label>
+            <input type="text" id="correo" name="correo" required>
 
             <button>Guardar datos</button>
             <p class="nota">No olvides guardar tus datos antes de continuar</p>

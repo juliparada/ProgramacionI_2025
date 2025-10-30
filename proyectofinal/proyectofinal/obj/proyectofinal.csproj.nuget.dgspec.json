@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\MINEDUCYT\\Desktop\\Proyecto final\\proyectofinal\\proyectofinal\\proyectofinal.csproj": {}
+    "C:\\Users\\Migue\\OneDrive\\Escritorio\\ProyectoFinal-2025.gi\\proyectofinal\\proyectofinal\\proyectofinal.csproj": {}
   },
   "projects": {
-    "C:\\Users\\MINEDUCYT\\Desktop\\Proyecto final\\proyectofinal\\proyectofinal\\proyectofinal.csproj": {
+    "C:\\Users\\Migue\\OneDrive\\Escritorio\\ProyectoFinal-2025.gi\\proyectofinal\\proyectofinal\\proyectofinal.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\MINEDUCYT\\Desktop\\Proyecto final\\proyectofinal\\proyectofinal\\proyectofinal.csproj",
+        "projectUniqueName": "C:\\Users\\Migue\\OneDrive\\Escritorio\\ProyectoFinal-2025.gi\\proyectofinal\\proyectofinal\\proyectofinal.csproj",
         "projectName": "proyectofinal",
-        "projectPath": "C:\\Users\\MINEDUCYT\\Desktop\\Proyecto final\\proyectofinal\\proyectofinal\\proyectofinal.csproj",
-        "packagesPath": "C:\\Users\\MINEDUCYT\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\MINEDUCYT\\Desktop\\Proyecto final\\proyectofinal\\proyectofinal\\obj\\",
+        "projectPath": "C:\\Users\\Migue\\OneDrive\\Escritorio\\ProyectoFinal-2025.gi\\proyectofinal\\proyectofinal\\proyectofinal.csproj",
+        "packagesPath": "C:\\Users\\Migue\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Migue\\OneDrive\\Escritorio\\ProyectoFinal-2025.gi\\proyectofinal\\proyectofinal\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\MINEDUCYT\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Migue\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -45,7 +45,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -89,7 +89,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100-rc.2.25502.107/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
