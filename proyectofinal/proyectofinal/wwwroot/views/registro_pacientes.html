@@ -1,0 +1,473 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro de Pacientes</title>
+    <style>
+        :root {
+            --primary: #3b5bdb;
+            --primary-dark: #324fc7;
+            --muted: #eaeaea;
+            --bg: #f3f4f6;
+            --danger: #e05656;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 32px 12px;
+            box-sizing: border-box;
+        }
+
+        .contenedor {
+            width: 100%;
+            max-width: 1100px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 18px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+        }
+
+        .header {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-salir {
+            background-color: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+            .btn-salir:hover {
+                background-color: var(--primary-dark);
+            }
+
+        .btn-import {
+            background: linear-gradient(90deg,#20b659 0%, #148a43 100%);
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+            .btn-import[disabled] {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 18px;
+        }
+
+        /* Form lateral */
+        form {
+            border: 1px solid #eee;
+            padding: 12px;
+            border-radius: 6px;
+            background: #fff;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="tel"],
+        textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 72px;
+        }
+
+        .form-row {
+            margin-bottom: 10px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 6px;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+            .btn.secondary {
+                background: #fff;
+                color: #333;
+                border: 1px solid #ddd;
+                font-weight: 600;
+            }
+
+        /* Tabla */
+        .tabla-wrap {
+            overflow: auto;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 8px;
+            background: #fff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 720px;
+        }
+
+        th, td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #f0f0f0;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        th {
+            background: var(--muted);
+            font-weight: 700;
+            text-align: center;
+        }
+
+        td.center {
+            text-align: center;
+        }
+
+        .empty {
+            text-align: center;
+            color: #666;
+            padding: 20px 0;
+        }
+
+        .btn-icon {
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 6px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn-delete {
+            color: var(--danger);
+            border: 1px solid rgba(224,86,86,0.12);
+            font-weight: 700;
+        }
+
+        @media (max-width:980px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                min-width: 640px;
+            }
+        }
+
+        @media (max-width:640px) {
+            table {
+                min-width: 540px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor" role="main">
+        <div class="header">
+            <h2>Registro de Pacientes</h2>
+            <div class="header-actions">
+                <button class="btn-import" id="btn-importar" type="button" title="Importar pacientes desde la agenda">Importar desde agenda</button>
+                <button class="btn-salir" type="button" onclick="volver()">Volver</button>
+            </div>
+        </div>
+
+        <div class="grid">
+            <!-- Tabla de pacientes -->
+            <div class="tabla-wrap" aria-live="polite">
+                <table aria-describedby="tabla-pacientes">
+                    <thead>
+                        <tr>
+                            <th class="center">#</th>
+                            <th>Nombres Paciente</th>
+                            <th>Motivo</th>
+                            <th>Fecha de Nacimiento</th>
+                            <th>Dia Reservado</th>
+                            <th>Hora</th>
+                            <th class="center">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pacientes-body"></tbody>
+                </table>
+                <div id="empty-msg" class="empty" hidden>No hay pacientes registrados.</div>
+            </div>
+
+            <!-- Formulario para agregar paciente -->
+            <form id="form-paciente" aria-label="Formulario registro paciente">
+                <div class="form-row">
+                    <label for="nombres">Nombres</label>
+                    <input id="nombres" name="nombres" type="text" required placeholder="Ej. María" />
+                </div>
+
+                <div class="form-row">
+                    <label for="apellidos">Apellidos</label>
+                    <input id="apellidos" name="apellidos" type="text" required placeholder="Ej. Pérez" />
+                </div>
+
+                <div class="form-row">
+                    <label for="dui">DUI</label>
+                    <input id="dui" name="dui" type="text" placeholder="00000000-0" />
+                </div>
+
+                <div class="form-row">
+                    <label for="fecha_nac">Fecha de nacimiento</label>
+                    <input id="fecha_nac" name="fecha_nac" type="date" />
+                </div>
+
+                <div class="form-row">
+                    <label for="telefono">Teléfono</label>
+                    <input id="telefono" name="telefono" type="tel" placeholder="+503 7xxxxxxx" />
+                </div>
+
+                <div class="form-row">
+                    <label for="direccion">Dirección</label>
+                    <textarea id="direccion" name="direccion" placeholder="Dirección completa (opcional)"></textarea>
+                </div>
+
+                <div class="actions">
+                    <button type="button" class="btn secondary" id="btn-reset">Limpiar</button>
+                    <button type="submit" class="btn" id="btn-guardar">Agregar paciente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>// LocalStorage keys
+        const STORAGE_KEY = 'registro_pacientes';
+        const CITAS_KEY = 'citas';
+
+        const body = document.getElementById('pacientes-body');
+        const emptyMsg = document.getElementById('empty-msg');
+        const form = document.getElementById('form-paciente');
+        const btnImport = document.getElementById('btn-importar');
+
+        // Cargar pacientes desde localStorage
+        function cargarPacientes() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        }
+
+        function guardarPacientes(lista) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
+        }
+
+        function renderPacientes() {
+            const datos = cargarPacientes();
+            body.innerHTML = '';
+            if (datos.length === 0) {
+                emptyMsg.hidden = false;
+                return;
+            }
+            emptyMsg.hidden = true;
+            datos.forEach((p, idx) => {
+                const tr = document.createElement('tr');
+
+                const tdIndex = document.createElement('td');
+                tdIndex.className = 'center';
+                tdIndex.textContent = (idx + 1);
+                tr.appendChild(tdIndex);
+
+                const tdNombres = document.createElement('td');
+                tdNombres.textContent = p.nombres || '';
+                tr.appendChild(tdNombres);
+
+                const tdApellidos = document.createElement('td');
+                tdApellidos.textContent = p.apellidos || '';
+                tr.appendChild(tdApellidos);
+
+                const tdDui = document.createElement('td');
+                tdDui.textContent = p.dui || '';
+                tr.appendChild(tdDui);
+
+                const tdFecha = document.createElement('td');
+                tdFecha.textContent = p.fecha_nac || '';
+                tr.appendChild(tdFecha);
+
+                const tdTel = document.createElement('td');
+                tdTel.textContent = p.telefono || '';
+                tr.appendChild(tdTel);
+
+                const tdDir = document.createElement('td');
+                tdDir.textContent = p.direccion || '';
+                tr.appendChild(tdDir);
+
+                const tdAcc = document.createElement('td');
+                tdAcc.className = 'center';
+                const delBtn = document.createElement('button');
+                delBtn.type = 'button';
+                delBtn.className = 'btn-icon btn-delete';
+                delBtn.textContent = 'Eliminar';
+                delBtn.title = 'Eliminar paciente';
+                delBtn.addEventListener('click', () => {
+                    if (!confirm('¿Eliminar paciente? Esta acción no se puede deshacer.')) return;
+                    eliminarPaciente(idx);
+                });
+                tdAcc.appendChild(delBtn);
+                tr.appendChild(tdAcc);
+
+                body.appendChild(tr);
+            });
+        }
+
+        function agregarPaciente(obj) {
+            const lista = cargarPacientes();
+            lista.push(obj);
+            guardarPacientes(lista);
+            renderPacientes();
+            form.reset();
+            document.getElementById('nombres').focus();
+        }
+
+        function eliminarPaciente(index) {
+            const lista = cargarPacientes();
+            lista.splice(index, 1);
+            guardarPacientes(lista);
+            renderPacientes();
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const paciente = {
+                nombres: document.getElementById('nombres').value.trim(),
+                apellidos: document.getElementById('apellidos').value.trim(),
+                dui: document.getElementById('dui').value.trim(),
+                fecha_nac: document.getElementById('fecha_nac').value,
+                telefono: document.getElementById('telefono').value.trim(),
+                direccion: document.getElementById('direccion').value.trim()
+            };
+
+            if (!paciente.nombres || !paciente.apellidos) {
+                alert('Nombres y apellidos son obligatorios.');
+                return;
+            }
+
+            agregarPaciente(paciente);
+        });
+
+        document.getElementById('btn-reset').addEventListener('click', () => form.reset());
+
+        function volver() {
+            // Navega a la página anterior o a la agenda por defecto
+            if (document.referrer) {
+                window.location.href = document.referrer;
+            } else {
+                window.location.href = 'agendacion.html';
+            }
+        }
+
+        // Importar pacientes desde localStorage.citas
+        function parseName(full) {
+            // full puede ser "Nombre Apellido · motivo · hora" o solo "Nombre Apellido"
+            if (!full) return { first: '', last: '' };
+            const parts = full.split('·').map(s => s.trim());
+            const namePart = parts[0] || '';
+            const words = namePart.split(/\s+/).filter(Boolean);
+            if (words.length <= 1) return { first: namePart, last: '' };
+            const last = words.slice(-1).join(' ');
+            const first = words.slice(0, -1).join(' ');
+            return { first, last };
+        }
+
+        function importarDesdeAgenda() {
+            if (!confirm('Importar pacientes desde la agenda añadirá los nombres encontrados como nuevos pacientes. ¿Continuar?')) return;
+
+            const citas = JSON.parse(localStorage.getItem(CITAS_KEY) || '{}');
+            const pacientes = cargarPacientes();
+            let importados = 0;
+            const seen = new Set(pacientes.map(p => `${(p.nombres || '').toLowerCase()}|${(p.apellidos || '').toLowerCase()}`));
+
+            for (const clave in citas) {
+                if (!Object.hasOwn(citas, clave)) continue;
+                const valor = citas[clave];
+                // valor esperado: "Nombre Apellido · motivo · hora" o "Nombre"
+                const { first, last } = parseName(valor);
+                const key = `${first.toLowerCase()}|${last.toLowerCase()}`;
+                if (!first) continue;
+                if (seen.has(key)) continue; // evitar duplicados
+                const nuevo = {
+                    nombres: first,
+                    apellidos: last,
+                    dui: '',
+                    fecha_nac: '',
+                    telefono: '',
+                    direccion: ''
+                };
+                pacientes.push(nuevo);
+                seen.add(key);
+                importados++;
+            }
+
+            if (importados > 0) {
+                guardarPacientes(pacientes);
+                renderPacientes();
+                alert(`Importados ${importados} paciente(s) desde la agenda.`);
+            } else {
+                alert('No se encontraron pacientes nuevos para importar desde la agenda.');
+            }
+        }
+
+        btnImport.addEventListener('click', importarDesdeAgenda);
+
+        // Inicializar renderizado
+        renderPacientes();</script>
+</body>
+</html>
