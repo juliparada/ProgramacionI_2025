@@ -11,37 +11,29 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            zoom: 100%;
+            margin: 0;
         }
 
         .contenedor {
             background: white;
-            width: 500px;
+            width: 700px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            padding: 200px 200px;
+            padding: 40px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            zoom: 120%;
         }
 
         .formulario {
             flex: 1;
+            padding-right: 20px;
         }
 
         h2 {
-            font-size: 22px;
-            margin-bottom: 10px;
-            position: relative;
+            font-size: 24px;
+            margin-bottom: 20px;
         }
-
-            h2::before {
-                content: "";
-                position: absolute;
-                left: -25px;
-                color: black;
-            }
 
         label {
             display: block;
@@ -50,7 +42,7 @@
         }
 
         input {
-            width: 90%;
+            width: 95%;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -77,12 +69,10 @@
             margin-top: 15px;
             font-size: 16px;
             cursor: pointer;
-            outline: none;
         }
 
         .doctor {
-            width: 120px;
-            margin-left: 10px;
+            width: 250px;
         }
     </style>
 </head>
@@ -91,20 +81,71 @@
         <div class="formulario">
             <h2>Crea una cuenta</h2>
 
-            <label>Correo:</label>
-            <input type="email" placeholder="Introduce tu correo">
+            <form id="registroForm">
+                <label>Correo:</label>
+                <input type="email" id="email" name="email" placeholder="Introduce tu correo" required>
 
-            <label>Contraseña:</label>
-            <input type="password" placeholder="Introduce tu contraseña">
+                <label>Contraseña:</label>
+                <div style="position: relative; width: 95%;">
+                    <input type="password" id="password" name="password" placeholder="Introduce tu contraseña" required style="width: 100%;">
+                    <button type="button" onclick="togglePassword()" style="position: absolute; right: 0; top: -15px; height: 100%; background: transparent; border: none; cursor: pointer;">👁️</button>
+                </div>
 
-            <p class="nota">No olvides guardar tus datos</p>
 
-            <form action="DatosPacientes.html" method="get" style="margin:0;">
+                <p class="nota">No olvides guardar tus datos</p>
+
                 <button type="submit">Siguiente</button>
             </form>
-                                            
         </div>
-        <img src="/img/crear.jpg" width="300" height="500" />
+        <img src="/img/crear.jpg" class="doctor" />
     </div>
+    <script>
+        function togglePassword() {
+            const input = document.getElementById("password");
+            input.type = input.type === "password" ? "text" : "password";
+        }
+    </script>
+
+
+    <script>
+
+        document.getElementById("registroForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+
+            if (!email || !password) {
+                alert("LLENA LOS DATOS");
+                return;
+            }
+
+            fetch("https://localhost:7289/api/usuarioPacientes", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email, password })
+            })
+                .then(response => {
+                    if (response.status === 409) {
+                        return response.json().then(data => {
+                            let mensaje = data.mensaje + "\n\nSugerencias de contraseña:\n";
+                            mensaje += data.sugerencias.map(s => `• ${s}`).join("\n");
+                            alert(mensaje);
+                        });
+                    } else if (response.ok) {
+                        alert("Registro exitoso");
+                        window.location.href = "DatosPacientes.html";
+                    } else {
+                        alert("Error al registrar. Intenta nuevamente.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("No se pudo conectar con el servidor.");
+                });
+        });
+    </script>
 </body>
 </html>

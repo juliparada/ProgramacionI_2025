@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using proyectofinal.Models;
 
@@ -75,13 +76,41 @@ namespace proyectofinal.Controllers
         // POST: api/usuarioPacientes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<usuarioPaciente>> PostusuarioPaciente(usuarioPaciente usuarioPaciente)
+        public async Task<IActionResult> PostusuarioPaciente([FromBody]usuarioPaciente usuarioPaciente)
         {
+            bool existe = await _context.usuarioPaciente
+                .AnyAsync(u => u.password == usuarioPaciente.password);
+
+            if (existe)
+            {
+                var sugerencias = new List<string>();
+                var random = new Random();
+
+                while (sugerencias.Count < 3)
+                {
+                    string sugerida = $"pass{random.Next(1000, 9999)}";
+                    bool yaExiste = await _context.usuarioPaciente.AnyAsync(u => u.password == sugerida);
+                    if (!yaExiste)
+                    {
+                        sugerencias.Add(sugerida);
+                    }
+                }
+
+                return Conflict(new
+                {
+                    mensaje = "La contraseña ya está en uso. Elige otra.",
+                    sugerencias = sugerencias
+                });
+            }
+
             _context.usuarioPaciente.Add(usuarioPaciente);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetusuarioPaciente", new { id = usuarioPaciente.idPacienteUsuario }, usuarioPaciente);
         }
+
+
+
 
         // DELETE: api/usuarioPacientes/5
         [HttpDelete("{id}")]
@@ -104,4 +133,6 @@ namespace proyectofinal.Controllers
             return _context.usuarioPaciente.Any(e => e.idPacienteUsuario == id);
         }
     }
+
+
 }
