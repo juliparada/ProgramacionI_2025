@@ -3,140 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-        }
-
+    <title>Agendar Cita</title>
+    <style> 
         body {
-            background-color: #ffffff;
+            font-family: Arial, sans-serif;
+            background-color: #f5f6fa;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
+            margin: 0;
         }
 
-        .contenedor {
-            background-color: #f9f9f9;
-            width: 420px;
+        .form-container {
+            background: #fff;
+            width: 380px;
+            padding: 25px 30px;
             border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            padding: 30px 40px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        .titulo {
+        .form-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
 
-            .titulo h2 {
-                font-size: 24px;
+            .form-header h2 {
+                margin: 0;
+                font-size: 22px;
                 color: #333;
             }
 
-            .titulo img {
-                width: 30px;
-                height: 30px;
+            .form-header img {
+                width: 32px;
+                height: 32px;
             }
 
         label {
             display: block;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: #444;
+            font-weight: bold;
+            margin: 10px 0 5px;
+            color: #333;
         }
 
-        input,
+        input[type="text"],
+        input[type="date"],
         select {
             width: 100%;
-            padding: 8px 10px;
+            padding: 10px;
+            border-radius: 6px;
             border: 1px solid #ccc;
-            border-radius: 6px;
-            margin-bottom: 15px;
+            font-size: 15px;
             outline: none;
-            transition: 0.3s;
-            background-color: white;
+            transition: border 0.2s;
         }
 
-            input:focus,
+            input[type="text"]:focus,
+            input[type="date"]:focus,
             select:focus {
-                border-color: #5a49e3;
+                border-color: #6a5acd;
             }
 
-        .btn {
-            display: inline-block;
-            text-decoration: none;
-            background-color: #5a49e3;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 10px 25px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            text-align: center;
-            margin-top: 10px;
+        button {
             width: 100%;
+            background-color: #6a5acd;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
-            .btn:hover {
-                background-color: #4637b8;
+            button:hover {
+                background-color: #5949c7;
             }
-
-        @media (max-width: 480px) {
-            .contenedor {
-                width: 90%;
-                padding: 20px;
-            }
-
-            .titulo h2 {
-                font-size: 20px;
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="contenedor">
-        <div class="titulo">
+
+    <div class="form-container">
+        <div class="form-header">
             <h2>Agenda</h2>
-            <!-- Puedes poner un icono de calendario -->
-            <img src="icono-calendario.png" alt="Icono calendario">
-            <!-- O usar un emoji: 📅 -->
+            <img src="icon.png" alt="Icon">
         </div>
 
-        <form>
+        <form id="formCita">
             <label for="nombre">Nombre del paciente:</label>
-            <input type="text" id="nombre" name="nombre" required>
+            <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
 
             <label for="motivo">Motivo:</label>
-            <select id="motivo" name="motivo" required>
-                <option value="">Seleccione un motivo</option>
-                <option value="consulta-general">Consulta general</option>
-                <option value="control">Control médico</option>
-                <option value="emergencia">Emergencia</option>
-                <option value="laboratorio">Examen de laboratorio</option>
-            </select>
+            <input type="text" id="motivo" name="motivo" placeholder="Escriba el motivo de la cita" required>
 
             <label for="fecha">Fecha:</label>
-            <select id="fecha" name="fecha" required>
-                <option value="">Seleccione una fecha</option>
-                <option value="2025-10-30">30 de octubre 2025</option>
-                <option value="2025-11-01">1 de noviembre 2025</option>
-                <option value="2025-11-05">5 de noviembre 2025</option>
-                <option value="2025-11-10">10 de noviembre 2025</option>
-            </select>
+            <input type="date" id="fecha" name="fecha" required>
 
             <label for="hora">Hora:</label>
-            <input type="time" id="hora" name="hora" required>
+            <select id="hora" name="hora" required>
+                <option value="">Seleccione una hora</option>
+            </select>
 
-            <button type="submit" class="btn">Agendar Cita</button>
+            <button type="submit">Agendar Cita</button>
         </form>
     </div>
+
+    <script>// Generar automáticamente las horas disponibles (5:00 pm - 11:00 pm)
+    const horaSelect = document.getElementById("hora");
+    const horas = ["5:00 pm", "6:00 pm", "7:00 pm", "8:00 pm", "9:00 pm", "10:00 pm", "11:00 pm"];
+    horas.forEach(h => {
+        const option = document.createElement("option");
+        option.value = h;
+        option.textContent = h;
+        horaSelect.appendChild(option);
+    });
+
+    // Acción al enviar el formulario
+    document.getElementById("formCita").addEventListener("submit", function(e) {
+        e.preventDefault();
+        alert("✅ Cita agendada correctamente para " +
+              document.getElementById("fecha").value + " a las " +
+              document.getElementById("hora").value);
+        this.reset();
+    });</script>
+
 </body>
 </html>

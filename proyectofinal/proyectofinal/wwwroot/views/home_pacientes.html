@@ -1,196 +1,234 @@
 ﻿<!DOCTYPE html>
-
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda Médica - Dr. Córdova</title>
+    <title>Agenda Medica - Dr. cordova</title>
     <style>
-        /* Estilo general */
         body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f6f6;
             margin: 0;
-            font-family: "Segoe UI", Arial, sans-serif;
-            background-color: #dcdcdc;
+            padding: 0;
         }
 
-        
-        .container {
-            width: 90%;
-            max-width: 1000px;
-            background-color: #fff;
-            margin: 40px auto;
-            border: 1px solid #999;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Encabezado centrado */
+        /* ===== ENCABEZADO ===== */
         header {
-            text-align: center;
-            background-color: #f5f5f5;
-            padding: 20px;
-            border-bottom: 1px solid #ccc;
-        }
-
-            header h1 {
-                font-family: "Brush Script MT", cursive;
-                font-size: 36px;
-                color: #333;
-                margin: 0;
-            }
-
-        /* Barra de navegación */
-        nav {
+            background-color: #fff;
             display: flex;
-            justify-content: flex-start;
-            background-color: #f9f9f9;
-            border-bottom: 1px solid #ccc;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-            nav a {
-                text-decoration: none;
-                color: #333;
-                padding: 12px 20px;
-                border-right: 1px solid #ccc;
-                transition: background-color 0.3s;
+        .left-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-family: "Brush Script MT", cursive;
+            font-size: 28px;
+            color: #000;
+            margin-right: 20px;
+        }
+
+        .top-buttons button {
+            background-color: #f48fb1;
+            border: none;
+            padding: 8px 15px;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .top-buttons button:hover {
+                background-color: #ec407a;
             }
 
-                nav a:last-child {
-                    border-right: none;
-                }
+        .user-section button {
+            border: none;
+            background-color: #eee;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-size: 16px;
+        }
 
-                nav a:hover {
-                    background-color: #e6e6e6;
-                }
-
-                nav a.activo {
-                    color: blue;
-                    font-weight: bold;
-                }
-
-        /* Tabla calendario */
+        /* ===== TABLA ===== */
         table {
-            width: 100%;
+            width: 95%;
+            margin: 30px auto;
             border-collapse: collapse;
-            text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
         }
 
         th, td {
-            border: 1px solid #000;
-            padding: 10px;
-            height: 50px;
+            border: 1px solid #ddd;
+            text-align: center;
         }
 
         th {
-            background-color: #f5f5f5;
-        }
-
-        /* Celdas de estado */
-        .cita {
-            background-color: #ffcccc;
-            color: #900;
+            background-color: #eee;
+            color: #000;
+            padding: 15px;
             font-weight: bold;
-            border-radius: 5px;
         }
 
-        .disponible {
-            background-color: #d4f4d2;
-            color: #2e7d32;
+        td {
+            height: 80px;
+            cursor: pointer;
+            position: relative;
         }
 
-        /* Pie de página opcional */
-        footer {
-            text-align: center;
-            padding: 10px;
-            font-size: 14px;
-            color: #555;
-            background-color: #f9f9f9;
-            border-top: 1px solid #ccc;
+            /* Columna de horas */
+            th.hora, td.hora {
+                background-color: #f2f2f2;
+                font-weight: bold;
+                width: 100px;
+                cursor: default;
+            }
+
+            td.ocupado {
+                background-color: #f8d7da;
+                color: #721c24;
+            }
+
+            td.disponible {
+                background-color: #d4edda;
+                color: #155724;
+            }
+
+        .botones {
+            display: none;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 8px;
+            z-index: 10;
         }
 
-        
-       
+            .botones button {
+                margin: 3px;
+                padding: 6px 10px;
+                border: none;
+                background-color: #007bff;
+                color: #fff;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 13px;
+            }
+
+                .botones button:hover {
+                    background-color: #0056b3;
+                }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Dr. Córdova</h1>
-        </header>
 
-        ```
-        <nav>
-            <a href="agenda.html" class="activo">Agenda</a>
-            <a href="historial_de_citas.html">Historial de Citas</a>
-         
-        </nav>
+    <header>
+        <div class="left-section">
+            <h1>Dr. Cordova</h1>
+            <div class="top-buttons">
+                <a href="agenda.html"><button id="btnAgendar">Agendar</button></a>
+                <a href="historial_de_citas.html"><button id="btnHistorial">Historial de Citas</button></a>
+            </div>
+        </div>
+        <div class="user-section">
+            <button>👤</button>
+            <button>⬇</button>
+        </div>
+    </header>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Hora</th>
-                    <th>Lunes</th>
-                    <th>Martes</th>
-                    <th>Miércoles</th>
-                    <th>Jueves</th>
-                    <th>Viernes</th>
-                    <th>Sábado</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>8:00</td>
-                    <td class="disponible">Disponible</td>
-                    <td class="cita">Cita: Juan Pérez</td>
-                    <td class="disponible">Disponible</td>
-                    <td class="cita">Cita: Ana López</td>
-                    <td class="disponible">Disponible</td>
-                    <td class="disponible">Disponible</td>
-                </tr>
-                <tr>
-                    <td>9:00</td>
-                    <td class="cita">Cita: Carlos Ruiz</td>
-                    <td class="disponible">Disponible</td>
-                    <td class="disponible">Disponible</td>
-                    <td class="cita">Cita: Laura Gómez</td>
-                    <td class="disponible">Disponible</td>
-                    <td class="cita">Cita: Luis Fernández</td>
-                </tr>
-                <tr>
-                    <td>10:00</td>
-                    <td class="disponible">Disponible</td>
-                    <td class="cita">Cita: Andrea Martínez</td>
-                    <td class="disponible">Disponible</td>
-                    <td class="disponible">Disponible</td>
-                    <td class="cita">Cita: Pedro Ramírez</td>
-                    <td class="disponible">Disponible</td>
-                </tr>
-                <tr>
-                    <td>11:00</td>
-                    <td class="cita">Cita: Sofía López</td>
-                    <td class="disponible">Disponible</td>
-                    <td class="disponible">Disponible</td>
-                    <td class="disponible">Disponible</td>
-                    <td class="disponible">Disponible</td>
-                    <td class="cita">Cita: María Torres</td>
-                </tr>
-                <tr>
-                    <td>12:00</td>
-                    <td class="disponible">Disponible</td>
-                    <td class="disponible">Disponible</td>
-                    <td class="cita">Cita: Pablo Díaz</td>
-                    <td class="disponible">Disponible</td>
-                    <td class="disponible">Disponible</td>
-                    <td class="disponible">Disponible</td>
-                </tr>
-            </tbody>
-        </table>
+    <table>
+        <thead>
+            <tr>
+                <th class="hora">Hora</th>
+                <th>Lunes</th>
+                <th>Martes</th>
+                <th>Miércoles</th>
+                <th>Jueves</th>
+                <th>Viernes</th>
+                <th>Sábado</th>
+            </tr>
+        </thead>
+        <tbody id="agenda">
+            <!-- Se generará dinámicamente -->
+        </tbody>
+    </table>
 
-       
-        <footer>
-            © 2025 Consultorio Médico Dr. Córdova
-        </footer>
-        
+    <script>// Horas de 5pm a 11pm
+        const horas = ["5:00 pm", "6:00 pm", "7:00 pm", "8:00 pm", "9:00 pm", "10:00 pm", "11:00 pm"];
 
-    </div>
+        // Inicialmente, todos los cupos están disponibles (false = disponible)
+        const agenda = [
+            [false, false, false, false, false, false],
+            [false, false, false, false, false, false],
+            [false, false, false, false, false, false],
+            [false, false, false, false, false, false],
+            [false, false, false, false, false, false],
+            [false, false, false, false, false, false],
+            [false, false, false, false, false, false],
+        ];
+
+        const tbody = document.getElementById('agenda');
+
+        // Generar tabla
+        agenda.forEach((fila, i) => {
+            const tr = document.createElement('tr');
+
+            // Celda de hora
+            const tdHora = document.createElement('td');
+            tdHora.classList.add('hora');
+            tdHora.textContent = horas[i];
+            tr.appendChild(tdHora);
+
+            // Celdas de días
+            fila.forEach((ocupado) => {
+                const td = document.createElement('td');
+                td.classList.add(ocupado ? 'ocupado' : 'disponible');
+                td.textContent = ocupado ? 'Ocupado' : 'Disponible';
+
+                const divBotones = document.createElement('div');
+                divBotones.classList.add('botones');
+                divBotones.innerHTML = `
+                    <button>Modificar</button>
+                    <button>Eliminar</button>
+                    <button>ver cita</button>
+                     <button>Agregar nueva cita</button>
+                `;
+                td.appendChild(divBotones);
+
+                if (!ocupado) {
+                    td.addEventListener('click', () => {
+                        document.querySelectorAll('.botones').forEach(b => b.style.display = 'none');
+                        divBotones.style.display = 'block';
+                    });
+                }
+
+                tr.appendChild(td);
+            });
+
+            tbody.appendChild(tr);
+        });
+
+        // Cerrar botones si se hace clic fuera
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('td')) {
+                document.querySelectorAll('.botones').forEach(b => b.style.display = 'none');
+            }
+        });</script>
+
 </body>
 </html>
