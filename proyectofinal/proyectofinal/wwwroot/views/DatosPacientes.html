@@ -62,7 +62,7 @@
                 border-color: #5a49e3;
             }
 
-        button{
+        button, span {
             margin-top: 15px;
             background-color: #5a49e3;
             color: white;
@@ -72,28 +72,21 @@
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            
-        }
-        span {
-            margin-top: 9px;
-            background-color: #5a49e3;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 10px 20px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
         }
 
-            .btn:hover {
+            button:hover, span:hover {
                 background-color: #4637b8;
             }
 
-        .imagen img {
-            width: 280px;
-            max-width: 100%;
+        .imagen {
+            flex-shrink: 0;
         }
+
+            .imagen img {
+                width: 280px;
+                max-width: 100%;
+                border-radius: 12px;
+            }
 
         @media (max-width: 768px) {
             .container {
@@ -106,9 +99,7 @@
                 width: 200px;
             }
         }
-        a{
-            margin-top: 480px;
-        }
+
         .nota {
             font-size: 12px;
             color: gray;
@@ -123,7 +114,7 @@
 </head>
 <body>
     <div class="container">
-        <form class="formulario">
+        <div class="formulario">
             <h2>Datos Pacientes</h2>
 
             <label for="nombre">Nombre:</label>
@@ -139,22 +130,109 @@
             <input type="date" id="fecha" name="fecha" required>
 
             <label for="telefono">Teléfono:</label>
-            
+            <input type="text" id="telefono" name="telefono" required>
 
             <label for="direccion">Dirección:</label>
             <input type="text" id="direccion" name="direccion" required>
 
-            <button>Guardar datos</button>
+            <button id="guardarBtn">Guardar datos</button>
+
+
             <p class="nota">No olvides guardar tus datos antes de continuar</p>
-        </form>
-        <a href="UsuarioPacientes.html">
-            <span>
-                Siguiente
-            </span>
-        </a>
+            <a href="UsuarioPacientes.html">
+                <span id="siguienteBtn" style="pointer-events: none; opacity: 0.5;">Siguiente</span>
+            </a>
+        </div>
+
         <div class="imagen">
             <img src="/img/registrate.jpg" alt="Ilustración médico">
         </div>
     </div>
+    <script>
+        document.getElementById("guardarBtn").addEventListener("click", async function (e) {
+            e.preventDefault();
+
+            document.querySelectorAll(".error").forEach(el => el.remove());
+
+            const idPacienteUsuario = parseInt(localStorage.getItem("idPacienteUsuario"));
+            const nombre = document.getElementById("nombre").value.trim();
+            const apellido = document.getElementById("apellido").value.trim();
+            const dui = document.getElementById("dui").value.trim();
+            const telefono = document.getElementById("telefono").value.trim();
+            const direccion = document.getElementById("direccion").value.trim();
+
+            let fecha;
+            let valido = true;
+
+            function mostrarError(idCampo, mensajeTexto = "Este campo no puede estar vacío") {
+                const campo = document.getElementById(idCampo);
+                const mensaje = document.createElement("div");
+                mensaje.className = "error";
+                mensaje.style.color = "red";
+                mensaje.style.fontSize = "12px";
+                mensaje.textContent = mensajeTexto;
+                campo.insertAdjacentElement("afterend", mensaje);
+                valido = false;
+            }
+
+            if (!nombre) mostrarError("nombre");
+            if (!apellido) mostrarError("apellido");
+            if (!direccion) mostrarError("direccion");
+
+            const fechaInput = document.getElementById("fecha").value.trim();
+            if (fechaInput) {
+                const fechaObj = new Date(fechaInput);
+                if (!isNaN(fechaObj)) {
+                    fecha = fechaObj.toISOString();
+                } else {
+                    mostrarError("fecha", "Fecha inválida");
+                }
+            } else {
+                mostrarError("fecha");
+            }
+
+            if (!valido) return;
+
+            if (isNaN(idPacienteUsuario)) {
+                alert("ID de usuario inválido. Inicia sesión nuevamente.");
+                return;
+            }
+
+            const datosPaciente = {
+                idPacienteUsuario,
+                nombre,
+                apellido,
+                dui,
+                fecha,
+                telefono,
+                direccion
+            };
+
+            console.log("Enviando datos:", datosPaciente);
+
+            try {
+                const respuesta = await fetch("https://localhost:7289/api/usuarioPacientes/guardarDatosPaciente", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(datosPaciente)
+                });
+
+                if (respuesta.ok) {
+                    alert("DATOS GUARDADOS");
+                    const siguienteBtn = document.getElementById("siguienteBtn");
+                    siguienteBtn.style.pointerEvents = "auto";
+                    siguienteBtn.style.opacity = "1";
+                } else {
+                    const errorTexto = await respuesta.text();
+                    alert("Error al guardar los datos:\n" + errorTexto);
+                }
+            } catch (error) {
+                console.error("Error en la solicitud:", error);
+                alert("No se pudo conectar con el servidor");
+            }
+        });
+    </script>
 </body>
-</html>
+</html >

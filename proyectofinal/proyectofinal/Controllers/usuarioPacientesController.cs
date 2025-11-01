@@ -75,13 +75,14 @@ namespace proyectofinal.Controllers
 
         // POST: api/usuarioPacientes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<IActionResult> PostusuarioPaciente([FromBody]usuarioPaciente usuarioPaciente)
+        [HttpPost("PostusuarioPaciente")]
+        public async Task<IActionResult> PostusuarioPaciente([FromBody] usuarioPaciente usuarioPaciente)
         {
-            bool existe = await _context.usuarioPaciente
+            // Validar si la contraseña ya está en uso
+            bool passwordExiste = await _context.usuarioPaciente
                 .AnyAsync(u => u.password == usuarioPaciente.password);
 
-            if (existe)
+            if (passwordExiste)
             {
                 var sugerencias = new List<string>();
                 var random = new Random();
@@ -103,11 +104,59 @@ namespace proyectofinal.Controllers
                 });
             }
 
+            // Guardar el nuevo usuario
             _context.usuarioPaciente.Add(usuarioPaciente);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetusuarioPaciente", new { id = usuarioPaciente.idPacienteUsuario }, usuarioPaciente);
+            // Devolver solo el ID para el frontend
+            return Ok(new { idPacienteUsuario = usuarioPaciente.idPacienteUsuario });
         }
+        [HttpPost("guardarDatosPaciente")]
+        public async Task<IActionResult> GuardarDatosPaciente([FromBody] DatosPacientes paciente)
+        {
+            if (paciente == null)
+                return BadRequest("Datos inválidos");
+
+            bool existeUsuario = await _context.usuarioPaciente
+                .AnyAsync(u => u.idPacienteUsuario == paciente.idPacienteUsuario);
+
+            if (!existeUsuario)
+                return BadRequest("El usuario no existe");
+
+            bool yaTieneDatos = await _context.DatosPacientes
+                .AnyAsync(d => d.idPacienteUsuario == paciente.idPacienteUsuario);
+
+            if (yaTieneDatos)
+                return Conflict("Este usuario ya tiene datos registrados");
+
+            try
+            {
+                _context.DatosPacientes.Add(paciente);
+                await _context.SaveChangesAsync();
+                return Ok(new { mensaje = "Datos guardados" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno: {ex.Message}");
+            }
+        }
+        [HttpPost("validarCredenciales")]
+        public async Task<IActionResult> ValidarCredenciales([FromBody] usuarioPaciente credenciales)
+        {
+            var usuario = await _context.usuarioPaciente
+                .FirstOrDefaultAsync(u => u.email == credenciales.email);
+
+            if (usuario == null)
+                return Ok(new { valido = false, error = "email" });
+
+            if (usuario.password != credenciales.password)
+                return Ok(new { valido = false, error = "password" });
+
+            return Ok(new { valido = true, idPacienteUsuario = usuario.idPacienteUsuario });
+        }
+
+
+
 
 
 

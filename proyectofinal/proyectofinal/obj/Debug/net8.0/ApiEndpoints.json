@@ -21,22 +21,6 @@
   },
   {
     "ContainingType": "proyectofinal.Controllers.usuarioPacientesController",
-    "Method": "PostusuarioPaciente",
-    "RelativePath": "api/usuarioPacientes",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "usuarioPaciente",
-        "Type": "proyectofinal.Models.usuarioPaciente",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "proyectofinal.Controllers.usuarioPacientesController",
     "Method": "GetusuarioPaciente",
     "RelativePath": "api/usuarioPacientes/{id}",
     "HttpMethod": "GET",
@@ -93,6 +77,54 @@
       {
         "Name": "id",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "proyectofinal.Controllers.usuarioPacientesController",
+    "Method": "GuardarDatosPaciente",
+    "RelativePath": "api/usuarioPacientes/guardarDatosPaciente",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "paciente",
+        "Type": "proyectofinal.Models.DatosPacientes",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "proyectofinal.Controllers.usuarioPacientesController",
+    "Method": "PostusuarioPaciente",
+    "RelativePath": "api/usuarioPacientes/PostusuarioPaciente",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "usuarioPaciente",
+        "Type": "proyectofinal.Models.usuarioPaciente",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "proyectofinal.Controllers.usuarioPacientesController",
+    "Method": "ValidarCredenciales",
+    "RelativePath": "api/usuarioPacientes/validarCredenciales",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "credenciales",
+        "Type": "proyectofinal.Models.usuarioPaciente",
         "IsRequired": true
       }
     ],

@@ -106,45 +106,39 @@
         }
     </script>
 
-
     <script>
-
-        document.getElementById("registroForm").addEventListener("submit", function (e) {
+        document.getElementById("registroForm").addEventListener("submit", async function (e) {
             e.preventDefault();
 
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
 
-            if (!email || !password) {
-                alert("LLENA LOS DATOS");
-                return;
-            }
-
-            fetch("https://localhost:7289/api/usuarioPacientes", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ email, password })
-            })
-                .then(response => {
-                    if (response.status === 409) {
-                        return response.json().then(data => {
-                            let mensaje = data.mensaje + "\n\nSugerencias de contraseña:\n";
-                            mensaje += data.sugerencias.map(s => `• ${s}`).join("\n");
-                            alert(mensaje);
-                        });
-                    } else if (response.ok) {
-                        alert("Registro exitoso");
-                        window.location.href = "DatosPacientes.html";
-                    } else {
-                        alert("Error al registrar. Intenta nuevamente.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    alert("No se pudo conectar con el servidor.");
+            try {
+                const respuesta = await fetch("https://localhost:7289/api/usuarioPacientes/PostusuarioPaciente", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ email, password })
                 });
+
+                if (respuesta.status === 409) {
+                    const data = await respuesta.json();
+                    let mensaje = data.mensaje + "\n\nSugerencias de contraseña:\n";
+                    mensaje += data.sugerencias.map(s => `• ${s}`).join("\n");
+                    alert(mensaje);
+                } else if (respuesta.ok) {
+                    const data = await respuesta.json();
+                    localStorage.setItem("idPacienteUsuario", data.idPacienteUsuario);
+                    alert("Registro exitoso");
+                    window.location.href = "DatosPacientes.html";
+                } else {
+                    alert("Error al registrar. Intenta nuevamente.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("No se pudo conectar con el servidor.");
+            }
         });
     </script>
 </body>
