@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendar Cita</title>
-    <style> 
+    <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f6fa;
@@ -112,24 +112,59 @@
         </form>
     </div>
 
-    <script>// Generar automáticamente las horas disponibles (5:00 pm - 11:00 pm)
-    const horaSelect = document.getElementById("hora");
-    const horas = ["5:00 pm", "6:00 pm", "7:00 pm", "8:00 pm", "9:00 pm", "10:00 pm", "11:00 pm"];
-    horas.forEach(h => {
-        const option = document.createElement("option");
-        option.value = h;
-        option.textContent = h;
-        horaSelect.appendChild(option);
-    });
+    <script>
+        // Generar automáticamente las horas disponibles (5:00 pm - 11:00 pm)
+        const horaSelect = document.getElementById("hora");
+        const horas = ["5:00 pm", "6:00 pm", "7:00 pm", "8:00 pm", "9:00 pm", "10:00 pm", "11:00 pm"];
+        horas.forEach(h => {
+            const option = document.createElement("option");
+            option.value = h;
+            option.textContent = h;
+            horaSelect.appendChild(option);
+        });
 
-    // Acción al enviar el formulario
-    document.getElementById("formCita").addEventListener("submit", function(e) {
-        e.preventDefault();
-        alert("✅ Cita agendada correctamente para " +
-              document.getElementById("fecha").value + " a las " +
-              document.getElementById("hora").value);
-        this.reset();
-    });</script>
+        // Acción al enviar el formulario
+        document.getElementById("formCita").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const nombre = document.getElementById("nombre").value.trim();
+            const motivo = document.getElementById("motivo").value.trim();
+            const fecha = document.getElementById("fecha").value;
+            const hora = document.getElementById("hora").value;
+
+            // ⚠️ Este ID debe venir del login o sesión
+            const idPacienteUsuario = 1; // Reemplaza con el valor real
+
+            if (nombre && motivo && fecha && hora) {
+                fetch("https://localhost:5001/api/usuarioPacientes/agendarCita", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        idPacienteUsuario,
+                        nombre,
+                        motivo,
+                        fecha,
+                        hora
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.mensaje || "✅ Cita agendada correctamente");
+                        document.getElementById("formCita").reset();
+                    })
+                    .catch(error => {
+                        alert("❌ Error al agendar la cita");
+                        console.error(error);
+                    });
+            } else {
+                alert("⚠️ Todos los campos son obligatorios");
+            }
+        });
+    </script>
+
+
 
 </body>
-</html>
+</html >

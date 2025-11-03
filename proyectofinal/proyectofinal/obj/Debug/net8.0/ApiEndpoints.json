@@ -84,6 +84,22 @@
   },
   {
     "ContainingType": "proyectofinal.Controllers.usuarioPacientesController",
+    "Method": "AgendarCita",
+    "RelativePath": "api/usuarioPacientes/agendarCita",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cita",
+        "Type": "proyectofinal.Models.agendaPaciente",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "proyectofinal.Controllers.usuarioPacientesController",
     "Method": "GuardarDatosPaciente",
     "RelativePath": "api/usuarioPacientes/guardarDatosPaciente",
     "HttpMethod": "POST",

@@ -168,7 +168,8 @@
         </tbody>
     </table>
 
-    <script>// Horas de 5pm a 11pm
+    <script>
+        // Horas de 5pm a 11pm
         const horas = ["5:00 pm", "6:00 pm", "7:00 pm", "8:00 pm", "9:00 pm", "10:00 pm", "11:00 pm"];
 
         // Inicialmente, todos los cupos están disponibles (false = disponible)
@@ -203,11 +204,10 @@
                 const divBotones = document.createElement('div');
                 divBotones.classList.add('botones');
                 divBotones.innerHTML = `
-                    <button>Modificar</button>
-                    <button>Eliminar</button>
-                    <button>ver cita</button>
-                     <button>Agregar nueva cita</button>
-                `;
+                        <button>Modificar</button>
+                        <button>Eliminar</button>
+                        <button>Ver Citas</button>
+                    `;
                 td.appendChild(divBotones);
 
                 if (!ocupado) {
@@ -228,7 +228,8 @@
             if (!e.target.closest('td')) {
                 document.querySelectorAll('.botones').forEach(b => b.style.display = 'none');
             }
-        });</script>
+        });
+    </script>
 
 </body>
 </html>

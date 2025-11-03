@@ -156,7 +156,38 @@ namespace proyectofinal.Controllers
         }
 
 
+        [HttpPost("agendarCita")]
+        public async Task<IActionResult> AgendarCita([FromBody] agendaPaciente cita)
+        {
+            if (cita == null ||
+                string.IsNullOrWhiteSpace(cita.nombre) ||
+                string.IsNullOrWhiteSpace(cita.motivo) ||
+                string.IsNullOrWhiteSpace(cita.hora) ||
+                cita.fecha == default)
+            {
+                return BadRequest("Todos los campos son obligatorios");
+            }
 
+            // Verificar que el paciente existe
+            bool existePaciente = await _context.usuarioPaciente
+                .AnyAsync(p => p.idPacienteUsuario == cita.idPacienteUsuario);
+
+            if (!existePaciente)
+            {
+                return BadRequest("El paciente no está registrado");
+            }
+
+            try
+            {
+                _context.agendarCita.Add(cita);
+                await _context.SaveChangesAsync();
+                return Ok(new { mensaje = "✅ Cita agendada correctamente" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno: {ex.Message}");
+            }
+        }
 
 
 

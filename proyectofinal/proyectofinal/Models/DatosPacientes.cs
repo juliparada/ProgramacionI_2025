@@ -20,8 +20,8 @@ namespace proyectofinal.Models
 
         // Relación inversa
 
-            public usuarioPaciente? usuarioPaciente { get; set; } 
-
+            public usuarioPaciente? usuarioPaciente { get; set; }
+            public ICollection<agendaPaciente>? Citas { get; set; }
 
     }
 }
