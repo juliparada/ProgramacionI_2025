@@ -3,232 +3,333 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda Medica - Dr. cordova</title>
+    <title>Agenda Medica - Dr. Cordova</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f6f6f6;
+            background-color: #cfcfcf;
             margin: 0;
             padding: 0;
         }
 
-        /* ===== ENCABEZADO ===== */
-        header {
-            background-color: #fff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .left-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        header h1 {
-            font-family: "Brush Script MT", cursive;
-            font-size: 28px;
-            color: #000;
-            margin-right: 20px;
-        }
-
-        .top-buttons button {
-            background-color: #f48fb1;
-            border: none;
-            padding: 8px 15px;
-            color: #fff;
-            font-weight: bold;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-            .top-buttons button:hover {
-                background-color: #ec407a;
-            }
-
-        .user-section button {
-            border: none;
-            background-color: #eee;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        /* ===== TABLA ===== */
         table {
-            width: 95%;
-            margin: 30px auto;
             border-collapse: collapse;
-            background-color: #fff;
-            border-radius: 10px;
-            overflow: hidden;
+            width: 92%;
+            margin: 30px auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
         }
 
         th, td {
-            border: 1px solid #ddd;
+            border: 1px solid #aaa;
+            padding: 10px;
             text-align: center;
         }
 
-        th {
-            background-color: #eee;
-            color: #000;
-            padding: 15px;
-            font-weight: bold;
+            th.hora, td.hora {
+                background: #f3f3f3;
+                width: 140px;
+                font-weight: 700;
+            }
+
+        .titulo {
+            font-family: "Brush Script MT", cursive;
+            font-size: 2em;
+            font-style: italic;
+            background-color: #f9f9f9;
+            border: none;
+            text-align: center;
+            height: 60px;
+            vertical-align: middle;
         }
 
-        td {
-            height: 80px;
-            cursor: pointer;
+        .menu {
+            background-color: #efefef;
+            font-weight: bold;
+            text-align: center;
+            height: auto;
+            padding: 12px 0;
             position: relative;
         }
 
-            /* Columna de horas */
-            th.hora, td.hora {
-                background-color: #f2f2f2;
-                font-weight: bold;
-                width: 100px;
-                cursor: default;
-            }
-
-            td.ocupado {
-                background-color: #f8d7da;
-                color: #721c24;
-            }
-
-            td.disponible {
-                background-color: #d4edda;
-                color: #155724;
-            }
-
-        .botones {
-            display: none;
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            right: 5px;
-            background: rgba(255, 255, 255, 0.95);
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 8px;
-            z-index: 10;
+        .menu-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 4px 12px;
         }
 
-            .botones button {
-                margin: 3px;
-                padding: 6px 10px;
-                border: none;
-                background-color: #007bff;
-                color: #fff;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 13px;
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(90deg,#5a49e3 0%, #4637b8 100%);
+            color: #fff;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 14px rgba(70,55,160,0.12);
+            transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+            text-decoration: none;
+            white-space: nowrap;
+            font-size: 0.95rem;
+        }
+
+            .btn.secondary {
+                background: #fff;
+                color: #333;
+                border: 1px solid #ddd;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+                font-weight: 600;
             }
 
-                .botones button:hover {
-                    background-color: #0056b3;
-                }
+        .iconos {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .icono {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 6px;
+            line-height: 1;
+            text-decoration: none;
+            color: inherit;
+        }
+
+            .icono:hover {
+                background: rgba(0,0,0,0.04);
+            }
+
+            .icono:focus {
+                outline: 3px solid rgba(90,73,227,0.18);
+            }
+
+        .dias {
+            background-color: #ddd;
+            font-weight: bold;
+        }
+
+        td.disponible {
+            background-color: #e7f5e7;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+
+        td.ocupado {
+            background-color: #ffd6d6;
+            color: #444;
+            font-weight: bold;
+
+            cursor: default;
+        }
+
+        td.disponible:hover {
+            background-color: #c6eac6;
+        }
+
+        .cell-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 120px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 640px) {
+            .menu-bar {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .iconos {
+                right: 8px;
+            }
+
+            th.hora, td.hora {
+                width: 110px;
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+            .cell-text {
+                max-width: 80px;
+            }
+        }
     </style>
 </head>
 <body>
-
-    <header>
-        <div class="left-section">
-            <h1>Dr. Cordova</h1>
-            <div class="top-buttons">
-                <a href="agenda.html"><button id="btnAgendar">Agendar</button></a>
-                <a href="historial_de_citas.html"><button id="btnHistorial">Historial de Citas</button></a>
-            </div>
-        </div>
-        <div class="user-section">
-            <button>👤</button>
-            <button>⬇</button>
-        </div>
-    </header>
-
     <table>
-        <thead>
-            <tr>
-                <th class="hora">Hora</th>
-                <th>Lunes</th>
-                <th>Martes</th>
-                <th>Miércoles</th>
-                <th>Jueves</th>
-                <th>Viernes</th>
-                <th>Sábado</th>
-            </tr>
-        </thead>
-        <tbody id="agenda">
-            <!-- Se generará dinámicamente -->
-        </tbody>
+        <tr>
+            <td colspan="7" class="titulo">Dr. Cordova</td>
+        </tr>
+
+        <tr class="menu">
+            <td colspan="7">
+                <div class="menu-bar" role="toolbar" aria-label="Navegación principal">
+                    <a class="btn" href="agenda.html" role="button">Agendar</a>
+                    <a class="btn secondary" href="historial_de_citas.html" role="button">Historial de Citas</a>
+                </div>
+                <div class="iconos" aria-hidden="false">
+                    <a class="icono" id="icon-descargas" aria-label="Descargas" title="Descargas" href="#">⬇️</a>
+                </div>
+            </td>
+        </tr>
+
+        <tr class="dias">
+            <th class="hora">Hora</th>
+            <th>Lunes</th>
+            <th>Martes</th>
+            <th>Miércoles</th>
+            <th>Jueves</th>
+            <th>Viernes</th>
+            <th>Sábado</th>
+        </tr>
+
+        <tbody id="agenda-body"></tbody>
     </table>
 
     <script>
-        // Horas de 5pm a 11pm
-        const horas = ["5:00 pm", "6:00 pm", "7:00 pm", "8:00 pm", "9:00 pm", "10:00 pm", "11:00 pm"];
-
-        // Inicialmente, todos los cupos están disponibles (false = disponible)
-        const agenda = [
-            [false, false, false, false, false, false],
-            [false, false, false, false, false, false],
-            [false, false, false, false, false, false],
-            [false, false, false, false, false, false],
-            [false, false, false, false, false, false],
-            [false, false, false, false, false, false],
-            [false, false, false, false, false, false],
+        // Datos de la tabla
+        const filas = 6;
+        const columnas = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+        const franjasHorarias = [
+            "09:00 - 09:30",
+            "09:30 - 10:00",
+            "10:00 - 10:30",
+            "10:30 - 11:00",
+            "11:00 - 11:30",
+            "11:30 - 12:00"
         ];
 
-        const tbody = document.getElementById('agenda');
+        // LocalStorage helpers
+        function loadCitas() {
+            try {
+                const raw = localStorage.getItem('citas');
+                return raw ? JSON.parse(raw) : {};
+            } catch (e) {
+                console.warn('Error parseando citas desde localStorage:', e);
+                return {};
+            }
+        }
 
-        // Generar tabla
-        agenda.forEach((fila, i) => {
-            const tr = document.createElement('tr');
+        function saveCitas(citas) {
+            localStorage.setItem('citas', JSON.stringify(citas));
+        }
 
-            // Celda de hora
-            const tdHora = document.createElement('td');
-            tdHora.classList.add('hora');
-            tdHora.textContent = horas[i];
-            tr.appendChild(tdHora);
+        // parseValor conserva nombre y hora/franja de la cadena "Nombre · Hora"
+        function parseValor(valor) {
+            const parts = valor.split('·').map(p => p.trim());
+            return {
+                nombre: parts[0] || '',
+                hora: parts[1] || ''
+            };
+        }
 
-            // Celdas de días
-            fila.forEach((ocupado) => {
-                const td = document.createElement('td');
-                td.classList.add(ocupado ? 'ocupado' : 'disponible');
-                td.textContent = ocupado ? 'Ocupado' : 'Disponible';
+        // Click en celda ocupada: solo si NO está ocupada por otro paciente
+        function onCellClick(clave, valor) {
+            // Si la celda está ocupada, no hacer nada
+            if (valor === "Ocupado") return;
 
-                const divBotones = document.createElement('div');
-                divBotones.classList.add('botones');
-                divBotones.innerHTML = `
-                        <button>Modificar</button>
-                        <button>Eliminar</button>
-                        <button>Ver Citas</button>
-                    `;
-                td.appendChild(divBotones);
+            const citas = loadCitas();
+            const parsed = parseValor(valor);
 
-                if (!ocupado) {
-                    td.addEventListener('click', () => {
-                        document.querySelectorAll('.botones').forEach(b => b.style.display = 'none');
-                        divBotones.style.display = 'block';
-                    });
+            const editar = confirm(`Cita: ${valor}\n\nPulse Aceptar para EDITAR la cita.\nPulse Cancelar para ELIMINAR la cita.`);
+            if (editar) {
+                const nuevoNombre = prompt('Editar nombre del paciente:', parsed.nombre);
+                if (nuevoNombre === null) return; // cancelar
+                const nuevaHora = prompt('Editar hora o franja (ej. 09:00 o 09:00 - 09:30):', parsed.hora);
+                if (nuevaHora === null) return; // cancelar
+
+                const nombreTrim = nuevoNombre.trim();
+                const horaTrim = nuevaHora.trim();
+                if (nombreTrim === '') {
+                    alert('El nombre no puede quedar vacío.');
+                    return;
                 }
 
-                tr.appendChild(td);
-            });
-
-            tbody.appendChild(tr);
-        });
-
-        // Cerrar botones si se hace clic fuera
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('td')) {
-                document.querySelectorAll('.botones').forEach(b => b.style.display = 'none');
+                citas[clave] = `${nombreTrim} · ${horaTrim}`;
+                saveCitas(citas);
+                renderTable();
+            } else {
+                const confirmar = confirm('¿Eliminar definitivamente esta cita?');
+                if (!confirmar) return;
+                if (Object.prototype.hasOwnProperty.call(citas, clave)) {
+                    delete citas[clave];
+                    saveCitas(citas);
+                    renderTable();
+                }
             }
-        });
+        }
+
+        // Crear cita al pulsar en celda disponible
+        function onCrearCita(dia, indice) {
+            const nombre = prompt(`Agendar cita para ${dia} (${franjasHorarias[indice]})\nIngrese su nombre:`);
+            if (!nombre) return;
+            const citas = loadCitas();
+            const clave = `${dia}_${indice}`;
+            citas[clave] = `${nombre.trim()} · ${franjasHorarias[indice]}`;
+            saveCitas(citas);
+            renderTable();
+        }
+
+        // Renderiza la tabla a partir de localStorage
+        function renderTable() {
+            const cuerpo = document.getElementById('agenda-body');
+            if (!cuerpo) return;
+            cuerpo.innerHTML = '';
+            const citas = loadCitas();
+
+            for (let i = 0; i < filas; i += 1) {
+                const fila = document.createElement('tr');
+
+                const horaCelda = document.createElement('td');
+                horaCelda.className = 'hora';
+                horaCelda.textContent = franjasHorarias[i] || '';
+                fila.appendChild(horaCelda);
+
+                columnas.forEach((dia) => {
+                    const celda = document.createElement('td');
+                    const clave = `${dia}_${i}`;
+                    const valor = citas[clave];
+
+                    if (!valor || typeof valor === 'object') {
+                        // Disponible: se puede agendar
+                        celda.className = 'disponible';
+                        celda.textContent = 'Disponible';
+                        celda.addEventListener('click', () => onCrearCita(dia, i));
+                    } else {
+                        // Ocupado: mostrar "Ocupado" y bloquear interacción
+                        celda.className = 'ocupado';
+                        const text = document.createElement('span');
+                        text.className = 'cell-text';
+                        text.textContent = "Ocupado";
+                        celda.appendChild(text);
+                        // No se agrega ningún evento de clic
+                    }
+
+                    fila.appendChild(celda);
+                });
+
+                cuerpo.appendChild(fila);
+            }
+        }
+        // Inicializa
+        renderTable();
     </script>
 
 </body>

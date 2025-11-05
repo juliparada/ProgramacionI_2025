@@ -111,6 +111,7 @@ namespace proyectofinal.Controllers
             // Devolver solo el ID para el frontend
             return Ok(new { idPacienteUsuario = usuarioPaciente.idPacienteUsuario });
         }
+
         [HttpPost("guardarDatosPaciente")]
         public async Task<IActionResult> GuardarDatosPaciente([FromBody] DatosPacientes paciente)
         {
@@ -140,6 +141,7 @@ namespace proyectofinal.Controllers
                 return StatusCode(500, $"Error interno: {ex.Message}");
             }
         }
+
         [HttpPost("validarCredenciales")]
         public async Task<IActionResult> ValidarCredenciales([FromBody] usuarioPaciente credenciales)
         {
@@ -189,30 +191,108 @@ namespace proyectofinal.Controllers
             }
         }
 
-
-
-
-        // DELETE: api/usuarioPacientes/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteusuarioPaciente(int id)
+        [HttpGet("obtenerCitasPorPaciente/{idPacienteUsuario}")]
+        public async Task<ActionResult<IEnumerable<agendaPaciente>>> ObtenerCitasPorPaciente(int idPacienteUsuario)
         {
-            var usuarioPaciente = await _context.usuarioPaciente.FindAsync(id);
-            if (usuarioPaciente == null)
+            var citas = await _context.agendarCita
+                .Where(c => c.idPacienteUsuario == idPacienteUsuario)
+                .ToListAsync();
+
+            return citas;
+        }
+
+        [HttpPut("actualizarCita/{id}")]
+        public async Task<IActionResult> ActualizarCita(int id, [FromBody] agendaPaciente cita)
+        {
+            var citaExistente = await _context.agendarCita.FindAsync(id);
+            if (citaExistente == null)
             {
                 return NotFound();
             }
 
-            _context.usuarioPaciente.Remove(usuarioPaciente);
+            citaExistente.nombre = cita.nombre;
+            citaExistente.motivo = cita.motivo;
+            citaExistente.fecha = cita.fecha;
+            citaExistente.hora = cita.hora;
+
+            _context.Entry(citaExistente).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CitaExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+        [HttpGet("obtenerCitasSemana")]
+        public async Task<IActionResult> ObtenerCitasSemana()
+        {
+            // Obtén el lunes de la semana actual
+            var hoy = DateTime.Today;
+            var inicioSemana = hoy.AddDays(-(int)hoy.DayOfWeek + 1); // 1 = lunes
+
+            // Obtén el sábado de la semana actual
+            var finSemana = inicioSemana.AddDays(6);
+
+            var citas = await _context.agendarCita
+                .Where(c => c.fecha.Date >= inicioSemana.Date && c.fecha.Date <= finSemana.Date)
+                .Select(c => new
+                {
+                    c.nombre,
+                    c.hora,
+                    // 1=Lunes, 2=Martes, ..., 6=Sábado
+                    diaSemana = ((int)c.fecha.DayOfWeek == 0) ? 7 : (int)c.fecha.DayOfWeek,
+                    fecha = c.fecha.ToString("yyyy-MM-dd")
+                })
+                .ToListAsync();
+
+            return Ok(citas);
+        }
+
+        [HttpGet("obtenerCitasPorFecha/{fecha}")]
+        public async Task<IActionResult> ObtenerCitasPorFecha(DateTime fecha)
+        {
+            var citas = await _context.agendarCita
+                .Where(c => c.fecha.Date == fecha.Date)
+                .Select(c => new { c.hora })
+                .ToListAsync();
+
+            return Ok(citas);
+        }
+
+        [HttpDelete("eliminarCita/{id}")]
+        public async Task<IActionResult> EliminarCita(int id)
+        {
+            var cita = await _context.agendarCita.FindAsync(id);
+            if (cita == null)
+            {
+                return NotFound();
+            }
+
+            _context.agendarCita.Remove(cita);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
+        private bool CitaExists(int id)
+        {
+            return _context.agendarCita.Any(e => e.idCita == id);
+        }
+
         private bool usuarioPacienteExists(int id)
         {
-            return _context.usuarioPaciente.Any(e => e.idPacienteUsuario == id);
-        }
+            return _context.usuarioPaciente.Any(e => e.idPacienteUsuario == id);}
     }
-
-
 }

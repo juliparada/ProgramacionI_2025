@@ -295,42 +295,50 @@
         }
 
         // Renderiza la tabla a partir de localStorage
-        function renderTable() {
-            const cuerpo = document.getElementById('agenda-body');
-            if (!cuerpo) return;
-            cuerpo.innerHTML = '';
-            const citas = loadCitas();
+function renderTable() {
+    const cuerpo = document.getElementById('agenda-body');
+    if (!cuerpo) return;
+    cuerpo.innerHTML = '';
+    const citas = loadCitas();
 
-            for (let i = 0; i < filas; i += 1) {
-                const fila = document.createElement('tr');
+    for (let i = 0; i < filas; i += 1) {
+        const fila = document.createElement('tr');
 
-                const horaCelda = document.createElement('td');
-                horaCelda.className = 'hora';
-                horaCelda.textContent = franjasHorarias[i] || '';
-                fila.appendChild(horaCelda);
+        const horaCelda = document.createElement('td');
+        horaCelda.className = 'hora';
+        horaCelda.textContent = franjasHorarias[i] || '';
+        fila.appendChild(horaCelda);
 
-                columnas.forEach((dia) => {
-                    const celda = document.createElement('td');
-                    const clave = `${dia}_${i}`;
+        columnas.forEach((dia) => {
+            const celda = document.createElement('td');
+            const clave = `${dia}_${i}`;
+            const cita = citas[clave];
 
-                    if (citas[clave]) {
-                        celda.className = 'ocupado';
-                        const text = document.createElement('span');
-                        text.className = 'cell-text';
-                        text.textContent = citas[clave];
-                        celda.appendChild(text);
-                        celda.addEventListener('click', () => onCellClick(clave, citas[clave]));
-                    } else {
-                        celda.className = 'disponible';
-                        celda.textContent = 'Disponible';
-                        celda.addEventListener('click', () => onCrearCita(dia, i));
-                    }
+            if (cita) {
+                celda.className = 'ocupado';
+                const text = document.createElement('span');
+                text.className = 'cell-text';
 
-                    fila.appendChild(celda);
-                });
+                // Mostrar nombre si es objeto, o texto plano si es string
+                if (typeof cita === 'object') {
+                    text.textContent = cita.nombre || "Ocupado";
+                } else {
+                    text.textContent = cita;
+                }
 
-                cuerpo.appendChild(fila);
+                celda.appendChild(text);
+                celda.addEventListener('click', () => onCellClick(clave, cita));
+            } else {
+                celda.className = 'disponible';
+                celda.textContent = 'Disponible';
+                celda.addEventListener('click', () => onCrearCita(dia, i));
             }
+
+            fila.appendChild(celda);
+        });
+
+        cuerpo.appendChild(fila);
+    }
         }
 
         // Inicializa

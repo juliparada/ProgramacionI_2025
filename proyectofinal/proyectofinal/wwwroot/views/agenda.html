@@ -84,6 +84,7 @@
                 background-color: #5949c7;
             }
     </style>
+
 </head>
 <body>
 
@@ -113,58 +114,141 @@
     </div>
 
     <script>
-        // Generar automáticamente las horas disponibles (5:00 pm - 11:00 pm)
-        const horaSelect = document.getElementById("hora");
-        const horas = ["5:00 pm", "6:00 pm", "7:00 pm", "8:00 pm", "9:00 pm", "10:00 pm", "11:00 pm"];
-        horas.forEach(h => {
-            const option = document.createElement("option");
-            option.value = h;
-            option.textContent = h;
-            horaSelect.appendChild(option);
+        // Datos base
+        const filas = 6;
+        const columnas = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+        const franjasHorarias = [
+            "09:00 - 09:30",
+            "09:30 - 10:00",
+            "10:00 - 10:30",
+            "10:30 - 11:00",
+            "11:00 - 11:30",
+            "11:30 - 12:00"
+        ];
+
+        // Helpers de localStorage
+        function loadCitas() {
+            try {
+                const raw = localStorage.getItem('citas');
+                return raw ? JSON.parse(raw) : {};
+            } catch (e) {
+                console.warn('Error parseando citas desde localStorage:', e);
+                return {};
+            }
+        }
+
+        function saveCitas(citas) {
+            localStorage.setItem('citas', JSON.stringify(citas));
+        }
+
+        // Convierte fecha a nombre de día
+        function obtenerDiaDeLaSemana(fechaStr) {
+            const dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+            const fecha = new Date(fechaStr);
+            return dias[fecha.getDay()];
+        }
+
+        // Muestra las horas disponibles, bloqueando solo las ocupadas del día seleccionado
+        function mostrarHoras(fecha, ocupadasBackend = []) {
+            const horaSelect = document.getElementById("hora");
+            horaSelect.innerHTML = '<option value="">Seleccione una hora</option>';
+
+            const diaSeleccionado = obtenerDiaDeLaSemana(fecha); // "Lunes", "Martes", etc.
+            const citasLocales = loadCitas();
+            const ocupadasLocales = [];
+
+            Object.entries(citasLocales).forEach(([clave, valor]) => {
+                if (!clave.startsWith(diaSeleccionado)) return; // Solo citas del día seleccionado
+
+                if (typeof valor === 'object' && valor.nombre) {
+                    const partes = valor.nombre.split("·");
+                    if (partes.length > 1) ocupadasLocales.push(partes[1].trim());
+                } else if (typeof valor === 'string') {
+                    const partes = valor.split("·");
+                    if (partes.length > 1) ocupadasLocales.push(partes[1].trim());
+                }
+            });
+
+            const todasOcupadas = [...new Set([...ocupadasBackend, ...ocupadasLocales])];
+
+            franjasHorarias.forEach(h => {
+                const option = document.createElement("option");
+                option.value = h;
+                option.textContent = h;
+                if (todasOcupadas.includes(h)) {
+                    option.disabled = true;
+                    option.textContent += " (Ocupado)";
+                }
+                horaSelect.appendChild(option);
+            });
+        }
+
+        // Consulta ocupadas desde backend
+        function obtenerHorasOcupadasGlobal(fecha, callback) {
+            fetch(`https://localhost:5001/api/usuarioPacientes/obtenerCitasPorFecha/${fecha}`)
+                .then(response => response.json())
+                .then(data => {
+                    const ocupadas = data.map(cita => cita.hora);
+                    callback(ocupadas);
+                })
+                .catch(() => callback([]));
+        }
+
+        // Al cargar la página
+        window.onload = function () {
+            const fechaInicial = document.getElementById("fecha").value;
+            if (fechaInicial) {
+                obtenerHorasOcupadasGlobal(fechaInicial, (ocupadasBackend) => {
+                    mostrarHoras(fechaInicial, ocupadasBackend);
+                });
+            } else {
+                mostrarHoras("", []);
+            }
+        };
+
+        // Al cambiar la fecha
+        document.getElementById("fecha").addEventListener("change", function () {
+            const fecha = document.getElementById("fecha").value;
+            if (!fecha) {
+                mostrarHoras("", []);
+                return;
+            }
+            obtenerHorasOcupadasGlobal(fecha, (ocupadasBackend) => {
+                mostrarHoras(fecha, ocupadasBackend);
+            });
         });
 
-        // Acción al enviar el formulario
-        document.getElementById("formCita").addEventListener("submit", function (e) {
+        // Envío del formulario
+        document.getElementById("formulario").addEventListener("submit", function (e) {
             e.preventDefault();
 
             const nombre = document.getElementById("nombre").value.trim();
-            const motivo = document.getElementById("motivo").value.trim();
+
             const fecha = document.getElementById("fecha").value;
             const hora = document.getElementById("hora").value;
 
-            // ⚠️ Este ID debe venir del login o sesión
-            const idPacienteUsuario = 1; // Reemplaza con el valor real
-
-            if (nombre && motivo && fecha && hora) {
-                fetch("https://localhost:5001/api/usuarioPacientes/agendarCita", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        idPacienteUsuario,
-                        nombre,
-                        motivo,
-                        fecha,
-                        hora
-                    })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        alert(data.mensaje || "✅ Cita agendada correctamente");
-                        document.getElementById("formCita").reset();
-                    })
-                    .catch(error => {
-                        alert("❌ Error al agendar la cita");
-                        console.error(error);
-                    });
-            } else {
-                alert("⚠️ Todos los campos son obligatorios");
+            if (!nombre || !fecha || !hora) {
+                alert("Por favor complete todos los campos.");
+                return;
             }
-        });
-    </script>
+
+            const dia = obtenerDiaDeLaSemana(fecha);
+            const indice = franjasHorarias.indexOf(hora);
+            const clave = `${dia}_${indice}`;
+
+            const citas = loadCitas();
+            citas[clave] = `${nombre} · ${hora}`;
+            saveCitas(citas);
+
+            alert("Cita agendada correctamente.");
+
+            // Actualiza el selector de horas para reflejar el nuevo estado
+            obtenerHorasOcupadasGlobal(fecha, (ocupadasBackend) => {
+                mostrarHoras(fecha, ocupadasBackend);
+            });
+        });</script>
 
 
 
 </body>
-</html >
+</html>
