@@ -1,4 +1,4 @@
-wwwroot\img\logo.png
-wwwroot\views\alumno.html
-wwwroot\views\busqueda_alumno.html
 wwwroot\views\index.html
+wwwroot\img\logo.png
+wwwroot\views\busqueda_alumno.html
+wwwroot\views\alumno.html

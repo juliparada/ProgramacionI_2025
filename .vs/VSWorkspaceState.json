@@ -1,6 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\WebAppAcademica",
+    "\\WebAppAcademica\\WebAppAcademica",
+    "\\WebAppAcademica\\WebAppAcademica\\wwwroot",
+    "\\WebAppAcademica\\WebAppAcademica\\wwwroot\\views"
   ],
+  "SelectedNode": "\\WebAppAcademica\\WebAppAcademica\\wwwroot\\views\\busqueda_alumno.html",
   "PreviewInSolutionExplorer": false
 }
