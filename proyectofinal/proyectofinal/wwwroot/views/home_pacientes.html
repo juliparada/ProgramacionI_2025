@@ -6,8 +6,8 @@
     <title>Agenda Medica - Dr. Cordova</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #cfcfcf;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e0f7fa; /* celeste suave */
             margin: 0;
             padding: 0;
         }
@@ -16,38 +16,40 @@
             border-collapse: collapse;
             width: 92%;
             margin: 30px auto;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         th, td {
-            border: 1px solid #aaa;
+            border: 1px solid #b2dfdb;
             padding: 10px;
             text-align: center;
         }
 
             th.hora, td.hora {
-                background: #f3f3f3;
+                background: #b2ebf2;
                 width: 140px;
                 font-weight: 700;
+                color: #004d40;
             }
 
         .titulo {
             font-family: "Brush Script MT", cursive;
             font-size: 2em;
             font-style: italic;
-            background-color: #f9f9f9;
+            background-color: #b2ebf2;
             border: none;
             text-align: center;
             height: 60px;
             vertical-align: middle;
+            color: #00695c;
         }
 
         .menu {
-            background-color: #efefef;
+            background-color: #e0f2f1;
             font-weight: bold;
             text-align: center;
-            height: auto;
+
             padding: 12px 0;
             position: relative;
         }
@@ -64,14 +66,14 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(90deg,#5a49e3 0%, #4637b8 100%);
+            background: linear-gradient(90deg,#00796b 0%, #004d40 100%);
             color: #fff;
             border: none;
             padding: 10px 14px;
             border-radius: 8px;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 6px 14px rgba(70,55,160,0.12);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.1);
             transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
             text-decoration: none;
             white-space: nowrap;
@@ -79,9 +81,9 @@
         }
 
             .btn.secondary {
-                background: #fff;
+                background: #ffffff;
                 color: #333;
-                border: 1px solid #ddd;
+                border: 1px solid #b2dfdb;
                 box-shadow: 0 4px 8px rgba(0,0,0,0.06);
                 font-weight: 600;
             }
@@ -116,22 +118,23 @@
             }
 
             .icono:focus {
-                outline: 3px solid rgba(90,73,227,0.18);
+                outline: 3px solid rgba(0,150,136,0.2);
             }
 
         .dias {
-            background-color: #ddd;
+            background-color: #b2dfdb;
             font-weight: bold;
+            color: #004d40;
         }
 
         td.disponible {
-            background-color: #e7f5e7;
+            background-color: #e0f2f1;
             cursor: pointer;
             vertical-align: middle;
         }
 
         td.ocupado {
-            background-color: #ffd6d6;
+            background-color: #ffcdd2;
             color: #444;
             font-weight: bold;
 
@@ -139,7 +142,7 @@
         }
 
         td.disponible:hover {
-            background-color: #c6eac6;
+            background-color: #b2dfdb;
         }
 
         .cell-text {
@@ -166,6 +169,7 @@
                 font-size: 0.9rem;
                 padding: 8px;
             }
+
             .cell-text {
                 max-width: 80px;
             }
@@ -278,11 +282,18 @@
 
         // Crear cita al pulsar en celda disponible
         function onCrearCita(dia, indice) {
-            const nombre = prompt(`Agendar cita para ${dia} (${franjasHorarias[indice]})\nIngrese su nombre:`);
+            const nombre = prompt(`Agendar cita para ${dia} (${franjasHorarias[indice]})\nIngrese nombre del paciente:`);
             if (!nombre) return;
+
+            const edad = prompt(`Ingrese la edad de ${nombre.trim()}:`);
+            if (!edad) return;
+
+            const motivo = prompt(`Ingrese el motivo de la cita para ${nombre.trim()}:`);
+            if (!motivo) return;
+
             const citas = loadCitas();
             const clave = `${dia}_${indice}`;
-            citas[clave] = `${nombre.trim()} · ${franjasHorarias[indice]}`;
+            citas[clave] = `${nombre.trim()} · Edad: ${edad.trim()} · Motivo: ${motivo.trim()} · ${franjasHorarias[indice]}`;
             saveCitas(citas);
             renderTable();
         }

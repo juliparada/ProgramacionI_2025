@@ -1,0 +1,160 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>Búsqueda de Pacientes</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #e0f7fa; /* celeste suave */
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 32px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 28px;
+            color: #00796b;
+            font-size: 1.8rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: 1px solid #b2dfdb;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        th, td {
+            border: 1px solid #b2dfdb;
+            padding: 10px 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #b2ebf2;
+            color: #004d40;
+        }
+
+        tr:nth-child(even) {
+            background: #f1f8e9;
+        }
+
+        tr:hover {
+            background: #dcedc8;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #666;
+            padding: 20px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Búsqueda de Pacientes</h2>
+        <input type="text" id="busqueda" placeholder="Buscar por nombre..." autocomplete="off" />
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Motivo</th>
+                    <th>Edad</th>
+                </tr>
+            </thead>
+            <tbody id="resultados">
+                <!-- Resultados aquí -->
+            </tbody>
+        </table>
+        <div id="noResultados" class="no-results" style="display:none;">No se encontraron pacientes.</div>
+    </div>
+
+    <script>
+        // Parsea el string de la cita y extrae nombre, edad y motivo
+        function parseCitaString(valor) {
+            // valor esperado: "Nombre · Edad: 13 · Motivo: Dolor de cabeza · 09:30 - 10:00"
+            const partes = valor.split('·').map(p => p.trim());
+            const nombre = partes[0] || "-";
+            let edad = "-";
+            let motivo = "-";
+            partes.forEach(p => {
+                if (p.startsWith("Edad:")) edad = p.replace("Edad:", "").trim();
+                if (p.startsWith("Motivo:")) motivo = p.replace("Motivo:", "").trim();
+            });
+            return { nombre, motivo, edad };
+        }
+
+        // Lee las citas desde localStorage y extrae los pacientes únicos
+        function obtenerPacientesDeCitas() {
+            const raw = localStorage.getItem('citas');
+            if (!raw) return [];
+            const citas = JSON.parse(raw);
+            const pacientesMap = {};
+
+            Object.values(citas).forEach(valor => {
+                if (typeof valor === "string") {
+                    const { nombre, motivo, edad } = parseCitaString(valor);
+                    if (nombre && !pacientesMap[nombre]) {
+                        pacientesMap[nombre] = { nombre, motivo, edad };
+                    }
+                }
+            });
+
+            return Object.values(pacientesMap);
+        }
+
+        const inputBusqueda = document.getElementById('busqueda');
+        const tbody = document.getElementById('resultados');
+        const noResultados = document.getElementById('noResultados');
+
+        function mostrarResultados(filtrados) {
+            tbody.innerHTML = '';
+            if (filtrados.length === 0) {
+                noResultados.style.display = 'block';
+                return;
+            }
+            noResultados.style.display = 'none';
+            filtrados.forEach(p => {
+                const fila = document.createElement('tr');
+                fila.innerHTML = `<td>${p.nombre}</td><td>${p.motivo}</td><td>${p.edad}</td>`;
+                tbody.appendChild(fila);
+            });
+        }
+
+        function filtrarPacientes() {
+            const pacientes = obtenerPacientesDeCitas();
+            const texto = inputBusqueda.value.trim().toLowerCase();
+            const filtrados = pacientes.filter(p =>
+                p.nombre.toLowerCase().includes(texto)
+            );
+            mostrarResultados(filtrados);
+        }
+
+        inputBusqueda.addEventListener('input', filtrarPacientes);
+
+        // Mostrar todos al cargar
+        mostrarResultados(obtenerPacientesDeCitas());
+    </script>
+</body>
+</html>

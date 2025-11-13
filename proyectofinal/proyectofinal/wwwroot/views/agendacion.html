@@ -6,8 +6,8 @@
     <title>Agenda - Dr. Cordoba</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #cfcfcf;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e0f7fa; /* celeste suave */
             margin: 0;
             padding: 0;
         }
@@ -16,21 +16,22 @@
             border-collapse: collapse;
             width: 92%;
             margin: 30px auto;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         th, td {
-            border: 1px solid #aaa;
+            border: 1px solid #b2dfdb;
             padding: 10px;
             text-align: center;
         }
 
             /* Columna de horas */
             th.hora, td.hora {
-                background: #f3f3f3;
+                background: #b2ebf2;
                 width: 140px;
                 font-weight: 700;
+                color: #004d40;
             }
 
         /* Encabezado */
@@ -38,21 +39,21 @@
             font-family: "Brush Script MT", cursive;
             font-size: 2em;
             font-style: italic;
-            background-color: #f9f9f9;
+            background-color: #b2ebf2;
             border: none;
             text-align: center;
             height: 60px;
             vertical-align: middle;
+            color: #00695c;
         }
 
-        /* Menú (fila) - centrado debajo del título */
+        /* Menú */
         .menu {
-            background-color: #efefef;
+            background-color: #e0f2f1;
             font-weight: bold;
             text-align: center;
-            height: auto;
             padding: 12px 0;
-            position: relative; /* permite posicionar iconos en la esquina */
+            position: relative;
         }
 
         .menu-bar {
@@ -67,14 +68,14 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(90deg,#5a49e3 0%, #4637b8 100%);
+            background: linear-gradient(90deg,#00796b 0%, #004d40 100%);
             color: #fff;
             border: none;
             padding: 10px 14px;
             border-radius: 8px;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 6px 14px rgba(70,55,160,0.12);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.1);
             transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
             text-decoration: none;
             white-space: nowrap;
@@ -82,14 +83,14 @@
         }
 
             .btn.secondary {
-                background: #fff;
+                background: #ffffff;
                 color: #333;
-                border: 1px solid #ddd;
+                border: 1px solid #b2dfdb;
                 box-shadow: 0 4px 8px rgba(0,0,0,0.06);
                 font-weight: 600;
             }
 
-        /* Contenedor de iconos en esquina derecha */
+        /* Iconos */
         .iconos {
             position: absolute;
             right: 12px;
@@ -120,31 +121,32 @@
             }
 
             .icono:focus {
-                outline: 3px solid rgba(90,73,227,0.18);
+                outline: 3px solid rgba(0,150,136,0.2);
             }
 
         /* Días */
         .dias {
-            background-color: #ddd;
+            background-color: #b2dfdb;
             font-weight: bold;
+            color: #004d40;
         }
 
         /* Celdas */
         td.disponible {
-            background-color: #e7f5e7;
+            background-color: #e0f2f1;
             cursor: pointer;
             vertical-align: middle;
         }
 
         td.ocupado {
-            background-color: #ffd6d6;
+            background-color: #ffcdd2;
             color: #444;
             font-weight: bold;
-            cursor: pointer;
+            cursor: default;
         }
 
         td.disponible:hover {
-            background-color: #c6eac6;
+            background-color: #b2dfdb;
         }
 
         /* Texto en celda ocupada */
@@ -188,8 +190,8 @@
         <tr class="menu">
             <td colspan="7">
                 <div class="menu-bar" role="toolbar" aria-label="Navegación principal">
-                    <a class="btn" href="agenda_administracion.html" role="button">Agenda</a>
-                    <a class="btn secondary" href="agenda_administracion.html" role="button">Registro de pacientes</a>
+                    <a class="btn" href="agenda.html" role="button">Agenda</a>
+                    <a class="btn secondary" href="busqueda_Pacientes.html" role="button">Busqueda de pacientes</a>
                     <a class="btn secondary" href="facturas.html" role="button">Facturas</a>
                 </div>
 
@@ -244,10 +246,12 @@
         // parseValor conserva nombre y hora/franja de la cadena "Nombre · Hora"
         function parseValor(valor) {
             const parts = valor.split('·').map(p => p.trim());
-            return {
-                nombre: parts[0] || '',
-                hora: parts[1] || ''
-            };
+            const nombre = parts[0] || '';
+            const edad = parts.find(p => p.startsWith("Edad:"))?.split(":")[1]?.trim() || '';
+            const motivo = parts.find(p => p.startsWith("Motivo:"))?.split(":")[1]?.trim() || '';
+            const hora = parts.find(p => p.includes(":") && p.includes("-")) || '';
+
+            return { nombre, edad, motivo, hora };
         }
 
         // Click en celda ocupada: aceptar = editar, cancelar = eliminar
@@ -255,21 +259,21 @@
             const citas = loadCitas();
             const parsed = parseValor(valor);
 
-            const editar = confirm(`Cita: ${valor}\n\nPulse Aceptar para EDITAR la cita.\nPulse Cancelar para ELIMINAR la cita.`);
+            const editar = confirm(`Cita:\nNombre: ${parsed.nombre}\nEdad: ${parsed.edad}\nMotivo: ${parsed.motivo}\nHora: ${parsed.hora}\n\nPulse Aceptar para EDITAR la cita.\nPulse Cancelar para ELIMINAR la cita.`);
             if (editar) {
                 const nuevoNombre = prompt('Editar nombre del paciente:', parsed.nombre);
-                if (nuevoNombre === null) return; // cancelar
-                const nuevaHora = prompt('Editar hora o franja (ej. 09:00 o 09:00 - 09:30):', parsed.hora);
-                if (nuevaHora === null) return; // cancelar
+                if (nuevoNombre === null) return;
 
-                const nombreTrim = nuevoNombre.trim();
-                const horaTrim = nuevaHora.trim();
-                if (nombreTrim === '') {
-                    alert('El nombre no puede quedar vacío.');
-                    return;
-                }
+                const nuevaEdad = prompt('Editar edad del paciente:', parsed.edad);
+                if (nuevaEdad === null) return;
 
-                citas[clave] = `${nombreTrim} · ${horaTrim}`;
+                const nuevoMotivo = prompt('Editar motivo de la cita:', parsed.motivo);
+                if (nuevoMotivo === null) return;
+
+                const nuevaHora = prompt('Editar hora o franja (ej. 09:00 - 09:30):', parsed.hora);
+                if (nuevaHora === null) return;
+
+                citas[clave] = `${nuevoNombre.trim()} · Edad: ${nuevaEdad.trim()} · Motivo: ${nuevoMotivo.trim()} · ${nuevaHora.trim()}`;
                 saveCitas(citas);
                 renderTable();
             } else {
@@ -287,9 +291,16 @@
         function onCrearCita(dia, indice) {
             const nombre = prompt(`Agendar cita para ${dia} (${franjasHorarias[indice]})\nIngrese nombre del paciente:`);
             if (!nombre) return;
+
+            const edad = prompt(`Ingrese la edad de ${nombre.trim()}:`);
+            if (!edad) return;
+
+            const motivo = prompt(`Ingrese el motivo de la cita para ${nombre.trim()}:`);
+            if (!motivo) return;
+
             const citas = loadCitas();
             const clave = `${dia}_${indice}`;
-            citas[clave] = `${nombre.trim()} · ${franjasHorarias[indice]}`;
+            citas[clave] = `${nombre.trim()} · Edad: ${edad.trim()} · Motivo: ${motivo.trim()} · ${franjasHorarias[indice]}`;
             saveCitas(citas);
             renderTable();
         }
@@ -321,7 +332,7 @@ function renderTable() {
 
                 // Mostrar nombre si es objeto, o texto plano si es string
                 if (typeof cita === 'object') {
-                    text.textContent = cita.nombre || "Ocupado";
+                    text.textContent = parseValor(cita).nombre || "Ocupado";
                 } else {
                     text.textContent = cita;
                 }
