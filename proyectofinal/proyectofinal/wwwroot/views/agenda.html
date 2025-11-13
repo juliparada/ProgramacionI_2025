@@ -93,12 +93,15 @@
     <div class="form-container">
         <div class="form-header">
             <h2>Agenda</h2>
-            <img src="icon.png" alt="Icon">
-        </div>
+            <h1> 📝 </h1>
+</div>
 
         <form id="formCita">
             <label for="nombre">Nombre del paciente:</label>
             <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
+
+            <label for="edad">Edad:</label>
+            <input type="text" id="edad" name="edad" placeholder="Ingrese su edad" required>
 
             <label for="motivo">Motivo:</label>
             <input type="text" id="motivo" name="motivo" placeholder="Escriba el motivo de la cita" required>
@@ -145,7 +148,7 @@
 
         // Convierte fecha a nombre de día
         function obtenerDiaDeLaSemana(fechaStr) {
-            const dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+            const dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
             const fecha = new Date(fechaStr);
             return dias[fecha.getDay()];
         }
@@ -221,15 +224,16 @@
         });
 
         // Envío del formulario
-        document.getElementById("formulario").addEventListener("submit", function (e) {
+        document.getElementById("formCita").addEventListener("submit", function (e) {
             e.preventDefault();
 
             const nombre = document.getElementById("nombre").value.trim();
-
+            const edad = document.getElementById("edad").value.trim();
+            const motivo = document.getElementById("motivo").value.trim();
             const fecha = document.getElementById("fecha").value;
             const hora = document.getElementById("hora").value;
 
-            if (!nombre || !fecha || !hora) {
+            if (!nombre || !edad || !motivo || !fecha || !hora) {
                 alert("Por favor complete todos los campos.");
                 return;
             }
@@ -239,7 +243,7 @@
             const clave = `${dia}_${indice}`;
 
             const citas = loadCitas();
-            citas[clave] = `${nombre} · ${hora}`;
+            citas[clave] = `${nombre} · Edad: ${edad} · Motivo: ${motivo} · ${hora}`;
             saveCitas(citas);
 
             alert("Cita agendada correctamente.");
@@ -248,7 +252,8 @@
             obtenerHorasOcupadasGlobal(fecha, (ocupadasBackend) => {
                 mostrarHoras(fecha, ocupadasBackend);
             });
-        });</script>
+        });
+    </script>
 
 
 

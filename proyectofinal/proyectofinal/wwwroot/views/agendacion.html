@@ -190,15 +190,12 @@
         <tr class="menu">
             <td colspan="7">
                 <div class="menu-bar" role="toolbar" aria-label="Navegación principal">
-                    <a class="btn" href="agenda.html" role="button">Agenda</a>
-                    <a class="btn secondary" href="busqueda_Pacientes.html" role="button">Busqueda de pacientes</a>
-                    <a class="btn secondary" href="facturas.html" role="button">Facturas</a>
+                    <a class="btn" href="agenda.html" role="button">Agenda 📝</a>
+                    <a class="btn secondary" href="busqueda_Pacientes.html" role="button">Busqueda de pacientes 👤</a>
+                    <a class="btn secondary" href="facturas.html" role="button">Facturas 🧾</a>
                 </div>
 
-                <div class="iconos" aria-hidden="false">
-                    <a class="icono" id="icon-descargas" aria-label="Descargas" title="Descargas" href="descargas.html">⬇️</a>
-                    <a class="icono" id="icon-facturas" aria-label="Facturas" title="Facturas" href="facturas.html">🧾</a>
-                </div>
+
             </td>
         </tr>
 
@@ -212,7 +209,9 @@
             <th>Sábado</th>
         </tr>
 
+
         <tbody id="agenda-body"></tbody>
+
     </table>
 
     <script>
@@ -270,8 +269,7 @@
                 const nuevoMotivo = prompt('Editar motivo de la cita:', parsed.motivo);
                 if (nuevoMotivo === null) return;
 
-                const nuevaHora = prompt('Editar hora o franja (ej. 09:00 - 09:30):', parsed.hora);
-                if (nuevaHora === null) return;
+
 
                 citas[clave] = `${nuevoNombre.trim()} · Edad: ${nuevaEdad.trim()} · Motivo: ${nuevoMotivo.trim()} · ${nuevaHora.trim()}`;
                 saveCitas(citas);
@@ -306,50 +304,50 @@
         }
 
         // Renderiza la tabla a partir de localStorage
-function renderTable() {
-    const cuerpo = document.getElementById('agenda-body');
-    if (!cuerpo) return;
-    cuerpo.innerHTML = '';
-    const citas = loadCitas();
+        function renderTable() {
+            const cuerpo = document.getElementById('agenda-body');
+            if (!cuerpo) return;
+            cuerpo.innerHTML = '';
+            const citas = loadCitas();
 
-    for (let i = 0; i < filas; i += 1) {
-        const fila = document.createElement('tr');
+            for (let i = 0; i < filas; i += 1) {
+                const fila = document.createElement('tr');
 
-        const horaCelda = document.createElement('td');
-        horaCelda.className = 'hora';
-        horaCelda.textContent = franjasHorarias[i] || '';
-        fila.appendChild(horaCelda);
+                const horaCelda = document.createElement('td');
+                horaCelda.className = 'hora';
+                horaCelda.textContent = franjasHorarias[i] || '';
+                fila.appendChild(horaCelda);
 
-        columnas.forEach((dia) => {
-            const celda = document.createElement('td');
-            const clave = `${dia}_${i}`;
-            const cita = citas[clave];
+                columnas.forEach((dia) => {
+                    const celda = document.createElement('td');
+                    const clave = `${dia}_${i}`;
+                    const cita = citas[clave];
 
-            if (cita) {
-                celda.className = 'ocupado';
-                const text = document.createElement('span');
-                text.className = 'cell-text';
+                    if (cita) {
+                        celda.className = 'ocupado';
+                        const text = document.createElement('span');
+                        text.className = 'cell-text';
 
-                // Mostrar nombre si es objeto, o texto plano si es string
-                if (typeof cita === 'object') {
-                    text.textContent = parseValor(cita).nombre || "Ocupado";
-                } else {
-                    text.textContent = cita;
-                }
+                        // Mostrar nombre si es objeto, o texto plano si es string
+                        if (typeof cita === 'object') {
+                            text.textContent = parseValor(cita).nombre || "Ocupado";
+                        } else {
+                            text.textContent = cita;
+                        }
 
-                celda.appendChild(text);
-                celda.addEventListener('click', () => onCellClick(clave, cita));
-            } else {
-                celda.className = 'disponible';
-                celda.textContent = 'Disponible';
-                celda.addEventListener('click', () => onCrearCita(dia, i));
+                        celda.appendChild(text);
+                        celda.addEventListener('click', () => onCellClick(clave, cita));
+                    } else {
+                        celda.className = 'disponible';
+                        celda.textContent = 'Disponible';
+                        celda.addEventListener('click', () => onCrearCita(dia, i));
+                    }
+
+                    fila.appendChild(celda);
+                });
+
+                cuerpo.appendChild(fila);
             }
-
-            fila.appendChild(celda);
-        });
-
-        cuerpo.appendChild(fila);
-    }
         }
 
         // Inicializa
