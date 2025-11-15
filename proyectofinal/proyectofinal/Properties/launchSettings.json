@@ -24,7 +24,7 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "views/UsuarioPacientes.html",
-      "applicationUrl": "https://localhost:7289;http://localhost:5212",
+      "applicationUrl": "https://localhost:7289;http://localhost:5289",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

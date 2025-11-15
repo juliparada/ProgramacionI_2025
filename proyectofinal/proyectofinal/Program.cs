@@ -27,6 +27,10 @@ app.UseDefaultFiles(); // Esto buscará index.html automáticamente
 
 app.UseStaticFiles();
 
+app.UseCors(builder =>
+    builder.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader());
 
 
 app.UseAuthorization();

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda - Dr. Cordoba</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -182,6 +183,10 @@
     </style>
 </head>
 <body>
+    <div style="width:92%;margin:24px auto 0 auto;text-align:right;">
+        <label for="calendario" style="font-weight:bold;color:#00695c;">Seleccionar semana: </label>
+        <input id="calendario" type="text" style="padding:8px 12px;border-radius:6px;border:1px solid #b2dfdb;font-size:1rem;">
+    </div>
     <table>
         <tr>
             <td colspan="7" class="titulo">Dr. Cordoba</td>
@@ -214,6 +219,7 @@
 
     </table>
 
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         // Datos de la tabla
         const filas = 6;
@@ -226,6 +232,29 @@
             "11:00 - 11:30",
             "11:30 - 12:00"
         ];
+
+        // Utilidad para obtener el lunes de la semana de una fecha
+        function getMonday(d) {
+            d = new Date(d);
+            var day = d.getDay(),
+                diff = d.getDate() - day + (day === 0 ? -6 : 1); // Ajuste para lunes
+            return new Date(d.setDate(diff));
+        }
+
+        // Devuelve un array con las fechas de lunes a sábado de la semana seleccionada
+        function getWeekDates(selectedDate) {
+            const monday = getMonday(selectedDate);
+            return Array.from({ length: 6 }, (_, i) => {
+                const d = new Date(monday);
+                d.setDate(monday.getDate() + i);
+                return d;
+            });
+        }
+
+        // Formatea fecha a yyyy-mm-dd
+        function formatDate(d) {
+            return d.toISOString().slice(0, 10);
+        }
 
         // LocalStorage helpers
         function loadCitas() {
@@ -253,6 +282,58 @@
             return { nombre, edad, motivo, hora };
         }
 
+        // Estado global de la fecha seleccionada
+        let selectedDate = new Date();
+
+        // Renderiza la tabla a partir de localStorage y la semana seleccionada
+        function renderTable() {
+            const cuerpo = document.getElementById('agenda-body');
+            if (!cuerpo) return;
+            cuerpo.innerHTML = '';
+            const citas = loadCitas();
+            const weekDates = getWeekDates(selectedDate);
+
+            for (let i = 0; i < filas; i += 1) {
+                const fila = document.createElement('tr');
+
+                const horaCelda = document.createElement('td');
+                horaCelda.className = 'hora';
+                horaCelda.textContent = franjasHorarias[i] || '';
+                fila.appendChild(horaCelda);
+
+                columnas.forEach((dia, idx) => {
+                    const celda = document.createElement('td');
+                    const fechaClave = formatDate(weekDates[idx]);
+                    const clave = `${fechaClave}_${dia}_${i}`;
+                    const cita = citas[clave];
+
+                    if (cita) {
+                        celda.className = 'ocupado';
+                        const text = document.createElement('span');
+                        text.className = 'cell-text';
+
+                        if (typeof cita === 'object' && cita.valor) {
+                            text.textContent = cita.valor;
+                            celda.addEventListener('click', () => onCellClick(clave, cita.valor));
+                        } else {
+                            text.textContent = cita;
+                            celda.addEventListener('click', () => onCellClick(clave, cita));
+                        }
+
+                        celda.appendChild(text);
+                    } else {
+                        celda.className = 'disponible';
+                        celda.textContent = 'Disponible';
+                        celda.addEventListener('click', () => onCrearCita(dia, i, weekDates));
+                    }
+
+                    fila.appendChild(celda);
+                });
+
+                cuerpo.appendChild(fila);
+            }
+        }
+
         // Click en celda ocupada: aceptar = editar, cancelar = eliminar
         function onCellClick(clave, valor) {
             const citas = loadCitas();
@@ -269,24 +350,21 @@
                 const nuevoMotivo = prompt('Editar motivo de la cita:', parsed.motivo);
                 if (nuevoMotivo === null) return;
 
-
-
-                citas[clave] = `${nuevoNombre.trim()} · Edad: ${nuevaEdad.trim()} · Motivo: ${nuevoMotivo.trim()} · ${nuevaHora.trim()}`;
-                saveCitas(citas);
-                renderTable();
+                // Mantener la hora original
+                citas[clave] = {
+                    valor: `${nuevoNombre.trim()} · Edad: ${nuevaEdad.trim()} · Motivo: ${nuevoMotivo.trim()} · ${parsed.hora}`,
+                    homePacientes: true
+                };
             } else {
-                const confirmar = confirm('¿Eliminar definitivamente esta cita?');
-                if (!confirmar) return;
-                if (Object.prototype.hasOwnProperty.call(citas, clave)) {
-                    delete citas[clave];
-                    saveCitas(citas);
-                    renderTable();
-                }
+                citas[clave] = `${nuevoNombre.trim()} · Edad: ${nuevaEdad.trim()} · Motivo: ${nuevoMotivo.trim()} · ${parsed.hora}`;
             }
+            saveCitas(citas);
+            renderTable();
+
         }
 
         // Crear cita al pulsar en celda disponible
-        function onCrearCita(dia, indice) {
+        function onCrearCita(dia, indice, weekDates) {
             const nombre = prompt(`Agendar cita para ${dia} (${franjasHorarias[indice]})\nIngrese nombre del paciente:`);
             if (!nombre) return;
 
@@ -297,58 +375,35 @@
             if (!motivo) return;
 
             const citas = loadCitas();
-            const clave = `${dia}_${indice}`;
-            citas[clave] = `${nombre.trim()} · Edad: ${edad.trim()} · Motivo: ${motivo.trim()} · ${franjasHorarias[indice]}`;
+            const weekDatesArr = weekDates || getWeekDates(selectedDate);
+            const fechaClave = formatDate(weekDatesArr[columnas.indexOf(dia)]);
+            const clave = `${fechaClave}_${dia}_${indice}`;
+            citas[clave] = `${nombre} · Edad: ${edad} · Motivo: ${motivo} · ${franjasHorarias[indice]}`;
             saveCitas(citas);
             renderTable();
         }
 
-        // Renderiza la tabla a partir de localStorage
-        function renderTable() {
-            const cuerpo = document.getElementById('agenda-body');
-            if (!cuerpo) return;
-            cuerpo.innerHTML = '';
-            const citas = loadCitas();
+        // Flatpickr: calendario para seleccionar la semana
+        flatpickr("#calendario", {
+            locale: "es",
+            defaultDate: new Date(),
+            inline: false,
+            onChange: function (selectedDates) {
+                if (selectedDates.length > 0) {
+                    selectedDate = selectedDates[0];
+                    renderTable();
+                }
+            },
+            disable: [
+                function (date) {
+                    // Solo permitir seleccionar lunes a sábado (no domingos)
+                    return (date.getDay() === 0);
+                }
+            ]
+        });
 
-            for (let i = 0; i < filas; i += 1) {
-                const fila = document.createElement('tr');
-
-                const horaCelda = document.createElement('td');
-                horaCelda.className = 'hora';
-                horaCelda.textContent = franjasHorarias[i] || '';
-                fila.appendChild(horaCelda);
-
-                columnas.forEach((dia) => {
-                    const celda = document.createElement('td');
-                    const clave = `${dia}_${i}`;
-                    const cita = citas[clave];
-
-                    if (cita) {
-                        celda.className = 'ocupado';
-                        const text = document.createElement('span');
-                        text.className = 'cell-text';
-
-                        // Mostrar nombre si es objeto, o texto plano si es string
-                        if (typeof cita === 'object') {
-                            text.textContent = parseValor(cita).nombre || "Ocupado";
-                        } else {
-                            text.textContent = cita;
-                        }
-
-                        celda.appendChild(text);
-                        celda.addEventListener('click', () => onCellClick(clave, cita));
-                    } else {
-                        celda.className = 'disponible';
-                        celda.textContent = 'Disponible';
-                        celda.addEventListener('click', () => onCrearCita(dia, i));
-                    }
-
-                    fila.appendChild(celda);
-                });
-
-                cuerpo.appendChild(fila);
-            }
-        }
+        // Inicializa el input con la fecha actual
+        document.getElementById('calendario').value = formatDate(selectedDate);
 
         // Inicializa
         renderTable();

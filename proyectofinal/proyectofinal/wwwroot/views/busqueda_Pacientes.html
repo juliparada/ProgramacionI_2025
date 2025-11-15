@@ -3,7 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <title>Búsqueda de Pacientes</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
+        /* 🔷 ESTILO GENERAL DEL CUERPO */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #e0f7fa; /* celeste suave */
@@ -11,49 +13,65 @@
             padding: 0;
         }
 
+        /* 🔷 CONTENEDOR PRINCIPAL */
         .container {
-            max-width: 700px;
-            margin: 50px auto;
+            max-width: 1100px;
+            margin: 30px auto; /* antes 50px → más arriba */
             background: #ffffff;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 32px;
+            padding: 40px 100px 80px 40px;
         }
 
+        /* 🔷 TÍTULO */
         h2 {
             text-align: center;
+            margin-top: 0; /* nuevo: elimina espacio arriba */
             margin-bottom: 28px;
             color: #00796b;
             font-size: 1.8rem;
         }
 
+        /* 🔷 CAMPOS DE TEXTO (Nombre, Motivo, etc.) */
         input[type="text"] {
-            width: 96%;
-            padding: 12px;
-            font-size: 1rem;
+            width: 103%; /* más compacto */
+            padding: 10px;
+            font-size: 0.95rem;
             border: 1px solid #b2dfdb;
             border-radius: 8px;
             margin-bottom: 20px;
             box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 16px;
+        /* 🔷 CAMPO DE FECHA (flatpickr) */
+        .flatpickr-input {
+            width: 90%; /* igual que input de texto */
+            padding: 10px;
+            font-size: 0.95rem;
         }
 
+        /* 🔷 TABLA DE PACIENTES */
+        table {
+            width: 105%; /* ligeramente más estrecha */
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        /* 🔷 CELDAS DE LA TABLA */
         th, td {
             border: 1px solid #b2dfdb;
-            padding: 10px 12px;
+            padding: 8px 10px; /* menos relleno */
+            font-size: 1.1rem; /* texto un poco más pequeño */
             text-align: left;
         }
 
+        /* 🔷 ENCABEZADO DE LA TABLA */
         th {
             background: #b2ebf2;
             color: #004d40;
         }
 
+        /* 🔷 FILAS ALTERNAS Y HOVER */
         tr:nth-child(even) {
             background: #f1f8e9;
         }
@@ -62,11 +80,45 @@
             background: #dcedc8;
         }
 
+        /* 🔷 MENSAJE CUANDO NO HAY RESULTADOS */
         .no-results {
             text-align: center;
             color: #666;
             padding: 20px 0;
             font-style: italic;
+        }
+
+        /* 🔷 BOTONES DE ACCIÓN */
+        .btn {
+            padding: 4px 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            margin-right: 4px;
+        }
+
+        /* 🔷 BOTÓN ELIMINAR */
+        .btn-eliminar {
+            background: #c9e553;
+            color: #221717;
+        }
+
+        /* 🔷 BOTÓN MODIFICAR */
+        .btn-modificar {
+            background: #7bb6dd;
+            color: #fefefe;
+        }
+
+        /* 🔷 BOTÓN GUARDAR */
+        .btn-guardar {
+            background: #4caf50;
+            color: #fff;
+        }
+
+        /* 🔷 BOTÓN CANCELAR */
+        .btn-cancelar {
+            background: #bdbdbd;
+            color: #333;
         }
     </style>
 </head>
@@ -81,6 +133,9 @@
                     <th>Nombre</th>
                     <th>Motivo</th>
                     <th>Edad</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody id="resultados">
@@ -90,38 +145,45 @@
         <div id="noResultados" class="no-results" style="display:none;">No se encontraron pacientes.</div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        // Parsea el string de la cita y extrae nombre, edad y motivo
+        const franjasHorarias = [
+            "09:00 - 09:30", "09:30 - 10:00", "10:00 - 10:30",
+            "10:30 - 11:00", "11:00 - 11:30", "11:30 - 12:00"
+        ];
+        const columnas = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+
+        // Parsea el string de la cita y extrae nombre, edad, motivo y hora
         function parseCitaString(valor) {
             // valor esperado: "Nombre · Edad: 13 · Motivo: Dolor de cabeza · 09:30 - 10:00"
             const partes = valor.split('·').map(p => p.trim());
             const nombre = partes[0] || "-";
             let edad = "-";
             let motivo = "-";
+            let hora = "-";
             partes.forEach(p => {
                 if (p.startsWith("Edad:")) edad = p.replace("Edad:", "").trim();
                 if (p.startsWith("Motivo:")) motivo = p.replace("Motivo:", "").trim();
+                if (franjasHorarias.includes(p)) hora = p;
             });
-            return { nombre, motivo, edad };
+            return { nombre, motivo, edad, hora };
         }
 
-        // Lee las citas desde localStorage y extrae los pacientes únicos
+        // Lee las citas desde localStorage y extrae los pacientes únicos con su cita
         function obtenerPacientesDeCitas() {
             const raw = localStorage.getItem('citas');
             if (!raw) return [];
             const citas = JSON.parse(raw);
-            const pacientesMap = {};
+            const pacientes = [];
 
-            Object.values(citas).forEach(valor => {
-                if (typeof valor === "string") {
-                    const { nombre, motivo, edad } = parseCitaString(valor);
-                    if (nombre && !pacientesMap[nombre]) {
-                        pacientesMap[nombre] = { nombre, motivo, edad };
-                    }
-                }
+            Object.entries(citas).forEach(([clave, valor]) => {
+                const [fecha, ,] = clave.split('_');
+                const texto = typeof valor === 'object' && typeof valor.valor === 'string' ? valor.valor : String(valor);
+                const cita = parseCitaString(texto);
+                pacientes.push({ ...cita, fecha, clave });
             });
 
-            return Object.values(pacientesMap);
+            return pacientes;
         }
 
         const inputBusqueda = document.getElementById('busqueda');
@@ -135,11 +197,112 @@
                 return;
             }
             noResultados.style.display = 'none';
-            filtrados.forEach(p => {
+            filtrados.forEach((p, idx) => {
                 const fila = document.createElement('tr');
-                fila.innerHTML = `<td>${p.nombre}</td><td>${p.motivo}</td><td>${p.edad}</td>`;
+                fila.innerHTML = `
+                            <td>${p.nombre}</td>
+                            <td>${p.motivo}</td>
+                            <td>${p.edad}</td>
+                            <td>${p.fecha}</td>
+                            <td>${p.hora}</td>
+                            <td>
+                                <button class="btn btn-modificar" data-idx="${idx}">Modificar</button>
+                                <button class="btn btn-eliminar" data-idx="${idx}">Eliminar</button>
+                            </td>
+                        `;
                 tbody.appendChild(fila);
             });
+
+            // Asignar eventos a los botones
+            document.querySelectorAll('.btn-eliminar').forEach(btn => {
+                btn.onclick = function () {
+                    const idx = this.getAttribute('data-idx');
+                    eliminarCita(filtrados[idx].clave);
+                };
+            });
+            document.querySelectorAll('.btn-modificar').forEach(btn => {
+                btn.onclick = function () {
+                    const idx = this.getAttribute('data-idx');
+                    mostrarFormularioEdicion(filtrados[idx]);
+                };
+            });
+        }
+
+        function eliminarCita(clave) {
+            if (!confirm('¿Eliminar esta cita?')) return;
+            const raw = localStorage.getItem('citas');
+            if (!raw) return;
+            const citas = JSON.parse(raw);
+            delete citas[clave];
+            localStorage.setItem('citas', JSON.stringify(citas));
+            filtrarPacientes();
+        }
+
+        function mostrarFormularioEdicion(paciente) {
+            // Reemplaza la fila por inputs editables
+            const filas = Array.from(tbody.children);
+            const fila = filas.find(f => f.children[0].textContent === paciente.nombre && f.children[3].textContent === paciente.fecha && f.children[4].textContent === paciente.hora);
+            if (!fila) return;
+            fila.innerHTML = `
+                        <td><input type="text" id="editNombre" value="${paciente.nombre}" /></td>
+                        <td><input type="text" id="editMotivo" value="${paciente.motivo}" /></td>
+                        <td><input type="text" id="editEdad" value="${paciente.edad}" /></td>
+                        <td><input type="text" id="editFecha" class="flatpickr-input" value="${paciente.fecha}" /></td>
+                        <td>
+                            <select id="editHora">
+                                ${franjasHorarias.map(h => `<option value="${h}" ${h === paciente.hora ? 'selected' : ''}>${h}</option>`).join('')}
+                            </select>
+                        </td>
+                        <td>
+                            <button class="btn btn-guardar">Guardar</button>
+                            <button class="btn btn-cancelar">Cancelar</button>
+                        </td>
+                    `;
+            flatpickr("#editFecha", {
+                locale: "es",
+                dateFormat: "Y-m-d",
+                disable: [date => date.getDay() === 0]
+            });
+
+            fila.querySelector('.btn-guardar').onclick = function () {
+                guardarEdicion(paciente);
+            };
+            fila.querySelector('.btn-cancelar').onclick = function () {
+                filtrarPacientes();
+            };
+        }
+
+        function guardarEdicion(paciente) {
+            const nuevoNombre = document.getElementById('editNombre').value.trim();
+            const nuevoMotivo = document.getElementById('editMotivo').value.trim();
+            const nuevaEdad = document.getElementById('editEdad').value.trim();
+            const nuevaFecha = document.getElementById('editFecha').value;
+            const nuevaHora = document.getElementById('editHora').value;
+
+            if (!nuevoNombre || !nuevoMotivo || !nuevaEdad || !nuevaFecha || !nuevaHora) {
+                alert('Todos los campos son obligatorios.');
+                return;
+            }
+
+            // Validar franja horaria disponible
+            const raw = localStorage.getItem('citas');
+            const citas = raw ? JSON.parse(raw) : {};
+            const dia = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"][new Date(nuevaFecha).getDay()];
+            if (!columnas.includes(dia)) {
+                alert("La fecha seleccionada no corresponde a un día hábil.");
+                return;
+            }
+            const nuevoIndice = franjasHorarias.indexOf(nuevaHora);
+            const nuevaClave = `${nuevaFecha}_${dia}_${nuevoIndice}`;
+            if (nuevaClave !== paciente.clave && citas[nuevaClave]) {
+                alert('Ya existe una cita para ese día y hora.');
+                return;
+            }
+            // Actualizar
+            delete citas[paciente.clave];
+            citas[nuevaClave] = `${nuevoNombre} · Edad: ${nuevaEdad} · Motivo: ${nuevoMotivo} · ${nuevaHora}`;
+            localStorage.setItem('citas', JSON.stringify(citas));
+            filtrarPacientes();
         }
 
         function filtrarPacientes() {
@@ -154,7 +317,7 @@
         inputBusqueda.addEventListener('input', filtrarPacientes);
 
         // Mostrar todos al cargar
-        mostrarResultados(obtenerPacientesDeCitas());
+        filtrarPacientes();
     </script>
 </body>
 </html>

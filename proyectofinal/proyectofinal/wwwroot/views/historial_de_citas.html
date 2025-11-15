@@ -5,29 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historial de Citas</title>
     <style>
+        /* 🔷 RESET Y FUENTE BASE */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        /* 🔷 CUERPO */
         body {
-            background-color: #ffffff;
+            background-color: #e0f7fa; /* celeste suave */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
         }
 
+        /* 🔷 CONTENEDOR PRINCIPAL */
         .contenedor {
-            background-color: #f9f9f9;
+            background-color: #ffffff;
             width: 420px;
             border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             padding: 30px 40px;
         }
 
+        /* 🔷 TÍTULO */
         .titulo {
             display: flex;
             justify-content: space-between;
@@ -36,8 +40,9 @@
         }
 
             .titulo h2 {
-                font-size: 24px;
-                color: #333;
+                font-size: 1.8rem;
+                color: #00796b;
+                margin: 0;
             }
 
             .titulo img {
@@ -45,32 +50,39 @@
                 height: 30px;
             }
 
+        /* 🔷 ETIQUETAS */
         label {
             display: block;
             font-weight: 600;
             margin-bottom: 5px;
-            color: #444;
+            color: #004d40;
         }
 
-        input {
+        /* 🔷 CAMPOS DE ENTRADA */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"] {
             width: 100%;
-            padding: 8px 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            outline: none;
-            transition: 0.3s;
+            padding: 10px;
+            font-size: 0.95rem;
+            border: 1px solid #b2dfdb;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: border-color 0.3s ease;
         }
 
-            input:focus {
-                border-color: #5a49e3;
-            }
+        input:focus {
+            border-color: #00796b;
+            outline: none;
+        }
 
+        /* 🔷 BOTÓN PRINCIPAL */
         .btn {
             display: inline-block;
-            text-decoration: none; /* Quita la línea */
-            background-color: #5a49e3;
-            color: white;
+            background-color: #4caf50;
+            color: #fff;
             border: none;
             border-radius: 6px;
             padding: 10px 25px;
@@ -82,9 +94,10 @@
         }
 
             .btn:hover {
-                background-color: #4637b8;
+                background-color: #388e3c;
             }
 
+        /* 🔷 RESPONSIVE */
         @media (max-width: 480px) {
             .contenedor {
                 width: 90%;
@@ -92,7 +105,7 @@
             }
 
             .titulo h2 {
-                font-size: 20px;
+                font-size: 1.5rem;
             }
         }
     </style>
@@ -100,24 +113,90 @@
 <body>
     <div class="contenedor">
         <div class="titulo">
-            <h2>Historial de Citas</h2>
-            <!-- Puedes cambiar la imagen o usar un emoji -->
-            <img src="icono-libro.png" alt="Icono libro">
-            <!-- O usa un emoji si no tienes imagen: 📖 -->
+            <h2>Historial de Citas 📚</h2>
+
         </div>
 
-        <form>
-            <label for="nombre">Nombre del paciente:</label>
-            <input type="text" id="nombre" name="nombre" required>
+        <div style="margin-bottom:18px;">
+            <label for="filtro-fecha" style="font-weight:600;color:#444;">Buscar por fecha:</label>
+            <input type="date" id="filtro-fecha" style="padding:6px 10px;border-radius:6px;border:1px solid #ccc;">
+        </div>
 
-            <label for="motivo">Motivo:</label>
-            <input type="text" id="motivo" name="motivo" required>
-
-            <label for="fecha">Fecha:</label>
-            <input type="date" id="fecha" name="fecha" required>
-
-            <a href="home_pacientes.html" class="btn">Salir</a>
-        </form>
+        <table style="width:100%;border-collapse:collapse;margin-bottom:16px;">
+            <thead>
+                <tr>
+                    <th style="border-bottom:1px solid #ccc;padding:8px 4px;text-align:left;">Nombre</th>
+                    <th style="border-bottom:1px solid #ccc;padding:8px 4px;text-align:left;">Motivo</th>
+                    <th style="border-bottom:1px solid #ccc;padding:8px 4px;text-align:left;">Fecha</th>
+                    <th style="border-bottom:1px solid #ccc;padding:8px 4px;text-align:left;">Hora</th>
+                </tr>
+            </thead>
+            <tbody id="historial-citas-body">
+                <!-- Las filas se llenan por JS -->
+            </tbody>
+        </table>
+        <a href="home_pacientes.html" class="btn">Salir</a>
     </div>
+
+    <script>
+        const franjasHorarias = [
+            "09:00 - 09:30",
+            "09:30 - 10:00",
+            "10:00 - 10:30",
+            "10:30 - 11:00",
+            "11:00 - 11:30",
+            "11:30 - 12:00"
+        ];
+
+        function cargarHistorialCitas(filtroFecha = "") {
+            const tbody = document.getElementById('historial-citas-body');
+            tbody.innerHTML = '';
+            let citas = {};
+            try {
+                const raw = localStorage.getItem('citas');
+                citas = raw ? JSON.parse(raw) : {};
+            } catch (e) {
+                citas = {};
+            }
+
+            let hayResultados = false;
+
+            Object.entries(citas).forEach(([clave, valor]) => {
+                if (typeof valor === 'object' && valor.homePacientes && typeof valor.valor === 'string') {
+                    const fecha = clave.split('_')[0];
+                    if (filtroFecha && filtroFecha !== fecha) return;
+
+                    const partes = valor.valor.split('·').map(p => p.trim());
+                    const nombre = partes[0] || '';
+                    const motivo = partes.find(p => p.startsWith('Motivo:'))?.replace('Motivo:', '').trim() || '';
+                    const hora = partes.find(p => franjasHorarias.includes(p)) || '';
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td style="padding:6px 4px;">${nombre}</td>
+                        <td style="padding:6px 4px;">${motivo}</td>
+                        <td style="padding:6px 4px;">${fecha}</td>
+                        <td style="padding:6px 4px;">${hora}</td>
+                    `;
+                    tbody.appendChild(tr);
+                    hayResultados = true;
+                }
+            });
+
+            if (!hayResultados) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td colspan="4" style="padding:10px;text-align:center;color:#888;">No hay citas para mostrar.</td>`;
+                tbody.appendChild(tr);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const filtro = document.getElementById('filtro-fecha');
+            filtro.addEventListener('input', function () {
+                cargarHistorialCitas(this.value);
+            });
+            cargarHistorialCitas();
+        });
+    </script>
 </body>
 </html>

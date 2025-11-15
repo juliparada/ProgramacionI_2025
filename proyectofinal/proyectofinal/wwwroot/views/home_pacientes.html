@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda Medica - Dr. Cordova</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -173,10 +174,21 @@
             .cell-text {
                 max-width: 80px;
             }
+
+            td.home-pacientes {
+                background-color: #2031be; /* amarillo suave */
+                color: #f6cb41;
+                font-weight: bold;
+                cursor: pointer;
+            }
         }
     </style>
 </head>
 <body>
+    <div style="width:92%;margin:24px auto 0 auto;text-align:right;">
+        <label for="calendario" style="font-weight:bold;color:#00695c;">Seleccionar semana: </label>
+        <input id="calendario" type="text" style="padding:8px 12px;border-radius:6px;border:1px solid #b2dfdb;font-size:1rem;">
+    </div>
     <table>
         <tr>
             <td colspan="7" class="titulo">Dr. Cordova</td>
@@ -204,8 +216,9 @@
         <tbody id="agenda-body"></tbody>
     </table>
 
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        // Datos de la tabla
+
         const filas = 6;
         const columnas = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
         const franjasHorarias = [
@@ -217,7 +230,26 @@
             "11:30 - 12:00"
         ];
 
-        // LocalStorage helpers
+        function getMonday(d) {
+            d = new Date(d);
+            var day = d.getDay(),
+                diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            return new Date(d.setDate(diff));
+        }
+
+        function getWeekDates(selectedDate) {
+            const monday = getMonday(selectedDate);
+            return Array.from({ length: 6 }, (_, i) => {
+                const d = new Date(monday);
+                d.setDate(monday.getDate() + i);
+                return d;
+            });
+        }
+
+        function formatDate(d) {
+            return d.toISOString().slice(0, 10);
+        }
+
         function loadCitas() {
             try {
                 const raw = localStorage.getItem('citas');
@@ -232,53 +264,102 @@
             localStorage.setItem('citas', JSON.stringify(citas));
         }
 
-        // parseValor conserva nombre y hora/franja de la cadena "Nombre · Hora"
-        function parseValor(valor) {
+        function parseValor(valor)
+        {
             const parts = valor.split('·').map(p => p.trim());
-            return {
-                nombre: parts[0] || '',
-                hora: parts[1] || ''
-            };
+            const nombre = parts[0] || '';
+            const edad = parts.find(p => p.startsWith("Edad:"))?.split(":")[1]?.trim() || '';
+            const motivo = parts.find(p => p.startsWith("Motivo:"))?.split(":")[1]?.trim() || '';
+            const hora = parts.find(p => p.includes(":") && p.includes("-")) || '';
+            return { nombre, edad, motivo, hora };
         }
 
-        // Click en celda ocupada: solo si NO está ocupada por otro paciente
-        function onCellClick(clave, valor) {
-            // Si la celda está ocupada, no hacer nada
-            if (valor === "Ocupado") return;
+        let selectedDate = new Date();
 
+        function renderTable()
+        {
+            const cuerpo = document.getElementById('agenda-body');
+            if (!cuerpo) return;
+            cuerpo.innerHTML = '';
             const citas = loadCitas();
-            const parsed = parseValor(valor);
+            const weekDates = getWeekDates(selectedDate);
 
-            const editar = confirm(`Cita: ${valor}\n\nPulse Aceptar para EDITAR la cita.\nPulse Cancelar para ELIMINAR la cita.`);
-            if (editar) {
-                const nuevoNombre = prompt('Editar nombre del paciente:', parsed.nombre);
-                if (nuevoNombre === null) return; // cancelar
-                const nuevaHora = prompt('Editar hora o franja (ej. 09:00 o 09:00 - 09:30):', parsed.hora);
-                if (nuevaHora === null) return; // cancelar
+            for (let i = 0; i < filas; i++) {
+                const fila = document.createElement('tr');
 
-                const nombreTrim = nuevoNombre.trim();
-                const horaTrim = nuevaHora.trim();
-                if (nombreTrim === '') {
-                    alert('El nombre no puede quedar vacío.');
-                    return;
-                }
+                const horaCelda = document.createElement('td');
+                horaCelda.className = 'hora';
+                horaCelda.textContent = franjasHorarias[i];
+                fila.appendChild(horaCelda);
 
-                citas[clave] = `${nombreTrim} · ${horaTrim}`;
-                saveCitas(citas);
-                renderTable();
-            } else {
-                const confirmar = confirm('¿Eliminar definitivamente esta cita?');
-                if (!confirmar) return;
-                if (Object.prototype.hasOwnProperty.call(citas, clave)) {
-                    delete citas[clave];
-                    saveCitas(citas);
-                    renderTable();
-                }
+                columnas.forEach((dia, idx) => {
+                    const celda = document.createElement('td');
+                    const fechaClave = formatDate(weekDates[idx]);
+                    const clave = `${fechaClave}_${dia}_${i}`;
+                    const valor = citas[clave];
+
+                    if (!valor) {
+                        celda.className = 'disponible';
+                        celda.textContent = 'Disponible';
+                        celda.addEventListener('click', () => onCrearCita(dia, i, weekDates));
+                    } else if (typeof valor === 'object' && valor.homePacientes) {
+                        celda.className = 'home-pacientes';
+                        const text = document.createElement('span');
+                        text.className = 'cell-text';
+                        text.textContent = valor.valor;
+                        celda.appendChild(text);
+                        celda.addEventListener('click', () => onCellClick(clave, valor.valor));
+                    } else if (typeof valor === 'object' && valor.valor) {
+                        // cita creada desde agendacion.html como objeto sin homePacientes
+                        celda.className = 'ocupado';
+                        const text = document.createElement('span');
+                        text.className = 'cell-text';
+                        text.textContent = "Ocupado";
+                        celda.appendChild(text);
+                    } else {
+                        // cita guardada como string plano
+                        celda.className = 'ocupado';
+                        const text = document.createElement('span');
+                        text.className = 'cell-text';
+                        text.textContent = "Ocupado";
+                        celda.appendChild(text);
+
+                    }
+
+                    fila.appendChild(celda);
+                });
+
+                cuerpo.appendChild(fila);
             }
         }
 
-        // Crear cita al pulsar en celda disponible
-        function onCrearCita(dia, indice) {
+        function onCellClick(clave, valor) {
+            const citas = loadCitas();
+            const parsed = parseValor(valor);
+
+            const editar = confirm(`Cita:\nNombre: ${parsed.nombre}\nEdad: ${parsed.edad}\nMotivo: ${parsed.motivo}\nHora: ${parsed.hora}\n\nAceptar para EDITAR\nCancelar para ELIMINAR`);
+            if (editar) {
+                const nuevoNombre = prompt('Editar nombre del paciente:', parsed.nombre);
+                if (nuevoNombre === null) return;
+
+                const nuevaEdad = prompt('Editar edad del paciente:', parsed.edad);
+                if (nuevaEdad === null) return;
+
+                const nuevoMotivo = prompt('Editar motivo de la cita:', parsed.motivo);
+                if (nuevoMotivo === null) return;
+
+                citas[clave] = {
+                    valor: `${nuevoNombre.trim()} · Edad: ${nuevaEdad.trim()} · Motivo: ${nuevoMotivo.trim()} · ${parsed.hora}`,
+                    homePacientes: true
+                };
+            } else
+            {
+                delete citas[clave];
+            }
+            saveCitas(citas);
+            renderTable();
+        }
+        function onCrearCita(dia, indice, weekDates) {
             const nombre = prompt(`Agendar cita para ${dia} (${franjasHorarias[indice]})\nIngrese nombre del paciente:`);
             if (!nombre) return;
 
@@ -289,55 +370,41 @@
             if (!motivo) return;
 
             const citas = loadCitas();
-            const clave = `${dia}_${indice}`;
-            citas[clave] = `${nombre.trim()} · Edad: ${edad.trim()} · Motivo: ${motivo.trim()} · ${franjasHorarias[indice]}`;
+            const fechaClave = formatDate(weekDates[columnas.indexOf(dia)]);
+            const clave = `${fechaClave}_${dia}_${indice}`;
+            citas[clave] = {
+                valor: `${nombre.trim()} · Edad: ${edad.trim()} · Motivo: ${motivo.trim()} · ${franjasHorarias[indice]}`,
+                homePacientes: true
+            };
             saveCitas(citas);
             renderTable();
         }
 
-        // Renderiza la tabla a partir de localStorage
-        function renderTable() {
-            const cuerpo = document.getElementById('agenda-body');
-            if (!cuerpo) return;
-            cuerpo.innerHTML = '';
-            const citas = loadCitas();
+        flatpickr("#calendario", {
+            locale: "es",
+            defaultDate: new Date(),
+            inline: false,
+            onChange: function (selectedDates) {
+                if (selectedDates.length > 0) {
+                    selectedDate = selectedDates[0];
+                    renderTable();
+                }
+            },
+            disable: [
+                function (date) {
+                    return (date.getDay() === 0);
+                }
+            ]
+        });
 
-            for (let i = 0; i < filas; i += 1) {
-                const fila = document.createElement('tr');
-
-                const horaCelda = document.createElement('td');
-                horaCelda.className = 'hora';
-                horaCelda.textContent = franjasHorarias[i] || '';
-                fila.appendChild(horaCelda);
-
-                columnas.forEach((dia) => {
-                    const celda = document.createElement('td');
-                    const clave = `${dia}_${i}`;
-                    const valor = citas[clave];
-
-                    if (!valor || typeof valor === 'object') {
-                        // Disponible: se puede agendar
-                        celda.className = 'disponible';
-                        celda.textContent = 'Disponible';
-                        celda.addEventListener('click', () => onCrearCita(dia, i));
-                    } else {
-                        // Ocupado: mostrar "Ocupado" y bloquear interacción
-                        celda.className = 'ocupado';
-                        const text = document.createElement('span');
-                        text.className = 'cell-text';
-                        text.textContent = "Ocupado";
-                        celda.appendChild(text);
-                        // No se agrega ningún evento de clic
-                    }
-
-                    fila.appendChild(celda);
-                });
-
-                cuerpo.appendChild(fila);
-            }
-        }
-        // Inicializa
+        document.getElementById('calendario').value = formatDate(selectedDate);
         renderTable();
+
+        window.addEventListener("storage", function (e) {
+            if (e.key === "citas") {
+                renderTable();
+            }
+        });
     </script>
 
 </body>
