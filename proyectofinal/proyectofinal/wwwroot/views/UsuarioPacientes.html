@@ -112,7 +112,7 @@
             if (!valido) return;
 
             try {
-                const respuesta = await fetch("https://localhost:7289/api/index/validarCredenciales", {
+                const respuesta = await fetch("https://localhost:7289/api/UsuarioPacientes/validarCredenciales", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
