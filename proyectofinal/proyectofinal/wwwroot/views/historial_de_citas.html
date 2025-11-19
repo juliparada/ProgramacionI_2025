@@ -162,21 +162,22 @@
             let hayResultados = false;
 
             Object.entries(citas).forEach(([clave, valor]) => {
-                if (typeof valor === 'object' && valor.homePacientes && typeof valor.valor === 'string') {
+                // Mostrar solo si es string plano (home_pacientes) y NO objeto (agendacion.html)
+                if (typeof valor === 'string') {
                     const fecha = clave.split('_')[0];
                     if (filtroFecha && filtroFecha !== fecha) return;
 
-                    const partes = valor.valor.split('·').map(p => p.trim());
+                    const partes = valor.split('·').map(p => p.trim());
                     const nombre = partes[0] || '';
                     const motivo = partes.find(p => p.startsWith('Motivo:'))?.replace('Motivo:', '').trim() || '';
                     const hora = partes.find(p => franjasHorarias.includes(p)) || '';
 
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-                        <td style="padding:6px 4px;">${nombre}</td>
-                        <td style="padding:6px 4px;">${motivo}</td>
-                        <td style="padding:6px 4px;">${fecha}</td>
-                        <td style="padding:6px 4px;">${hora}</td>
+                        <td style="padding:6px4px;">${nombre}</td>
+                        <td style="padding:6px4px;">${motivo}</td>
+                        <td style="padding:6px4px;">${fecha}</td>
+                        <td style="padding:6px4px;">${hora}</td>
                     `;
                     tbody.appendChild(tr);
                     hayResultados = true;

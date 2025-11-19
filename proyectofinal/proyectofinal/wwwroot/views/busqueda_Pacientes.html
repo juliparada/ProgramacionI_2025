@@ -178,9 +178,16 @@
 
             Object.entries(citas).forEach(([clave, valor]) => {
                 const [fecha, ,] = clave.split('_');
-                const texto = typeof valor === 'object' && typeof valor.valor === 'string' ? valor.valor : String(valor);
-                const cita = parseCitaString(texto);
-                pacientes.push({ ...cita, fecha, clave });
+                let texto = null;
+                if (typeof valor === 'string') {
+                    texto = valor;
+                } else if (typeof valor === 'object' && typeof valor.valor === 'string') {
+                    texto = valor.valor;
+                }
+                if (texto) {
+                    const cita = parseCitaString(texto);
+                    pacientes.push({ ...cita, fecha, clave });
+                }
             });
 
             return pacientes;

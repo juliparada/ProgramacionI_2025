@@ -264,6 +264,16 @@
             localStorage.setItem('citas', JSON.stringify(citas));
         }
 
+        function loadCitasPacientes() {
+            try {
+                const raw = localStorage.getItem('citas_pacientes');
+                return raw ? JSON.parse(raw) : {};
+            } catch (e) {
+                console.warn('Error leyendo citas_pacientes:', e);
+                return {};
+            }
+        }
+
         function parseValor(valor)
         {
             const parts = valor.split('·').map(p => p.trim());
@@ -282,9 +292,10 @@
             if (!cuerpo) return;
             cuerpo.innerHTML = '';
             const citas = loadCitas();
+            const citasPacientes = loadCitasPacientes();
             const weekDates = getWeekDates(selectedDate);
 
-            for (let i = 0; i < filas; i++) {
+            for (let i =0; i < filas; i++) {
                 const fila = document.createElement('tr');
 
                 const horaCelda = document.createElement('td');
@@ -297,8 +308,15 @@
                     const fechaClave = formatDate(weekDates[idx]);
                     const clave = `${fechaClave}_${dia}_${i}`;
                     const valor = citas[clave];
+                    const bloqueo = citasPacientes[clave];
 
-                    if (!valor) {
+                    if (bloqueo && bloqueo.bloqueado) {
+                        celda.className = 'ocupado';
+                        const text = document.createElement('span');
+                        text.className = 'cell-text';
+                        text.textContent = "Ocupado";
+                        celda.appendChild(text);
+                    } else if (!valor) {
                         celda.className = 'disponible';
                         celda.textContent = 'Disponible';
                         celda.addEventListener('click', () => onCrearCita(dia, i, weekDates));
@@ -310,20 +328,17 @@
                         celda.appendChild(text);
                         celda.addEventListener('click', () => onCellClick(clave, valor.valor));
                     } else if (typeof valor === 'object' && valor.valor) {
-                        // cita creada desde agendacion.html como objeto sin homePacientes
                         celda.className = 'ocupado';
                         const text = document.createElement('span');
                         text.className = 'cell-text';
                         text.textContent = "Ocupado";
                         celda.appendChild(text);
                     } else {
-                        // cita guardada como string plano
                         celda.className = 'ocupado';
                         const text = document.createElement('span');
                         text.className = 'cell-text';
                         text.textContent = "Ocupado";
                         celda.appendChild(text);
-
                     }
 
                     fila.appendChild(celda);
