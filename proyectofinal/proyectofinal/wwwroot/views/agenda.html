@@ -125,15 +125,15 @@
 
         const filas = 6;
 
+        const columnas = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
         const franjasHorarias = [
-            "09:00 - 09:30",
-            "09:30 - 10:00",
-            "10:00 - 10:30",
-            "10:30 - 11:00",
-            "11:00 - 11:30",
-            "11:30 - 12:00"
-        ];
-        const columnas = ["Domingo","Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+ "09:00 -09:30",
+ "09:30 -10:00",
+ "10:00 -10:30",
+ "10:30 -11:00",
+ "11:00 -11:30",
+ "11:30 -12:00"
+];
 
         // Detectar si agenda.html fue abierto desde home_pacientes.html
         let origenEsHome = false;
@@ -180,6 +180,8 @@
 
         function saveCitas(citas) {
             localStorage.setItem('citas', JSON.stringify(citas));
+            // Notificar a otras pestañas (como home_pacientes.html) que hubo un cambio
+            localStorage.setItem('citas_sync', Date.now().toString());
         }
 
         function parseValor(valor) {
@@ -192,10 +194,12 @@
         }
 
         function obtenerDiaDeLaSemana(fechaStr) {
-            const dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-            const fecha = new Date(fechaStr);
-            return dias[fecha.getDay()];
-        }
+ const dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+ const fecha = new Date(fechaStr);
+ let dia = fecha.getDay();
+ if (dia ===0) return null; // No permitir domingo
+ return dias[dia];
+}
 
         function mostrarHoras(fecha) {
             const horaSelect = document.getElementById("hora");
@@ -301,7 +305,7 @@
         });
 
         window.addEventListener("storage", function (e) {
-            if (e.key === "citas") {
+            if (e.key === "citas" || e.key === "citas_sync") {
                 mostrarHoras(document.getElementById("fecha").value);
             }
         });

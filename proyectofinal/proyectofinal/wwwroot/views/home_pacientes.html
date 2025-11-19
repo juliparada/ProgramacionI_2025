@@ -316,29 +316,18 @@
                         text.className = 'cell-text';
                         text.textContent = "Ocupado";
                         celda.appendChild(text);
-                    } else if (!valor) {
+                    } else if (valor) {
+                        // Mostrar datos completos de cualquier cita (incluyendo las de agenda.html)
+                        celda.className = 'ocupado';
+                        const text = document.createElement('span');
+                        text.className = 'cell-text';
+                        text.textContent = (typeof valor === 'object' && valor.valor) ? valor.valor : "Ocupado";
+                        celda.appendChild(text);
+                        celda.addEventListener('click', () => onCellClick(clave, (typeof valor === 'object' && valor.valor) ? valor.valor : valor));
+                    } else {
                         celda.className = 'disponible';
                         celda.textContent = 'Disponible';
                         celda.addEventListener('click', () => onCrearCita(dia, i, weekDates));
-                    } else if (typeof valor === 'object' && valor.homePacientes) {
-                        celda.className = 'home-pacientes';
-                        const text = document.createElement('span');
-                        text.className = 'cell-text';
-                        text.textContent = valor.valor;
-                        celda.appendChild(text);
-                        celda.addEventListener('click', () => onCellClick(clave, valor.valor));
-                    } else if (typeof valor === 'object' && valor.valor) {
-                        celda.className = 'ocupado';
-                        const text = document.createElement('span');
-                        text.className = 'cell-text';
-                        text.textContent = "Ocupado";
-                        celda.appendChild(text);
-                    } else {
-                        celda.className = 'ocupado';
-                        const text = document.createElement('span');
-                        text.className = 'cell-text';
-                        text.textContent = "Ocupado";
-                        celda.appendChild(text);
                     }
 
                     fila.appendChild(celda);
@@ -350,6 +339,11 @@
 
         function onCellClick(clave, valor) {
             const citas = loadCitas();
+            // Solo permitir editar si la cita NO tiene homePacientes: true
+            if (citas[clave] && citas[clave].homePacientes) {
+                alert('Esta cita solo puede ser modificada desde la agenda principal.');
+                return;
+            }
             const parsed = parseValor(valor);
 
             const editar = confirm(`Cita:\nNombre: ${parsed.nombre}\nEdad: ${parsed.edad}\nMotivo: ${parsed.motivo}\nHora: ${parsed.hora}\n\nAceptar para EDITAR\nCancelar para ELIMINAR`);
@@ -364,12 +358,14 @@
                 if (nuevoMotivo === null) return;
 
                 citas[clave] = {
-                    valor: `${nuevoNombre.trim()} · Edad: ${nuevaEdad.trim()} · Motivo: ${nuevoMotivo.trim()} · ${parsed.hora}`,
-                    homePacientes: true
+                    valor: `${nuevoNombre.trim()} · Edad: ${nuevaEdad.trim()} · Motivo: ${nuevoMotivo.trim()} · ${parsed.hora}`
                 };
-            } else
-            {
-                delete citas[clave];
+            } else {
+                if (confirm('¿Eliminar esta cita permanentemente?')) {
+                    delete citas[clave];
+                } else {
+                    return;
+                }
             }
             saveCitas(citas);
             renderTable();
@@ -387,9 +383,9 @@
             const citas = loadCitas();
             const fechaClave = formatDate(weekDates[columnas.indexOf(dia)]);
             const clave = `${fechaClave}_${dia}_${indice}`;
+            // Guardar SIN homePacientes: true
             citas[clave] = {
-                valor: `${nombre.trim()} · Edad: ${edad.trim()} · Motivo: ${motivo.trim()} · ${franjasHorarias[indice]}`,
-                homePacientes: true
+                valor: `${nombre.trim()} · Edad: ${edad.trim()} · Motivo: ${motivo.trim()} · ${franjasHorarias[indice]}`
             };
             saveCitas(citas);
             renderTable();

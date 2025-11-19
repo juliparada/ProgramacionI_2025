@@ -139,15 +139,6 @@
     </div>
 
     <script>
-        const franjasHorarias = [
-            "09:00 - 09:30",
-            "09:30 - 10:00",
-            "10:00 - 10:30",
-            "10:30 - 11:00",
-            "11:00 - 11:30",
-            "11:30 - 12:00"
-        ];
-
         function cargarHistorialCitas(filtroFecha = "") {
             const tbody = document.getElementById('historial-citas-body');
             tbody.innerHTML = '';
@@ -162,15 +153,15 @@
             let hayResultados = false;
 
             Object.entries(citas).forEach(([clave, valor]) => {
-                // Mostrar solo si es string plano (home_pacientes) y NO objeto (agendacion.html)
-                if (typeof valor === 'string') {
+                // Mostrar solo si es objeto, tiene propiedad valor y NO tiene homePacientes:true
+                if (typeof valor === 'object' && valor.valor && !valor.homePacientes) {
                     const fecha = clave.split('_')[0];
                     if (filtroFecha && filtroFecha !== fecha) return;
 
-                    const partes = valor.split('·').map(p => p.trim());
+                    const partes = valor.valor.split('·').map(p => p.trim());
                     const nombre = partes[0] || '';
                     const motivo = partes.find(p => p.startsWith('Motivo:'))?.replace('Motivo:', '').trim() || '';
-                    const hora = partes.find(p => franjasHorarias.includes(p)) || '';
+                    const hora = partes.find(p => p.includes(":") && p.includes("-")) || '';
 
                     const tr = document.createElement('tr');
                     tr.innerHTML = `

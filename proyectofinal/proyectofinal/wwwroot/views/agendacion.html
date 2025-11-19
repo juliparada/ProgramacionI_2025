@@ -291,7 +291,7 @@
                 if (el) el.textContent = formatDisplay(weekDates[i]);
             });
 
-            for (let i = 0; i < filas; i++) {
+            for (let i =0; i < filas; i++) {
                 const tr = document.createElement('tr');
                 const tdHora = document.createElement('td');
                 tdHora.className = 'hora';
@@ -302,30 +302,21 @@
                     const td = document.createElement('td');
                     const fechaISO = formatISO(weekDates[colIdx]);
                     const clave = `${fechaISO}_${dia}_${i}`;
+                    const cita = citas[clave];
 
-                    // NUEVO: detectar si esta franja está bloqueada por la otra agenda (Dr. Cordova)
-                    const bloqueadaPorOtro = citas[clave + "_blocked"];
-
-                    if (bloqueadaPorOtro) {
-                        // Aparece OCUPADO y sin interacción
-                        td.textContent = 'OCUPADO';
-                        td.style.backgroundColor = '#b0bec5';
-                        td.style.color = '#263238';
-                        td.style.fontWeight = 'bold';
-                        td.title = 'Franja ocupada por Dr. Cordova';
-                        // ← no tiene onclick → no se puede tocar
-                    } else if (!citas[clave]) {
+                    if (cita) {
+                        // Mostrar todos los datos de la cita
+                        const p = parseValor(cita);
+                        td.innerHTML = `<div class='cell-text'><strong>${p.nombre}</strong><br>Edad: ${p.edad}<br>Motivo: ${p.motivo}<br>Hora: ${p.hora}</div>`;
+                        td.style.backgroundColor = '#ffccbc';
+                        td.style.cursor = 'pointer';
+                        td.title = 'Click para editar/eliminar';
+                        td.onclick = () => editarOEliminar(clave, cita);
+                    } else {
                         td.textContent = 'Disponible';
                         td.style.backgroundColor = '#e8f5e9';
                         td.style.cursor = 'pointer';
                         td.onclick = () => crearCita(dia, i, weekDates);
-                    } else {
-                        const p = parseValor(citas[clave]);
-                        td.textContent = p.nombre || 'Ocupado';
-                        td.style.backgroundColor = '#ffccbc';
-                        td.style.cursor = 'pointer';
-                        td.title = 'Click para editar/eliminar';
-                        td.onclick = () => editarOEliminar(clave, citas[clave]);
                     }
                     tr.appendChild(td);
                 });
@@ -353,9 +344,6 @@
                 homePacientes: true
             };
 
-            // NUEVO: bloqueamos la misma hora en la agenda del Dr. Cordova
-            citas[clave + "_blocked"] = { bloqueado: true };
-
             saveCitas(citas);
             renderTable();
         }
@@ -378,10 +366,15 @@
                 const nuevoNombre = prompt('Nombre:', p.nombre) || p.nombre;
                 const nuevaEdad = prompt('Edad:', p.edad) || p.edad;
                 const nuevoMotivo = prompt('Motivo:', p.motivo) || p.motivo;
-                citas[clave] = {
-                    valor: `${nuevoNombre.trim()} · Edad: ${nuevaEdad.trim()} · Motivo: ${nuevoMotivo.trim()} · ${p.hora}`,
-                    homePacientes: true
+                // Conservar homePacientes solo si ya existía
+                const citaActual = citas[clave];
+                const nuevaCita = {
+                    valor: `${nuevoNombre.trim()} · Edad: ${nuevaEdad.trim()} · Motivo: ${nuevoMotivo.trim()} · ${p.hora}`
                 };
+                if (citaActual && citaActual.homePacientes) {
+                    nuevaCita.homePacientes = true;
+                }
+                citas[clave] = nuevaCita;
             } else {
                 if (confirm('¿Eliminar esta cita permanentemente?')) {
                     delete citas[clave];

@@ -6,6 +6,7 @@ wwwroot\img\Inicio.jpg
 wwwroot\img\libro.jpg
 wwwroot\img\registrate.jpg
 wwwroot\views\agenda.html
+wwwroot\views\agendacion.html
 wwwroot\views\agenda_Administracion.html
 wwwroot\views\busqueda_Pacientes.html
 wwwroot\views\cuenta_Secretaria.html
@@ -19,4 +20,3 @@ wwwroot\views\registrate.html
 wwwroot\views\registro_pacientes.html
 wwwroot\views\subAgenda.html
 wwwroot\views\UsuarioPacientes.html
-wwwroot\views\agendacion.html
