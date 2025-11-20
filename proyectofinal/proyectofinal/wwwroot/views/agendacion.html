@@ -194,20 +194,20 @@
         <tr class="menu">
             <td colspan="7">
                 <div class="menu-bar" role="toolbar" aria-label="Navegación principal">
-                    <a class="btn" href="subAgenda.html" role="button">Agenda</a>
-                    <a class="btn secondary" href="busqueda_Pacientes.html" role="button">Busqueda de pacientes</a>
-                    <a class="btn secondary" href="facturas.html" role="button">Facturas</a>
+                    <a class="btn" href="subAgenda.html" role="button">Agenda 📝</a>
+                    <a class="btn secondary" href="busqueda_Pacientes.html" role="button">Busqueda de pacientes 🔎</a>
+                    <a class="btn secondary" href="facturas.html" role="button">Facturas 📄</a>
                 </div>
             </td>
         </tr>
         <tr class="dias">
             <th class="hora">Hora</th>
-            <th>Lunes<br><small id="f-lunes"></small></th>
-            <th>Martes<br><small id="f-martes"></small></th>
-            <th>Miércoles<br><small id="f-miercoles"></small></th>
-            <th>Jueves<br><small id="f-jueves"></small></th>
-            <th>Viernes<br><small id="f-viernes"></small></th>
-            <th>Sábado<br><small id="f-sabado"></small></th>
+            <th>Lunes</th>
+            <th>Martes</th>
+            <th>Miércoles</th>
+            <th>Jueves</th>
+            <th>Viernes</th>
+            <th>Sábado</th>
         </tr>
         <tbody id="agenda-body"></tbody>
     </table>
@@ -243,8 +243,12 @@
             });
         }
 
+        // Reemplazar formato UTC por formato local para que coincida con subAgenda y home_pacientes
         function formatISO(d) {
-            return d.toISOString().slice(0, 10);
+            const y = d.getFullYear();
+            const m = String(d.getMonth() +1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
         }
 
         function formatDisplay(d) {
@@ -388,6 +392,41 @@
             renderTable();
         }
 
+        function applySubAgendaDraft() {
+            try {
+                const raw = localStorage.getItem('datosSubAgendacion');
+                if (!raw) return;
+                const data = JSON.parse(raw);
+                if (!data || !data.fecha || !data.hora || !data.nombre) {
+                    localStorage.removeItem('datosSubAgendacion');
+                    return;
+                }
+                const dia = new Date(data.fecha).toLocaleDateString('es-ES', { weekday: 'long' });
+                const mapaDias = {
+                    'lunes': 'Lunes', 'martes': 'Martes', 'miércoles': 'Miércoles', 'miercoles': 'Miércoles',
+                    'jueves': 'Jueves', 'viernes': 'Viernes', 'sábado': 'Sábado', 'sabado': 'Sábado'
+                };
+                const diaColumna = mapaDias[dia.toLowerCase()];
+                if (!diaColumna || !columnas.includes(diaColumna)) {
+                    localStorage.removeItem('datosSubAgendacion');
+                    return;
+                }
+                const indiceFranja = franjasHorarias.indexOf(data.hora);
+                if (indiceFranja === -1) {
+                    localStorage.removeItem('datosSubAgendacion');
+                    return;
+                }
+                const clave = `${data.fecha}_${diaColumna}_${indiceFranja}`;
+                const citas = loadCitas();
+                if (!citas[clave]) {
+                    citas[clave] = { valor: `${data.nombre} · Edad: ${data.edad} · Motivo: ${data.motivo} · ${data.hora}`, homePacientes: true };
+                    saveCitas(citas);
+                }
+                // Consumir el borrador para que no se vuelva a recrear la cita tras eliminarla.
+                localStorage.removeItem('datosSubAgendacion');
+            } catch (e) { console.warn('No se pudo aplicar datosSubAgendacion:', e); localStorage.removeItem('datosSubAgendacion'); }
+        }
+
         // Inicialización del calendario
         const fp = flatpickr("#calendario", {
             locale: "es",
@@ -404,6 +443,7 @@
 
         lunesActual = getMonday(new Date());
         fp.setDate(new Date());
+        applySubAgendaDraft(); // integrar cita creada en subAgenda si existe
         renderTable();
 
         // Sincronización entre pestañas

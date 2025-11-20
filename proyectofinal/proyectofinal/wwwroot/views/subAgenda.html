@@ -133,184 +133,97 @@
             "11:00 - 11:30",
             "11:30 - 12:00"
         ];
-        const columnas = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-
-        // Detectar subAgenda.html fue abierto desde agecion.html
-        let origenEsHome = false;
-
-        try {
-            const referrer = document.referrer;
-            if (referrer.includes("agendacion.html")) {
-                origenEsHome = true;
-            }
-        } catch (e) {
-            origenEsHome = false;
-        }
-
-
-        function getMonday(d) {
-            d = new Date(d);
-            var day = d.getDay(),
-                diff = d.getDate() - day + (day === 0 ? -6 : 1);
-            return new Date(d.setDate(diff));
-        }
-
-        function getWeekDates(selectedDate) {
-            const monday = getMonday(selectedDate);
-            return Array.from({ length: 6 }, (_, i) => {
-                const d = new Date(monday);
-                d.setDate(monday.getDate() + i);
-                return d;
-            });
-        }
-
-        function formatDate(d) {
-            return d.toISOString().slice(0, 10);
-        }
-
-        function loadCitas() {
-            try {
-                const raw = localStorage.getItem('citas');
-                return raw ? JSON.parse(raw) : {};
-            } catch (e) {
-                console.warn('Error parseando citas desde localStorage:', e);
-                return {};
-            }
-        }
-
-        function saveCitas(citas) {
-            localStorage.setItem('citas', JSON.stringify(citas));
-        }
-
-        function parseValor(valor) {
-            const parts = valor.split('·').map(p => p.trim());
-            const nombre = parts[0] || '';
-            const edad = parts.find(p => p.startsWith("Edad:"))?.split(":")[1]?.trim() || '';
-            const motivo = parts.find(p => p.startsWith("Motivo:"))?.split(":")[1]?.trim() || '';
-            const hora = parts.find(p => p.includes(":") && p.includes("-")) || '';
-            return { nombre, edad, motivo, hora };
-        }
-
-        function obtenerDiaDeLaSemana(fechaStr) {
-            const dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-            const fecha = new Date(fechaStr);
-            return dias[fecha.getDay()];
-        }
-
-        function mostrarHoras(fecha) {
-            const horaSelect = document.getElementById("hora");
-            horaSelect.innerHTML = '<option value="">Seleccione una hora</option>';
-
-            if (!fecha) return;
-
-            const diaSeleccionado = obtenerDiaDeLaSemana(fecha);
-            if (!columnas.includes(diaSeleccionado)) return;
-
-            const citasLocales = loadCitas();
-            const ocupadasLocales = [];
-
-            Object.entries(citasLocales).forEach(([clave, valor]) => {
-                const partes = clave.split('_');
-                if (partes.length !== 3) return;
-                const [fechaClave, diaClave, indiceClave] = partes;
-                if (fechaClave === fecha && diaClave === diaSeleccionado) {
-                    const franja = franjasHorarias[parseInt(indiceClave)];
-                    if (franja) ocupadasLocales.push(franja);
-                }
-            });
-
-            franjasHorarias.forEach(h => {
-                const option = document.createElement("option");
-                option.value = h;
-                option.textContent = ocupadasLocales.includes(h) ? `${h} (Ocupado)` : h;
-                option.disabled = ocupadasLocales.includes(h);
-                horaSelect.appendChild(option);
-            });
-        }
-
-        window.onload = function () {
-            const fechaInput = document.getElementById("fecha");
-            const hoy = formatDate(new Date());
-            fechaInput.value = hoy;
-            mostrarHoras(hoy);
-
-            fechaInput.addEventListener("change", function () {
-                mostrarHoras(fechaInput.value);
-            });
-
+        // Columnas sin Domingo para que coincida con agendacion.html
+        const columnas = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]; // NORMALIZADO
+        const mapaDias = {
+            'lunes': 'Lunes', 'martes': 'Martes', 'miércoles': 'Miércoles', 'miercoles': 'Miércoles',
+            'jueves': 'Jueves', 'viernes': 'Viernes', 'sábado': 'Sábado', 'sabado': 'Sábado'
         };
 
-        flatpickr("#fecha", {
-            locale: "es",
-            dateFormat: "Y-m-d",
-            disable: [
-                function (date) {
-                    return date.getDay() === 0;
-                }
-            ]
-        });
+        function fechaLocalYYYYMMDD(d) {
+            const y = d.getFullYear();
+            const m = String(d.getMonth()+1).padStart(2,'0');
+            const day = String(d.getDate()).padStart(2,'0');
+            return `${y}-${m}-${day}`;
+        }
 
-        document.getElementById("formCita").addEventListener("submit", function (e) {
-            e.preventDefault();
+        function obtenerDiaNormalizado(fechaStr){
+            const d = new Date(fechaStr + 'T00:00:00');
+            const diaNombre = d.toLocaleDateString('es-ES',{weekday:'long'}).toLowerCase();
+            return mapaDias[diaNombre];
+        }
 
-            const nombre = document.getElementById("nombre").value.trim();
-            const edad = document.getElementById("edad").value.trim();
-            const motivo = document.getElementById("motivo").value.trim();
-            const fecha = document.getElementById("fecha").value;
-            const hora = document.getElementById("hora").value;
+        function loadCitas(){
+            try{ const raw = localStorage.getItem('citas'); return raw? JSON.parse(raw):{}; }catch{ return {}; }
+        }
+        function saveCitas(c){ localStorage.setItem('citas', JSON.stringify(c)); }
 
-            if (!nombre || !edad || !motivo || !fecha || !hora) {
-                alert("Por favor complete todos los campos.");
-                return;
-            }
+        function mostrarHoras(fecha){
+            const horaSelect = document.getElementById('hora');
+            horaSelect.innerHTML = '<option value="">Seleccione una hora</option>';
+            if(!fecha) return;
+            const diaNorm = obtenerDiaNormalizado(fecha);
+            if(!diaNorm || !columnas.includes(diaNorm)) return; // domingo queda fuera
 
-            const dia = obtenerDiaDeLaSemana(fecha);
-            if (!columnas.includes(dia)) {
-                alert("La fecha seleccionada no corresponde a un día hábil.");
-                return;
-            }
-
-            const horaLimpia = hora.replace(" (Ocupado)", "").trim();
-            const indice = franjasHorarias.indexOf(horaLimpia);
-
-            if (indice === -1) {
-                alert("Seleccione una franja horaria válida.");
-                return;
-            }
-
-            const clave = `${fecha}_${dia}_${indice}`;
             const citas = loadCitas();
+            const ocupadas = new Set();
+            Object.keys(citas).forEach(k=>{
+                const partes = k.split('_');
+                if(partes.length!==3) return;
+                const [f,d,i] = partes;
+                if(f===fecha && d===diaNorm){
+                    const idx = parseInt(i);
+                    if(!isNaN(idx) && franjasHorarias[idx]) ocupadas.add(franjasHorarias[idx]);
+                }
+            });
+            franjasHorarias.forEach(h=>{
+                const opt = document.createElement('option');
+                opt.value = h;
+                const ocupado = ocupadas.has(h);
+                opt.textContent = ocupado? `${h} (Ocupado)`: h;
+                opt.disabled = ocupado;
+                horaSelect.appendChild(opt);
+            });
+        }
 
-            if (citas[clave]) {
-                alert("Ya existe una cita para ese día y hora.");
-                return;
-            }
-
-            citas[clave] = {
-                valor: `${nombre} · Edad: ${edad} · Motivo: ${motivo} · ${horaLimpia}`,
-                homePacientes: true
-            };
-            // Guardar datos para agendacion.html
-            localStorage.setItem("datosSubAgendacion", JSON.stringify({
-                nombre,
-                edad,
-                motivo,
-                fecha,
-                hora: horaLimpia
-            }));
-
+        document.getElementById('formCita').addEventListener('submit', function(e){
+            e.preventDefault();
+            const nombre = document.getElementById('nombre').value.trim();
+            const edad = document.getElementById('edad').value.trim();
+            const motivo = document.getElementById('motivo').value.trim();
+            const fecha = document.getElementById('fecha').value; // ya formato yyyy-mm-dd
+            const hora = document.getElementById('hora').value;
+            if(!nombre || !edad || !motivo || !fecha || !hora){ alert('Complete todos los campos.'); return; }
+            const diaNorm = obtenerDiaNormalizado(fecha);
+            if(!diaNorm){ alert('Día no válido (no se permiten domingos).'); return; }
+            const horaLimpia = hora.replace(' (Ocupado)','').trim();
+            const idx = franjasHorarias.indexOf(horaLimpia);
+            if(idx === -1){ alert('Hora inválida.'); return; }
+            const clave = `${fecha}_${diaNorm}_${idx}`;
+            const citas = loadCitas();
+            if(citas[clave]){ alert('Ya existe una cita en esa hora.'); return; }
+            citas[clave] = { valor: `${nombre} · Edad: ${edad} · Motivo: ${motivo} · ${horaLimpia}`, homePacientes: true };
             saveCitas(citas);
-            exportarCitasABaseDeDatos(); // ⬅️ NUEVO
-            alert("Cita agendada correctamente.");
+            console.log('CITA GUARDADA', clave, citas[clave]);
+            alert('Cita agendada.');
             mostrarHoras(fecha);
-            document.getElementById("formCita").reset();
+            this.reset();
+
+            // Forzar evento de almacenamiento manual para otras pestañas que no reciben change (opcional)
+            window.dispatchEvent(new StorageEvent('storage', { key: 'citas', newValue: localStorage.getItem('citas') }));
         });
 
-        window.addEventListener("storage", function (e) {
-            if (e.key === "citas") {
-                mostrarHoras(document.getElementById("fecha").value);
-            }
-        });
+        window.onload = ()=>{
+            const fechaInput = document.getElementById('fecha');
+            const hoy = fechaLocalYYYYMMDD(new Date());
+            fechaInput.value = hoy;
+            mostrarHoras(hoy);
+            fechaInput.addEventListener('change', ()=> mostrarHoras(fechaInput.value));
+        };
+
+        flatpickr('#fecha', { locale:'es', dateFormat:'Y-m-d', disable:[d=> d.getDay()===0] });
+
+        window.addEventListener('storage', e=>{ if(e.key==='citas'){ mostrarHoras(document.getElementById('fecha').value); } });
     </script>
 
 

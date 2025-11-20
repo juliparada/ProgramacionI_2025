@@ -198,7 +198,7 @@
             <td colspan="7">
                 <div class="menu-bar" role="toolbar" aria-label="Navegación principal">
                     <a class="btn" href="agenda.html" role="button">Agendar 📝</a>
-                    <a class="btn secondary" href="historial_de_citas.html" role="button">Historial de Citas 📚 </a>
+                    <a class="btn secondary" href="historial_de_citas.html" role="button">Historial de Citas 📚</a>
                 </div>
             </td>
         </tr>
@@ -247,7 +247,11 @@
         }
 
         function formatDate(d) {
-            return d.toISOString().slice(0, 10);
+            // Formato local (evita desfases de zona horaria que rompen la clave)
+            const y = d.getFullYear();
+            const m = String(d.getMonth() +1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
         }
 
         function loadCitas() {
@@ -317,11 +321,15 @@
                         text.textContent = "Ocupado";
                         celda.appendChild(text);
                     } else if (valor) {
-                        // Mostrar datos completos de cualquier cita (incluyendo las de agenda.html)
                         celda.className = 'ocupado';
                         const text = document.createElement('span');
                         text.className = 'cell-text';
-                        text.textContent = (typeof valor === 'object' && valor.valor) ? valor.valor : "Ocupado";
+                        // Si la cita proviene de agendacion.html (homePacientes:true) mostrar solo "Ocupado"
+                        if (typeof valor === 'object') {
+                            text.textContent = valor.homePacientes ? 'Ocupado' : (valor.valor || 'Ocupado');
+                        } else {
+                            text.textContent = 'Ocupado';
+                        }
                         celda.appendChild(text);
                         celda.addEventListener('click', () => onCellClick(clave, (typeof valor === 'object' && valor.valor) ? valor.valor : valor));
                     } else {
@@ -339,11 +347,7 @@
 
         function onCellClick(clave, valor) {
             const citas = loadCitas();
-            // Solo permitir editar si la cita NO tiene homePacientes: true
-            if (citas[clave] && citas[clave].homePacientes) {
-                alert('Esta cita solo puede ser modificada desde la agenda principal.');
-                return;
-            }
+            // Permitir editar todas las citas
             const parsed = parseValor(valor);
 
             const editar = confirm(`Cita:\nNombre: ${parsed.nombre}\nEdad: ${parsed.edad}\nMotivo: ${parsed.motivo}\nHora: ${parsed.hora}\n\nAceptar para EDITAR\nCancelar para ELIMINAR`);
@@ -407,7 +411,7 @@
                 }
             ]
         });
-
+        
         document.getElementById('calendario').value = formatDate(selectedDate);
         renderTable();
 

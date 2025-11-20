@@ -127,12 +127,12 @@
 
         const columnas = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
         const franjasHorarias = [
- "09:00 -09:30",
- "09:30 -10:00",
- "10:00 -10:30",
- "10:30 -11:00",
- "11:00 -11:30",
- "11:30 -12:00"
+ "09:00 - 09:30",
+ "09:30 - 10:00",
+ "10:00 - 10:30",
+ "10:30 - 11:00",
+ "11:00 - 11:30",
+ "11:30 - 12:00"
 ];
 
         // Detectar si agenda.html fue abierto desde home_pacientes.html
@@ -293,11 +293,35 @@
             }
 
             citas[clave] = {
-                valor: `${nombre} · Edad: ${edad} · Motivo: ${motivo} · ${horaLimpia}`,
-                homePacientes: true
-            };
+                valor: `${nombre} · Edad: ${edad} · Motivo: ${motivo} · ${horaLimpia}`
+};
 
             saveCitas(citas);
+
+            // Enviar a la API para guardar en base de datos
+            fetch('https://localhost:7289/api/GuardarCitas', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    nombre: nombre.trim(),
+                    motivo: motivo.trim(),
+                    fecha: fecha,
+                    hora: horaLimpia
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Cita guardada en DB:', data.cantidad);
+                } else {
+                    console.error('Error guardando en DB:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error en fetch:', error);
+            });
 
             alert("Cita agendada correctamente.");
             mostrarHoras(fecha);
