@@ -17,7 +17,7 @@
             border-collapse: collapse;
             width: 92%;
             margin: 30px auto;
-            background-color: #ffffff;
+            background-color: #a1eaf3;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
@@ -29,7 +29,7 @@
 
             /* Columna de horas */
             th.hora, td.hora {
-                background: #b2ebf2;
+                background: #a1eaf3;
                 width: 140px;
                 font-weight: 700;
                 color: #004d40;
@@ -40,7 +40,7 @@
             font-family: "Brush Script MT", cursive;
             font-size: 2em;
             font-style: italic;
-            background-color: #b2ebf2;
+            background-color: #a1eaf3;
             border: none;
             text-align: center;
             height: 60px;
@@ -50,7 +50,7 @@
 
         /* Menú */
         .menu {
-            background-color: #e0f2f1;
+            background-color: #c6ffff;
             font-weight: bold;
             text-align: center;
             padding: 12px 0;
@@ -127,14 +127,14 @@
 
         /* Días */
         .dias {
-            background-color: #b2dfdb;
+            background-color: #a1eaf3;
             font-weight: bold;
             color: #004d40;
         }
 
         /* Celdas */
         td.disponible {
-            background-color: #e0f2f1;
+            background-color: #b2dfdb;
             cursor: pointer;
             vertical-align: middle;
         }
@@ -196,7 +196,7 @@
                 <div class="menu-bar" role="toolbar" aria-label="Navegación principal">
                     <a class="btn" href="subAgenda.html" role="button">Agenda 📝</a>
                     <a class="btn secondary" href="busqueda_Pacientes.html" role="button">Busqueda de pacientes 🔎</a>
-                    <a class="btn secondary" href="facturas.html" role="button">Facturas 📄</a>
+                    <a class="btn secondary" href="factura_pacientes.html" role="button">Facturas 📄</a>
                 </div>
             </td>
         </tr>
@@ -312,7 +312,8 @@
                         // Mostrar todos los datos de la cita
                         const p = parseValor(cita);
                         td.innerHTML = `<div class='cell-text'><strong>${p.nombre}</strong><br>Edad: ${p.edad}<br>Motivo: ${p.motivo}<br>Hora: ${p.hora}</div>`;
-                        td.style.backgroundColor = '#ffccbc';
+                        // Color según origen: más claro si viene de home (sin homePacientes)
+                        td.style.backgroundColor = (typeof cita === 'object' && !cita.homePacientes) ? '#ffe7d9' : '#ffccbc'; // tono claro para origen home
                         td.style.cursor = 'pointer';
                         td.title = 'Click para editar/eliminar';
                         td.onclick = () => editarOEliminar(clave, cita);
@@ -355,7 +356,7 @@
         function editarOEliminar(clave, valorActual) {
             // Si está bloqueada por el otro médico → no dejar tocar
             if (loadCitas()[clave + "_blocked"]) {
-                alert("Esta hora está ocupada por el Dr. Cordova y no se puede modificar desde aquí.");
+                alert("Esta hora está ocupada,y no se puede modificar desde aquí.");
                 return;
             }
 

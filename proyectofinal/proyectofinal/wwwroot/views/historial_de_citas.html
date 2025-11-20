@@ -15,20 +15,20 @@
 
         /* 🔷 CUERPO */
         body {
-            background-color: #e0f7fa; /* celeste suave */
+            background-color: #a1eaf3; /* celeste suave */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
         }
 
-        /* 🔷 CONTENEDOR PRINCIPAL */
+        /* 🔷 CONTENEDOR PRINCIPAL - MÁS GRANDE */
         .contenedor {
             background-color: #ffffff;
-            width: 420px;
+            width: 600px;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 30px 40px;
+            padding: 40px 50px;
         }
 
         /* 🔷 TÍTULO */
@@ -40,7 +40,7 @@
         }
 
             .titulo h2 {
-                font-size: 1.8rem;
+                font-size: 2rem;
                 color: #00796b;
                 margin: 0;
             }
@@ -77,12 +77,33 @@
             border-color: #00796b;
             outline: none;
         }
+        /* 🔷 TABLA - MÁS ESPACIADA Y LEGIBLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f1f8f9;
+        }
+
+        tbody tr:hover {
+            background-color: #d0f0f3;
+        }
 
         /* 🔷 BOTÓN PRINCIPAL */
         .btn {
             display: inline-block;
-            background-color: #4caf50;
-            color: #fff;
+            background-color: #b2ebf2; /* celestito pálido */
+            color: #004d40; /* texto oscuro para contraste */
             border: none;
             border-radius: 6px;
             padding: 10px 25px;
@@ -94,22 +115,28 @@
         }
 
             .btn:hover {
-                background-color: #388e3c;
+                background-color: #80deea; /* tono celeste más fuerte al pasar el mouse */
             }
 
         /* 🔷 RESPONSIVE */
         @media (max-width: 480px) {
             .contenedor {
-                width: 90%;
-                padding: 20px;
+                width: 95%;
+                padding: 25px;
             }
 
             .titulo h2 {
-                font-size: 1.5rem;
+                font-size: 1.6rem;
+            }
+
+            th, td {
+                padding: 10px 8px;
+                font-size: 0.95rem;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="contenedor">
         <div class="titulo">
@@ -122,21 +149,23 @@
             <input type="date" id="filtro-fecha" style="padding:6px 10px;border-radius:6px;border:1px solid #ccc;">
         </div>
 
-        <table style="width:100%;border-collapse:collapse;margin-bottom:16px;">
+        <table>
             <thead>
                 <tr>
-                    <th style="border-bottom:1px solid #ccc;padding:8px 4px;text-align:left;">Nombre</th>
-                    <th style="border-bottom:1px solid #ccc;padding:8px 4px;text-align:left;">Motivo</th>
-                    <th style="border-bottom:1px solid #ccc;padding:8px 4px;text-align:left;">Fecha</th>
-                    <th style="border-bottom:1px solid #ccc;padding:8px 4px;text-align:left;">Hora</th>
+                    <th>Nombre</th>
+                    <th>Motivo</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
                 </tr>
             </thead>
             <tbody id="historial-citas-body">
                 <!-- Las filas se llenan por JS -->
             </tbody>
         </table>
+
         <a href="home_pacientes.html" class="btn">Salir</a>
     </div>
+
 
     <script>
         function cargarHistorialCitas(filtroFecha = "") {
@@ -165,11 +194,11 @@
 
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-                        <td style="padding:6px4px;">${nombre}</td>
-                        <td style="padding:6px4px;">${motivo}</td>
-                        <td style="padding:6px4px;">${fecha}</td>
-                        <td style="padding:6px4px;">${hora}</td>
-                    `;
+                                    <td style="padding:6px4px;">${nombre}</td>
+                                    <td style="padding:6px4px;">${motivo}</td>
+                                    <td style="padding:6px4px;">${fecha}</td>
+                                    <td style="padding:6px4px;">${hora}</td>
+                                `;
                     tbody.appendChild(tr);
                     hayResultados = true;
                 }

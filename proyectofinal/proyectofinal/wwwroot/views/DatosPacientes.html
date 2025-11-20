@@ -13,11 +13,13 @@
         }
 
         body {
-            background-color: #fff;
+            background-color: #e0f7fa; /* paleta teal */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            padding: 40px 20px;
+            color: #004d40;
         }
 
         .container {
@@ -26,56 +28,75 @@
             justify-content: space-between;
             max-width: 900px;
             width: 100%;
-            background-color: #f9f9f9;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            padding: 40px;
-            gap: 40px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 12px 34px rgba(0, 121, 107, 0.18);
+            padding: 48px 46px;
+            gap: 46px;
+            border: 1px solid #b2dfdb;
+            position: relative;
+            overflow: hidden;
         }
 
         .formulario {
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
             .formulario h2 {
-                margin-bottom: 15px;
-                color: #333;
+                margin-bottom: 6px;
+                color: #00695c;
+                font-size: 32px;
+                letter-spacing: .5px;
             }
 
         label {
             font-weight: 600;
-            color: #444;
+            color: #00695c;
+            font-size: .9rem;
+            letter-spacing: .3px;
         }
 
         input {
-            padding: 8px 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+            padding: 10px 12px;
+            border: 1px solid #b2dfdb;
+            border-radius: 10px;
             outline: none;
-            transition: 0.3s;
+            transition: .3s;
+            background: #f7fffe;
         }
 
             input:focus {
-                border-color: #5a49e3;
+                border-color: #00796b;
+                box-shadow: 0 3px rgba(0, 121, 107, .15);
             }
 
+        /* Botones */
         button, span {
-            margin-top: 15px;
-            background-color: #5a49e3;
-            color: white;
+            margin-top: 14px;
+            background: linear-gradient(90deg, #00796b, #004d40);
+            color: #ffffff;
             border: none;
-            border-radius: 6px;
-            padding: 10px 20px;
-            font-weight: bold;
+            border-radius: 999px;
+            padding: 12px 26px;
+            font-weight: 700;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: .3s;
+            font-size: .9rem;
+            letter-spacing: .6px;
+            box-shadow: 0 10px 26px rgba(0, 121, 107, .35);
         }
 
             button:hover, span:hover {
-                background-color: #4637b8;
+                transform: translateY(-3px);
+                box-shadow: 0 14px 34px rgba(0, 121, 107, .45);
+            }
+
+            button:active, span:active {
+                transform: translateY(0);
+                box-shadow: 0 8px 22px rgba(0, 121, 107, .38);
             }
 
         .imagen {
@@ -85,14 +106,16 @@
             .imagen img {
                 width: 280px;
                 max-width: 100%;
-                border-radius: 12px;
+                border-radius: 16px;
+                box-shadow: 0 8px 24px rgba(0, 77, 64, .25);
             }
 
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
                 text-align: center;
-                gap: 20px;
+                gap: 28px;
+                padding: 38px 30px;
             }
 
             .imagen img {
@@ -102,14 +125,35 @@
 
         .nota {
             font-size: 12px;
-            color: gray;
-            margin-top: 15px;
+            color: #00695c;
+            margin-top: 10px;
+            font-style: italic;
         }
 
             .nota::after {
                 content: " *";
-                color: red;
+                color: #c62828;
             }
+
+        /* Campo foto */
+        .foto-wrapper {
+            margin-top: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        #foto {
+            padding: 10px 12px;
+            background: #f7fffe;
+            border: 1px solid #b2dfdb;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        #foto:hover {
+            border-color: #00796b;
+        }
     </style>
 </head>
 <body>
@@ -135,8 +179,13 @@
             <label for="direccion">Dirección:</label>
             <input type="text" id="direccion" name="direccion" required>
 
-            <button id="guardarBtn">Guardar datos</button>
+            <!-- Nuevo campo foto (no altera lógica existente) -->
+            <div class="foto-wrapper">
+                <label for="foto">Foto del paciente:</label>
+                <input type="file" id="foto" name="foto" accept="image/*">
+            </div>
 
+            <button id="guardarBtn">Guardar datos</button>
 
             <p class="nota">No olvides guardar tus datos antes de continuar</p>
             <a href="UsuarioPacientes.html">
@@ -235,4 +284,4 @@
         });
     </script>
 </body>
-</html >
+</html>

@@ -8,7 +8,7 @@
  <style>
      body {
          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-         background-color: #e0f7fa; /* celeste suave */
+         background-color: #a1eaf3; /* celeste suave */
          display: flex;
          justify-content: center;
          align-items: center;
@@ -90,141 +90,200 @@
 
 </head>
 <body>
-       <div class="form-container">
-             <div class="form-header">
-                   <h2>Agenda</h2>
-                   <h1> 📝 </h1>
-       </div>
+    <div class="form-container">
+        <div class="form-header">
+            <h2>Agenda</h2>
+            <h1> 📝 </h1>
+        </div>
 
- <form id="formCita">
- <label for="nombre">Nombre del paciente:</label>
- <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
- <label for="edad">Edad:</label>
- <input type="text" id="edad" name="edad" placeholder="Ingrese su edad" required>
- <label for="motivo">Motivo:</label>
- <input type="text" id="motivo" name="motivo" placeholder="Escriba el motivo de la cita" required>
- <label for="fecha">Fecha:</label>
- <input type="text" id="fecha" name="fecha" required>
- <label for="hora">Hora:</label>
- <select id="hora" name="hora" required>
- <option value="">Seleccione una hora</option>
- </select>
- <button type="submit">Agendar Cita</button>
- </form>
- </div>
- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
- <script>
- const filas =6;
- const columnas = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]; // sin Domingo
- const franjasHorarias = [
- "09:00 -09:30",
- "09:30 -10:00",
- "10:00 -10:30",
- "10:30 -11:00",
- "11:00 -11:30",
- "11:30 -12:00"
- ];
- let origenEsHome = false;
- try {
- const referrer = document.referrer;
- if (referrer.includes("home_pacientes.html")) origenEsHome = true;
- } catch (e) { origenEsHome = false; }
- function formatDate(d) {
- const y = d.getFullYear();
- const m = String(d.getMonth() +1).padStart(2, '0');
- const day = String(d.getDate()).padStart(2, '0');
- return `${y}-${m}-${day}`;
- }
- function loadCitas() {
- try {
- const raw = localStorage.getItem('citas');
- return raw ? JSON.parse(raw) : {};
- } catch (e) {
- console.warn('Error parseando citas desde localStorage:', e);
- return {};
- }
- }
- function saveCitas(citas) {
- localStorage.setItem('citas', JSON.stringify(citas));
- localStorage.setItem('citas_sync', Date.now().toString());
- }
- function obtenerDiaDeLaSemana(fechaStr) {
- const dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
- const fecha = new Date(fechaStr + 'T00:00:00');
- const dia = fecha.getDay();
- if (dia ===0) return null;
- return dias[dia];
- }
- function mostrarHoras(fecha) {
- const horaSelect = document.getElementById("hora");
- horaSelect.innerHTML = '<option value="">Seleccione una hora</option>';
- if (!fecha) return;
- const diaSeleccionado = obtenerDiaDeLaSemana(fecha);
- if (!diaSeleccionado || !columnas.includes(diaSeleccionado)) return;
- const citasLocales = loadCitas();
- const ocupadasLocales = [];
- Object.entries(citasLocales).forEach(([clave]) => {
- const partes = clave.split('_');
- if (partes.length !==3) return;
- const [fechaClave, diaClave, indiceClave] = partes;
- if (fechaClave === fecha && diaClave === diaSeleccionado) {
- const franja = franjasHorarias[parseInt(indiceClave)];
- if (franja) ocupadasLocales.push(franja);
- }
- });
- franjasHorarias.forEach(h => {
- const option = document.createElement("option");
- option.value = h;
- const ocupado = ocupadasLocales.includes(h);
- option.textContent = ocupado ? `${h} (Ocupado)` : h;
- option.disabled = ocupado;
- horaSelect.appendChild(option);
- });
- }
- window.onload = () => {
- const fechaInput = document.getElementById("fecha");
- const hoy = formatDate(new Date());
- fechaInput.value = hoy;
- mostrarHoras(hoy);
- fechaInput.addEventListener("change", () => mostrarHoras(fechaInput.value));
- };
- flatpickr("#fecha", {
- locale: "es",
- dateFormat: "Y-m-d",
- disable: [date => date.getDay() ===0]
- });
- document.getElementById("formCita").addEventListener("submit", e => {
- e.preventDefault();
- const nombre = document.getElementById("nombre").value.trim();
- const edad = document.getElementById("edad").value.trim();
- const motivo = document.getElementById("motivo").value.trim();
- const fecha = document.getElementById("fecha").value;
- const hora = document.getElementById("hora").value;
- if (!nombre || !edad || !motivo || !fecha || !hora) { alert("Por favor complete todos los campos."); return; }
- const dia = obtenerDiaDeLaSemana(fecha);
- if (!dia || !columnas.includes(dia)) { alert("La fecha seleccionada no corresponde a un día hábil."); return; }
- const horaLimpia = hora.replace(" (Ocupado)", "").trim();
- const indice = franjasHorarias.indexOf(horaLimpia);
- if (indice === -1) { alert("Seleccione una franja horaria válida."); return; }
- const clave = `${fecha}_${dia}_${indice}`;
- const citas = loadCitas();
- if (citas[clave]) { alert("Ya existe una cita para ese día y hora."); return; }
- citas[clave] = { valor: `${nombre} · Edad: ${edad} · Motivo: ${motivo} · ${horaLimpia}` };
- saveCitas(citas);
- window.dispatchEvent(new StorageEvent('storage', { key: 'citas', newValue: localStorage.getItem('citas') }));
- fetch('https://localhost:7289/api/GuardarCitas', {
- method: 'POST',
- headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({ nombre: nombre.trim(), motivo: motivo.trim(), fecha: fecha, hora: horaLimpia })
- }).then(r => r.json()).then(data => { if (!data.success) console.error('Error guardando en DB:', data.error); })
- .catch(err => console.error('Error en fetch:', err));
- alert("Cita agendada correctamente.");
- mostrarHoras(fecha);
- document.getElementById("formCita").reset();
- });
- window.addEventListener("storage", e => {
- if (e.key === "citas" || e.key === "citas_sync") mostrarHoras(document.getElementById("fecha").value);
- });
- </script>
+        <form id="formCita">
+            <label for="nombre">Nombre del paciente:</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
+
+            <label for="edad">Edad:</label>
+            <input type="text" id="edad" name="edad" placeholder="Ingrese su edad" required>
+
+            <label for="motivo">Motivo:</label>
+            <input type="text" id="motivo" name="motivo" placeholder="Escriba el motivo de la cita" required>
+
+            <label for="fecha">Fecha:</label>
+            <input type="text" id="fecha" name="fecha" required>
+
+            <label for="hora">Hora:</label>
+            <select id="hora" name="hora" required>
+                <option value="">Seleccione una hora</option>
+            </select>
+
+            <button type="submit">Agendar Cita</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        const filas = 6;
+        const columnas = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]; // sin Domingo
+        const franjasHorarias = [
+            "09:00 - 09:30",
+            "09:30 - 10:00",
+            "10:00 - 10:30",
+            "10:30 - 11:00",
+            "11:00 - 11:30",
+            "11:30 - 12:00"
+        ];
+
+        let origenEsHome = false;
+        try {
+            const referrer = document.referrer;
+            if (referrer.includes("home_pacientes.html")) origenEsHome = true;
+        } catch (e) {
+            origenEsHome = false;
+        }
+
+        function formatDate(d) {
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
+        }
+
+        function loadCitas() {
+            try {
+                const raw = localStorage.getItem('citas');
+                return raw ? JSON.parse(raw) : {};
+            } catch (e) {
+                console.warn('Error parseando citas desde localStorage:', e);
+                return {};
+            }
+        }
+
+        function saveCitas(citas) {
+            localStorage.setItem('citas', JSON.stringify(citas));
+            localStorage.setItem('citas_sync', Date.now().toString());
+        }
+
+        function obtenerDiaDeLaSemana(fechaStr) {
+            const dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+            const fecha = new Date(fechaStr + 'T00:00:00');
+            const dia = fecha.getDay();
+            if (dia === 0) return null;
+            return dias[dia];
+        }
+
+        function mostrarHoras(fecha) {
+            const horaSelect = document.getElementById("hora");
+            horaSelect.innerHTML = '<option value="">Seleccione una hora</option>';
+            if (!fecha) return;
+
+            const diaSeleccionado = obtenerDiaDeLaSemana(fecha);
+            if (!diaSeleccionado || !columnas.includes(diaSeleccionado)) return;
+
+            const citasLocales = loadCitas();
+            const ocupadasLocales = [];
+
+            Object.entries(citasLocales).forEach(([clave]) => {
+                const partes = clave.split('_');
+                if (partes.length !== 3) return;
+                const [fechaClave, diaClave, indiceClave] = partes;
+                if (fechaClave === fecha && diaClave === diaSeleccionado) {
+                    const franja = franjasHorarias[parseInt(indiceClave)];
+                    if (franja) ocupadasLocales.push(franja);
+                }
+            });
+
+            franjasHorarias.forEach(h => {
+                const option = document.createElement("option");
+                option.value = h;
+                const ocupado = ocupadasLocales.includes(h);
+                option.textContent = ocupado ? `${h} (Ocupado)` : h;
+                option.disabled = ocupado;
+                horaSelect.appendChild(option);
+            });
+        }
+
+        window.onload = () => {
+            const fechaInput = document.getElementById("fecha");
+            const hoy = formatDate(new Date());
+            fechaInput.value = hoy;
+            mostrarHoras(hoy);
+            fechaInput.addEventListener("change", () => mostrarHoras(fechaInput.value));
+        };
+
+        flatpickr("#fecha", {
+            locale: "es",
+            dateFormat: "Y-m-d",
+            disable: [date => date.getDay() === 0]
+        });
+
+        document.getElementById("formCita").addEventListener("submit", e => {
+            e.preventDefault();
+
+            const nombre = document.getElementById("nombre").value.trim();
+            const edad = document.getElementById("edad").value.trim();
+            const motivo = document.getElementById("motivo").value.trim();
+            const fecha = document.getElementById("fecha").value;
+            const hora = document.getElementById("hora").value;
+
+            if (!nombre || !edad || !motivo || !fecha || !hora) {
+                alert("Por favor complete todos los campos.");
+                return;
+            }
+
+            const dia = obtenerDiaDeLaSemana(fecha);
+            if (!dia || !columnas.includes(dia)) {
+                alert("La fecha seleccionada no corresponde a un día hábil.");
+                return;
+            }
+
+            const horaLimpia = hora.replace(" (Ocupado)", "").trim();
+            const indice = franjasHorarias.indexOf(horaLimpia);
+            if (indice === -1) {
+                alert("Seleccione una franja horaria válida.");
+                return;
+            }
+
+            const clave = `${fecha}_${dia}_${indice}`;
+            const citas = loadCitas();
+            if (citas[clave]) {
+                alert("Ya existe una cita para ese día y hora.");
+                return;
+            }
+
+            citas[clave] = {
+                valor: `${nombre} · Edad: ${edad} · Motivo: ${motivo} · ${horaLimpia}`
+            };
+            saveCitas(citas);
+
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'citas',
+                newValue: localStorage.getItem('citas')
+            }));
+
+            fetch('https://localhost:7289/api/GuardarCitas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nombre: nombre.trim(),
+                    motivo: motivo.trim(),
+                    fecha: fecha,
+                    hora: horaLimpia
+                })
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (!data.success) console.error('Error guardando en DB:', data.error);
+                })
+                .catch(err => console.error('Error en fetch:', err));
+
+            alert("Cita agendada correctamente.");
+            mostrarHoras(fecha);
+            document.getElementById("formCita").reset();
+        });
+
+        window.addEventListener("storage", e => {
+            if (e.key === "citas" || e.key === "citas_sync") {
+                mostrarHoras(document.getElementById("fecha").value);
+            }
+        });
+    </script>
 </body>
 </html>
