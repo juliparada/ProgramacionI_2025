@@ -134,12 +134,19 @@
             vertical-align: middle;
         }
 
+        /* Ocupado (de otras pantallas) → café suave acorde a paleta */
         td.ocupado {
-            background-color: #ffcdd2;
-            color: #444;
-            font-weight: bold;
-
+            background-color: #d7ccc8; /* brown200 */
+            color: #3e2723; /* brown900 para contraste */
+            font-weight: 700;
             cursor: default;
+        }
+
+        /* Citas creadas en home (muestran datos) en celeste */
+        td.cita-home {
+            background-color: #b2ebf2;
+            color: #004d40;
+            font-weight: 700;
         }
 
         td.disponible:hover {
@@ -321,10 +328,14 @@
                         text.textContent = "Ocupado";
                         celda.appendChild(text);
                     } else if (valor) {
-                        celda.className = 'ocupado';
+                        // Celeste si la cita proviene del home (objeto sin homePacientes)
+                        if (typeof valor === 'object' && !valor.homePacientes) {
+                            celda.className = 'cita-home';
+                        } else {
+                            celda.className = 'ocupado';
+                        }
                         const text = document.createElement('span');
                         text.className = 'cell-text';
-                        // Si la cita proviene de agendacion.html (homePacientes:true) mostrar solo "Ocupado"
                         if (typeof valor === 'object') {
                             text.textContent = valor.homePacientes ? 'Ocupado' : (valor.valor || 'Ocupado');
                         } else {

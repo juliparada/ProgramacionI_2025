@@ -1,341 +1,230 @@
 ﻿<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendar Cita</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #e0f7fa; /* celeste suave */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Agendar Cita</title>
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+ <style>
+     body {
+         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+         background-color: #e0f7fa; /* celeste suave */
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         height: 100vh;
+         margin: 0;
+     }
 
-        .form-container {
-            background: #ffffff;
-            width: 380px;
-            padding: 25px 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
+     .form-container {
+         background: #ffffff;
+         width: 380px;
+         padding: 25px 30px;
+         border-radius: 12px;
+         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+     }
 
-        .form-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
+     .form-header {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin-bottom: 15px;
+     }
 
-            .form-header h2 {
-                margin: 0;
-                font-size: 22px;
-                color: #00695c;
-            }
+         .form-header h2 {
+             margin: 0;
+             font-size: 22px;
+             color: #00695c;
+         }
 
-            .form-header img {
-                width: 32px;
-                height: 32px;
-            }
+         .form-header img {
+             width: 32px;
+             height: 32px;
+         }
 
-        label {
-            display: block;
-            font-weight: bold;
-            margin: 10px 0 5px;
-            color: #004d40;
-        }
+     label {
+         display: block;
+         font-weight: bold;
+         margin: 10px 0 5px;
+         color: #004d40;
+     }
 
-        input[type="text"],
-        input[type="date"],
-        select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #b2dfdb;
-            font-size: 15px;
-            outline: none;
-            transition: border 0.2s;
-            background-color: #ffffff;
-        }
+     input[type="text"],
+     input[type="date"],
+     select {
+         width: 100%;
+         padding: 10px;
+         border-radius: 6px;
+         border: 1px solid #b2dfdb;
+         font-size: 15px;
+         outline: none;
+         transition: border 0.2s;
+         background-color: #ffffff;
+     }
 
-            input[type="text"]:focus,
-            input[type="date"]:focus,
-            select:focus {
-                border-color: #00796b;
-            }
+         input[type="text"]:focus,
+         input[type="date"]:focus,
+         select:focus {
+             border-color: #00796b;
+         }
 
-        button {
-            width: 100%;
-            background-color: #00796b;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            margin-top: 15px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            box-shadow: 0 6px 14px rgba(0,0,0,0.1);
-        }
+     button {
+         width: 100%;
+         background-color: #00796b;
+         color: white;
+         font-size: 16px;
+         font-weight: bold;
+         padding: 10px;
+         border: none;
+         border-radius: 8px;
+         margin-top: 15px;
+         cursor: pointer;
+         transition: background-color 0.3s;
+         box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+     }
 
-            button:hover {
-                background-color: #004d40;
-            }
-    </style>
+         button:hover {
+             background-color: #23a0a0;
+         }
+ </style>
 
 </head>
 <body>
+       <div class="form-container">
+             <div class="form-header">
+                   <h2>Agenda</h2>
+                   <h1> 📝 </h1>
+       </div>
 
-    <div class="form-container">
-        <div class="form-header">
-            <h2>Agenda</h2>
-            <h1> 📝 </h1>
-        </div>
-
-        <form id="formCita">
-            <label for="nombre">Nombre del paciente:</label>
-            <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
-
-            <label for="edad">Edad:</label>
-            <input type="text" id="edad" name="edad" placeholder="Ingrese su edad" required>
-
-            <label for="motivo">Motivo:</label>
-            <input type="text" id="motivo" name="motivo" placeholder="Escriba el motivo de la cita" required>
-
-            <label for="fecha">Fecha:</label>
-            <input type="text" id="fecha" name="fecha" required>
-
-            <label for="hora">Hora:</label>
-            <select id="hora" name="hora" required>
-                <option value="">Seleccione una hora</option>
-            </select>
-
-            <button type="submit">Agendar Cita</button>
-        </form>
-    </div>
-
- 
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script>
-
-        const filas = 6;
-
-        const columnas = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-        const franjasHorarias = [
- "09:00 - 09:30",
- "09:30 - 10:00",
- "10:00 - 10:30",
- "10:30 - 11:00",
- "11:00 - 11:30",
- "11:30 - 12:00"
-];
-
-        // Detectar si agenda.html fue abierto desde home_pacientes.html
-        let origenEsHome = false;
-
-        try {
-            const referrer = document.referrer;
-            if (referrer.includes("home_pacientes.html")) {
-                origenEsHome = true;
-            }
-        } catch (e) {
-            origenEsHome = false;
-        }
-
-
-        function getMonday(d) {
-            d = new Date(d);
-            var day = d.getDay(),
-                diff = d.getDate() - day + (day === 0 ? -6 : 1);
-            return new Date(d.setDate(diff));
-        }
-
-        function getWeekDates(selectedDate) {
-            const monday = getMonday(selectedDate);
-            return Array.from({ length: 6 }, (_, i) => {
-                const d = new Date(monday);
-                d.setDate(monday.getDate() + i);
-                return d;
-            });
-        }
-
-        function formatDate(d) {
-            return d.toISOString().slice(0, 10);
-        }
-
-        function loadCitas() {
-            try {
-                const raw = localStorage.getItem('citas');
-                return raw ? JSON.parse(raw) : {};
-            } catch (e) {
-                console.warn('Error parseando citas desde localStorage:', e);
-                return {};
-            }
-        }
-
-        function saveCitas(citas) {
-            localStorage.setItem('citas', JSON.stringify(citas));
-            // Notificar a otras pestañas (como home_pacientes.html) que hubo un cambio
-            localStorage.setItem('citas_sync', Date.now().toString());
-        }
-
-        function parseValor(valor) {
-            const parts = valor.split('·').map(p => p.trim());
-            const nombre = parts[0] || '';
-            const edad = parts.find(p => p.startsWith("Edad:"))?.split(":")[1]?.trim() || '';
-            const motivo = parts.find(p => p.startsWith("Motivo:"))?.split(":")[1]?.trim() || '';
-            const hora = parts.find(p => p.includes(":") && p.includes("-")) || '';
-            return { nombre, edad, motivo, hora };
-        }
-
-        function obtenerDiaDeLaSemana(fechaStr) {
+ <form id="formCita">
+ <label for="nombre">Nombre del paciente:</label>
+ <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
+ <label for="edad">Edad:</label>
+ <input type="text" id="edad" name="edad" placeholder="Ingrese su edad" required>
+ <label for="motivo">Motivo:</label>
+ <input type="text" id="motivo" name="motivo" placeholder="Escriba el motivo de la cita" required>
+ <label for="fecha">Fecha:</label>
+ <input type="text" id="fecha" name="fecha" required>
+ <label for="hora">Hora:</label>
+ <select id="hora" name="hora" required>
+ <option value="">Seleccione una hora</option>
+ </select>
+ <button type="submit">Agendar Cita</button>
+ </form>
+ </div>
+ <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+ <script>
+ const filas =6;
+ const columnas = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]; // sin Domingo
+ const franjasHorarias = [
+ "09:00 -09:30",
+ "09:30 -10:00",
+ "10:00 -10:30",
+ "10:30 -11:00",
+ "11:00 -11:30",
+ "11:30 -12:00"
+ ];
+ let origenEsHome = false;
+ try {
+ const referrer = document.referrer;
+ if (referrer.includes("home_pacientes.html")) origenEsHome = true;
+ } catch (e) { origenEsHome = false; }
+ function formatDate(d) {
+ const y = d.getFullYear();
+ const m = String(d.getMonth() +1).padStart(2, '0');
+ const day = String(d.getDate()).padStart(2, '0');
+ return `${y}-${m}-${day}`;
+ }
+ function loadCitas() {
+ try {
+ const raw = localStorage.getItem('citas');
+ return raw ? JSON.parse(raw) : {};
+ } catch (e) {
+ console.warn('Error parseando citas desde localStorage:', e);
+ return {};
+ }
+ }
+ function saveCitas(citas) {
+ localStorage.setItem('citas', JSON.stringify(citas));
+ localStorage.setItem('citas_sync', Date.now().toString());
+ }
+ function obtenerDiaDeLaSemana(fechaStr) {
  const dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
- const fecha = new Date(fechaStr);
- let dia = fecha.getDay();
- if (dia ===0) return null; // No permitir domingo
+ const fecha = new Date(fechaStr + 'T00:00:00');
+ const dia = fecha.getDay();
+ if (dia ===0) return null;
  return dias[dia];
-}
-
-        function mostrarHoras(fecha) {
-            const horaSelect = document.getElementById("hora");
-            horaSelect.innerHTML = '<option value="">Seleccione una hora</option>';
-
-            if (!fecha) return;
-
-            const diaSeleccionado = obtenerDiaDeLaSemana(fecha);
-            if (!columnas.includes(diaSeleccionado)) return;
-
-            const citasLocales = loadCitas();
-            const ocupadasLocales = [];
-
-            Object.entries(citasLocales).forEach(([clave, valor]) => {
-                const partes = clave.split('_');
-                if (partes.length !== 3) return;
-                const [fechaClave, diaClave, indiceClave] = partes;
-                if (fechaClave === fecha && diaClave === diaSeleccionado) {
-                    const franja = franjasHorarias[parseInt(indiceClave)];
-                    if (franja) ocupadasLocales.push(franja);
-                }
-            });
-
-            franjasHorarias.forEach(h =>
-            {
-                const option = document.createElement("option");
-                option.value = h;
-                option.textContent = ocupadasLocales.includes(h) ? `${h} (Ocupado)` : h;
-                option.disabled = ocupadasLocales.includes(h);
-                horaSelect.appendChild(option);
-            });
-        }
-
-        window.onload = function () {
-            const fechaInput = document.getElementById("fecha");
-            const hoy = formatDate(new Date());
-            fechaInput.value = hoy;
-            mostrarHoras(hoy);
-
-            fechaInput.addEventListener("change", function () {
-                mostrarHoras(fechaInput.value);
-            });
-
-        };
-
-        flatpickr("#fecha", {
-            locale: "es",
-            dateFormat: "Y-m-d",
-            disable: [
-                function (date) {
-                    return date.getDay() === 0;
-                }
-            ]
-        });
-
-        document.getElementById("formCita").addEventListener("submit", function (e)
-        {
-            e.preventDefault();
-
-            const nombre = document.getElementById("nombre").value.trim();
-            const edad = document.getElementById("edad").value.trim();
-            const motivo = document.getElementById("motivo").value.trim();
-            const fecha = document.getElementById("fecha").value;
-            const hora = document.getElementById("hora").value;
-
-            if (!nombre || !edad || !motivo || !fecha || !hora) {
-                alert("Por favor complete todos los campos.");
-                return;
-            }
-
-            const dia = obtenerDiaDeLaSemana(fecha);
-            if (!columnas.includes(dia)) {
-                alert("La fecha seleccionada no corresponde a un día hábil.");
-                return;
-            }
-
-            const horaLimpia = hora.replace(" (Ocupado)", "").trim();
-            const indice = franjasHorarias.indexOf(horaLimpia);
-
-            if (indice === -1) {
-                alert("Seleccione una franja horaria válida.");
-                return;
-            }
-
-            const clave = `${fecha}_${dia}_${indice}`;
-            const citas = loadCitas();
-
-            if (citas[clave]) {
-                alert("Ya existe una cita para ese día y hora.");
-                return;
-            }
-
-            citas[clave] = {
-                valor: `${nombre} · Edad: ${edad} · Motivo: ${motivo} · ${horaLimpia}`
-};
-
-            saveCitas(citas);
-
-            // Enviar a la API para guardar en base de datos
-            fetch('https://localhost:7289/api/GuardarCitas', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    nombre: nombre.trim(),
-                    motivo: motivo.trim(),
-                    fecha: fecha,
-                    hora: horaLimpia
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log('Cita guardada en DB:', data.cantidad);
-                } else {
-                    console.error('Error guardando en DB:', data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Error en fetch:', error);
-            });
-
-            alert("Cita agendada correctamente.");
-            mostrarHoras(fecha);
-            document.getElementById("formCita").reset();
-        });
-
-        window.addEventListener("storage", function (e) {
-            if (e.key === "citas" || e.key === "citas_sync") {
-                mostrarHoras(document.getElementById("fecha").value);
-            }
-        });
-    </script>
-
-
-
+ }
+ function mostrarHoras(fecha) {
+ const horaSelect = document.getElementById("hora");
+ horaSelect.innerHTML = '<option value="">Seleccione una hora</option>';
+ if (!fecha) return;
+ const diaSeleccionado = obtenerDiaDeLaSemana(fecha);
+ if (!diaSeleccionado || !columnas.includes(diaSeleccionado)) return;
+ const citasLocales = loadCitas();
+ const ocupadasLocales = [];
+ Object.entries(citasLocales).forEach(([clave]) => {
+ const partes = clave.split('_');
+ if (partes.length !==3) return;
+ const [fechaClave, diaClave, indiceClave] = partes;
+ if (fechaClave === fecha && diaClave === diaSeleccionado) {
+ const franja = franjasHorarias[parseInt(indiceClave)];
+ if (franja) ocupadasLocales.push(franja);
+ }
+ });
+ franjasHorarias.forEach(h => {
+ const option = document.createElement("option");
+ option.value = h;
+ const ocupado = ocupadasLocales.includes(h);
+ option.textContent = ocupado ? `${h} (Ocupado)` : h;
+ option.disabled = ocupado;
+ horaSelect.appendChild(option);
+ });
+ }
+ window.onload = () => {
+ const fechaInput = document.getElementById("fecha");
+ const hoy = formatDate(new Date());
+ fechaInput.value = hoy;
+ mostrarHoras(hoy);
+ fechaInput.addEventListener("change", () => mostrarHoras(fechaInput.value));
+ };
+ flatpickr("#fecha", {
+ locale: "es",
+ dateFormat: "Y-m-d",
+ disable: [date => date.getDay() ===0]
+ });
+ document.getElementById("formCita").addEventListener("submit", e => {
+ e.preventDefault();
+ const nombre = document.getElementById("nombre").value.trim();
+ const edad = document.getElementById("edad").value.trim();
+ const motivo = document.getElementById("motivo").value.trim();
+ const fecha = document.getElementById("fecha").value;
+ const hora = document.getElementById("hora").value;
+ if (!nombre || !edad || !motivo || !fecha || !hora) { alert("Por favor complete todos los campos."); return; }
+ const dia = obtenerDiaDeLaSemana(fecha);
+ if (!dia || !columnas.includes(dia)) { alert("La fecha seleccionada no corresponde a un día hábil."); return; }
+ const horaLimpia = hora.replace(" (Ocupado)", "").trim();
+ const indice = franjasHorarias.indexOf(horaLimpia);
+ if (indice === -1) { alert("Seleccione una franja horaria válida."); return; }
+ const clave = `${fecha}_${dia}_${indice}`;
+ const citas = loadCitas();
+ if (citas[clave]) { alert("Ya existe una cita para ese día y hora."); return; }
+ citas[clave] = { valor: `${nombre} · Edad: ${edad} · Motivo: ${motivo} · ${horaLimpia}` };
+ saveCitas(citas);
+ window.dispatchEvent(new StorageEvent('storage', { key: 'citas', newValue: localStorage.getItem('citas') }));
+ fetch('https://localhost:7289/api/GuardarCitas', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json' },
+ body: JSON.stringify({ nombre: nombre.trim(), motivo: motivo.trim(), fecha: fecha, hora: horaLimpia })
+ }).then(r => r.json()).then(data => { if (!data.success) console.error('Error guardando en DB:', data.error); })
+ .catch(err => console.error('Error en fetch:', err));
+ alert("Cita agendada correctamente.");
+ mostrarHoras(fecha);
+ document.getElementById("formCita").reset();
+ });
+ window.addEventListener("storage", e => {
+ if (e.key === "citas" || e.key === "citas_sync") mostrarHoras(document.getElementById("fecha").value);
+ });
+ </script>
 </body>
 </html>
