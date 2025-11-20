@@ -42,6 +42,23 @@ namespace proyectofinal.Controllers
             return usuarioPaciente;
         }
 
+        // NUEVO: Obtener datos del paciente (DatosPacientes) por idPacienteUsuario
+        [HttpGet("obtenerDatosPaciente/{idPacienteUsuario}")]
+        public async Task<IActionResult> ObtenerDatosPaciente(int idPacienteUsuario)
+        {
+            var datos = await _context.DatosPacientes.FirstOrDefaultAsync(d => d.idPacienteUsuario == idPacienteUsuario);
+            if (datos == null) return NotFound(new { mensaje = "No hay datos registrados para este paciente" });
+            return Ok(new
+            {
+                nombre = datos.nombre,
+                apellido = datos.apellido,
+                dui = datos.dui,
+                telefono = datos.telefono,
+                fecha = datos.fecha,
+                direccion = datos.direccion
+            });
+        }
+
         // PUT: api/usuarioPacientes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
