@@ -6,10 +6,12 @@ using System.Windows.Forms;
 
 namespace ParcialI
 {
-    static class Program
+    internal static class Program
     {
         /// <summary>
         /// Punto de entrada principal para la aplicación.
+        /// 
+        /// 
         /// </summary>
         [STAThread]
         static void Main()
