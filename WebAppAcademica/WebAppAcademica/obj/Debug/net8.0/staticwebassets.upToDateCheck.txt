@@ -4,3 +4,7 @@ wwwroot\views\busqueda_alumno.html
 wwwroot\views\index.html
 wwwroot\views\docente.html
 wwwroot\views\materia.html
+wwwroot\views\busqueda_periodo.html
+wwwroot\views\busqueda_docente.html
+wwwroot\views\periodo.html
+wwwroot\views\busqueda_materia.html
