@@ -35,18 +35,20 @@
         listarPeriodos(txtBuscarPeriodo.value);
     });
 
-    async function listarPeriodos(buscar='') {
+    async function listarPeriodos(buscar = '') {
         const respuesta = await fetch(`/api/Periodos/buscar?buscar=${buscar}`, {
-            method:'GET',
+            method: 'GET',
             headers: {
                 "Content-Type": "application/json"
             }
         }), periodos = await respuesta.json();
         let filas = '';
+        let periodos = await obtenerPeriodos(buscar),
+            filas = '';
         periodos.forEach(periodo => {
             filas += `
                 <tr onClick='modificarPeriodo(${JSON.stringify(periodo)})'>
-                    <td>${periodo.fecha}</td>
+                    <td>${new Date(periodo.fecha).toLocaleDateString("en-GB")}</td>
                     <td>${periodo.periodo}</td>
                     <td><button type="button" class="btn btn-outline-danger btn-sm" onClick='eliminarPeriodo(${JSON.stringify(periodo)}, event)'>DEL</button>
                 </tr>
@@ -54,6 +56,7 @@
         });
         document.querySelector("#tblConsultaPeriodos > tbody").innerHTML = filas;
     }
+
     async function eliminarPeriodo(periodo, event) {
         event.preventDefault();
 
