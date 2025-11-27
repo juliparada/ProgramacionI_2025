@@ -1,4 +1,6 @@
-wwwroot\views\index.html
 wwwroot\img\logo.png
-wwwroot\views\busqueda_alumno.html
 wwwroot\views\alumno.html
+wwwroot\views\busqueda_alumno.html
+wwwroot\views\index.html
+wwwroot\views\docente.html
+wwwroot\views\materia.html
