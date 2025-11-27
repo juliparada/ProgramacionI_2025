@@ -7992,11 +7992,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\yeimy\\Desktop\\Programación2025\\WebAppAcademica\\WebAppAcademica\\WebAppAcademica.csproj",
+      "projectUniqueName": "C:\\Users\\yeimy\\Desktop\\ProgramacionI_2025\\WebAppAcademica\\WebAppAcademica\\WebAppAcademica.csproj",
       "projectName": "WebAppAcademica",
-      "projectPath": "C:\\Users\\yeimy\\Desktop\\Programación2025\\WebAppAcademica\\WebAppAcademica\\WebAppAcademica.csproj",
+      "projectPath": "C:\\Users\\yeimy\\Desktop\\ProgramacionI_2025\\WebAppAcademica\\WebAppAcademica\\WebAppAcademica.csproj",
       "packagesPath": "C:\\Users\\yeimy\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\yeimy\\Desktop\\Programación2025\\WebAppAcademica\\WebAppAcademica\\obj\\",
+      "outputPath": "C:\\Users\\yeimy\\Desktop\\ProgramacionI_2025\\WebAppAcademica\\WebAppAcademica\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

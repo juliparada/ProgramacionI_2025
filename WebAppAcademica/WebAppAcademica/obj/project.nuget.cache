@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "X8AWkQiltLE=",
+  "dgSpecHash": "iNLbRrsL2Vw=",
   "success": true,
-  "projectFilePath": "C:\\Users\\yeimy\\Desktop\\Programación2025\\WebAppAcademica\\WebAppAcademica\\WebAppAcademica.csproj",
+  "projectFilePath": "C:\\Users\\yeimy\\Desktop\\ProgramacionI_2025\\WebAppAcademica\\WebAppAcademica\\WebAppAcademica.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\yeimy\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\yeimy\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
