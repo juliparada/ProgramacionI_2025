@@ -371,6 +371,22 @@
   },
   {
     "ContainingType": "proyectofinal.Controllers.UsuarioSecretariaController",
+    "Method": "ObtenerDatosSecretaria",
+    "RelativePath": "api/UsuarioSecretaria/obtenerDatosSecretaria/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "proyectofinal.Controllers.UsuarioSecretariaController",
     "Method": "Registrar",
     "RelativePath": "api/UsuarioSecretaria/registrar",
     "HttpMethod": "POST",

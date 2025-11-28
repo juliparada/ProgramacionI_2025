@@ -1,9 +1,9 @@
 ﻿<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Perfil del Paciente</title>
+    <title>Perfil Administrativo</title>
     <style>
         * {
             box-sizing: border-box;
@@ -34,16 +34,16 @@
             overflow: hidden;
         }
 
-        .perfil::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><g stroke='%2300695c' stroke-width='2' fill='none' opacity='.18' stroke-linecap='round' stroke-linejoin='round'><rect x='10' y='10' width='28' height='36' rx='4'/><path d='M1818h16M1824h14M1830h10'/><rect x='14' y='76' width='46' height='18' rx='9'/></g></svg>");
-            background-size: 120px 120px;
-            background-repeat: repeat;
-            opacity: .25;
-            pointer-events: none;
-        }
+            .perfil::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><g stroke='%2300695c' stroke-width='2' fill='none' opacity='.18' stroke-linecap='round' stroke-linejoin='round'><rect x='10' y='10' width='28' height='36' rx='4'/><path d='M18 18 h16 M24 24 h14 M30 30 h10'/><rect x='14' y='76' width='46' height='18' rx='9'/></g></svg>");
+                background-size: 120px 120px;
+                background-repeat: repeat;
+                opacity: .25;
+                pointer-events: none;
+            }
 
         h1 {
             position: relative;
@@ -94,13 +94,12 @@
             cursor: pointer;
             box-shadow: 0 6px 18px rgba(0, 121, 107, 0.35);
             transition: .25s;
-
         }
 
-        .upload-label:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 26px rgba(0, 121, 107, 0.45);
-        }
+            .upload-label:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 26px rgba(0, 121, 107, 0.45);
+            }
 
         .exit-btn {
             display: block;
@@ -169,84 +168,116 @@
         }
 
         @media (max-width: 640px) {
-            .perfil { padding: 34px 26px 44px; }
-            h1 { font-size: 1.7rem; }
-            .avatar { width: 130px; height: 130px; font-size: 2.4rem; }
+            .perfil {
+                padding: 34px 26px 44px;
+            }
+
+            h1 {
+                font-size: 1.7rem;
+            }
+
+            .avatar {
+                width: 130px;
+                height: 130px;
+                font-size: 2.4rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="perfil">
-        <h1>Perfil del Paciente</h1>
-        <div id="avatar" class="avatar" aria-label="Foto del paciente">👤</div>
+        <h1>Perfil Administrativo</h1>
+        <div id="avatar" class="avatar" aria-label="Foto de la secretaria">👤</div>
         <div class="acciones">
             <label class="upload-label" for="fotoPerfil">Cambiar Foto</label>
-            <a href="home_pacientes.html" class="exit-btn" title="Regresar al inicio">Salir</a>
+            <a href="agendacion.html" class="exit-btn" title="Regresar a agenda">Salir</a>
         </div>
         <input id="fotoPerfil" type="file" accept="image/*" class="hidden" />
         <div id="estadoFoto" class="estado-foto"></div>
+
         <div class="datos">
-            <div class="fila">
-                <span class="label">Nombre</span>
-                <span class="valor" id="val-nombre">-</span>
-            </div>
-            <div class="fila">
-                <span class="label">DUI</span>
-                <span class="valor" id="val-dui">-</span>
-            </div>
-            <div class="fila">
-                <span class="label">Teléfono</span>
-                <span class="valor" id="val-telefono">-</span>
-            </div>
-            <div class="fila">
-                <span class="label">Fecha de Nacimiento</span>
-                <span class="valor" id="val-fecha">-</span>
-            </div>
-            <div class="fila">
-                <span class="label">Dirección</span>
-                <span class="valor" id="val-direccion">-</span>
-            </div>
+            <div class="fila"><span class="label">Nombre</span><span class="valor" id="val-nombre">-</span></div>
+            <div class="fila"><span class="label">Apellido</span><span class="valor" id="val-apellido">-</span></div>
+            <div class="fila"><span class="label">DUI</span><span class="valor" id="val-dui">-</span></div>
+            <div class="fila"><span class="label">Especialidad</span><span class="valor" id="val-especialidad">-</span></div>
+            <div class="fila"><span class="label">Teléfono</span><span class="valor" id="val-telefono">-</span></div>
+            <div class="fila"><span class="label">Fecha</span><span class="valor" id="val-fecha">-</span></div>
+            <div class="fila"><span class="label">Correo</span><span class="valor" id="val-correo">-</span></div>
+            <div class="fila"><span class="label">Dirección</span><span class="valor" id="val-direccion">-</span></div>
         </div>
     </div>
+
     <script>
-        // Solo mostrar: nombre, dui, telefono, fecha nacimiento, direccion, foto.
         const campos = {
             nombre: document.getElementById('val-nombre'),
+            apellido: document.getElementById('val-apellido'),
             dui: document.getElementById('val-dui'),
+            especialidad: document.getElementById('val-especialidad'),
             telefono: document.getElementById('val-telefono'),
             fecha: document.getElementById('val-fecha'),
+            correo: document.getElementById('val-correo'),
             direccion: document.getElementById('val-direccion')
         };
+
         const avatar = document.getElementById('avatar');
         const estadoFoto = document.getElementById('estadoFoto');
-        const idPacienteUsuario = localStorage.getItem('idPacienteUsuario');
+        const idSecretaria = localStorage.getItem('idSecretaria');
 
-        function aplicarDatos(data){
-            if(!data) return;
-            campos.nombre.textContent = (data.nombre || '').trim() || '-';
-            campos.dui.textContent = (data.dui || '').trim() || '-';
-            campos.telefono.textContent = (data.telefono || '').trim() || '-';
-            campos.direccion.textContent = (data.direccion || '').trim() || '-';
-            if(data.fecha){ const solo = data.fecha.split('T')[0]; campos.fecha.textContent = solo; } else { campos.fecha.textContent='-'; }
-        }
+        async function cargarDatos() {
+            if (!idSecretaria) return;
 
-        async function cargarDatos(){
-            // Intento API (ajusta a ruta real). Mantener simple.
-            if(idPacienteUsuario){
-                try {
-                    const resp = await fetch(`https://localhost:7289/api/usuarioPacientes/obtenerDatosPaciente/${idPacienteUsuario}`);
-                    if(resp.ok){ const json = await resp.json(); aplicarDatos(json); return; }
-                } catch(e){ console.warn('API no disponible', e); }
+            try {
+                const resp = await fetch(`/api/UsuarioSecretaria/obtenerDatosSecretaria/${idSecretaria}`);
+                if (resp.ok) {
+                    const data = await resp.json();
+                    campos.nombre.textContent = data.nombre || '-';
+                    campos.apellido.textContent = data.apellido || '-';
+                    campos.dui.textContent = data.dui || '-';
+                    campos.especialidad.textContent = data.especialidad || '-';
+                    campos.telefono.textContent = data.telefono || '-';
+                    campos.fecha.textContent = data.fecha || '-';
+                    campos.correo.textContent = data.correo || '-';
+                    campos.direccion.textContent = data.direccion || '-';
+
+                    if (data.fotoRuta) {
+                        avatar.style.backgroundImage = `url(${data.fotoRuta})`;
+                        avatar.style.backgroundSize = 'cover';
+                        avatar.style.backgroundPosition = 'center';
+                        avatar.textContent = '';
+                    }
+                } else {
+                    console.warn('No se pudo obtener datos');
+                }
+            } catch (e) {
+                console.warn('Error cargando datos', e);
             }
-            // Fallback: si previamente se guardó objeto en localStorage (opcional).
-            try { const ls = localStorage.getItem('datosPaciente'); if(ls){ aplicarDatos(JSON.parse(ls)); } } catch { /* ignore */ }
         }
 
-        function establecerFoto(dataUrl){ avatar.style.backgroundImage=`url(${dataUrl})`; avatar.style.backgroundSize='cover'; avatar.style.backgroundPosition='center'; avatar.textContent=''; estadoFoto.textContent='Foto cargada'; }
-        const fotoGuardada = localStorage.getItem('fotoPaciente'); if(fotoGuardada) establecerFoto(fotoGuardada);
+        function establecerFoto(dataUrl) {
+            avatar.style.backgroundImage = `url(${dataUrl})`;
+            avatar.style.backgroundSize = 'cover';
+            avatar.style.backgroundPosition = 'center';
+            avatar.textContent = '';
+            estadoFoto.textContent = 'Foto cargada';
+        }
+
+        const fotoLocal = localStorage.getItem('fotoSecretaria');
+        if (fotoLocal) establecerFoto(fotoLocal);
+
         document.getElementById('fotoPerfil').addEventListener('change', e => {
-            const file = e.target.files[0]; if(!file) return; if(!file.type.startsWith('image/')){ estadoFoto.textContent='Archivo no válido'; return; }
-            const reader = new FileReader(); reader.onload = () => { localStorage.setItem('fotoPaciente', reader.result); establecerFoto(reader.result); }; reader.readAsDataURL(file); estadoFoto.textContent='Procesando imagen...';
+            const file = e.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                estadoFoto.textContent = 'Archivo no válido';
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = () => {
+                localStorage.setItem('fotoSecretaria', reader.result);
+                establecerFoto(reader.result);
+            };
+            reader.readAsDataURL(file);
+            estadoFoto.textContent = 'Procesando imagen...';
         });
 
         cargarDatos();

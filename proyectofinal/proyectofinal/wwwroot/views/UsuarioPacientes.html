@@ -24,11 +24,32 @@
 
         #loginBtn {
             width: 100%;
+            max-width: 340px;
+            display: block;
+            margin: 0 auto 10px;
         }
 
         label   {
                  position: absolute;
                  }
+
+        /* Botón salir alineado y con el mismo ancho que ENTRAR */
+        .btn-salir {
+            display: block;
+            width: 100%;
+            max-width: 340px;
+            margin: 0 auto;
+            border-radius: 999px;
+            font-weight: 600;
+            letter-spacing: .4px;
+            border: 2px solid #a1eaf3;
+            color: #00695c;
+            background: #ffffff;
+        }
+        .btn-salir:hover {
+            background: #e3f8fb;
+            box-shadow: 0px 20px rgba(0,0,0,0.08);
+        }
 
     </style>
 </head>
@@ -63,9 +84,16 @@
                                             <button id="loginBtn" class="btn btn-dark btn-lg btn-block" type="button">ENTRAR</button>
                                         </div>
 
-                                        <p class="mb-5 pb-lg-2 text-center" style="color: #393f81;">
+                                        <p class="mb-4 text-center" style="color: #393f81;">
                                             ¿No tienes una cuenta aún? <a href="registrate.html" style="color: #0015ff;">Regístrate aquí</a>
                                         </p>
+
+                                        <!-- Botón Salir con contorno celestito -->
+                                        <div class="mb-2 text-center">
+                                            <button type="button" class="btn btn-salir" onclick="window.location.href='serviciosPrincipales.html'">
+                                                Salir
+                                            </button>
+                                        </div>
                                     </form>
                                 </div>
                             </div>

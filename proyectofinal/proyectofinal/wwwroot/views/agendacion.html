@@ -180,10 +180,39 @@
                 max-width: 80px;
             }
         }
+
+        /* Botón perfil administrativo */
+        .perfil-link {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            color: #00695c;
+            font-size: .9rem;
+        }
+
+        .perfil-link span {
+            display: inline-flex;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            background: #b2dfdb;
+            color: #004d40;
+            font-size: 22px;
+            box-shadow: 0 4px 10px rgba(0,0,0,.15);
+        }
     </style>
 </head>
 <body>
-    <div style="width:92%;margin:24px auto 0 auto;text-align:right;">
+    <div style="width:92%;margin:24px auto 0 auto;text-align:right; position:relative;">
+        <a href="perfil_administrativo.html" title="Ver perfil administrativo" class="perfil-link"><span>👤</span> Perfil</a>
         <label for="calendario" style="font-weight:bold;color:#00695c;">Seleccionar semana: </label>
         <input id="calendario" type="text" style="padding:8px 12px;border-radius:6px;border:1px solid #b2dfdb;font-size:1rem;">
     </div>

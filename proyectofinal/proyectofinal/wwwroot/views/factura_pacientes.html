@@ -32,6 +32,30 @@
             width: 100%;
             padding: 46px 42px 52px;
             box-shadow: 0 12px 38px rgba(0, 121, 107, .18);
+            position: relative;
+        }
+
+        /* Botón salir reubicado debajo de imprimir */
+        .exit-inline {
+            margin-top: 14px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .exit-inline a {
+            background: linear-gradient(90deg, #00796b, #004d40);
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 999px;
+            font-size: .85rem;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 8px 20px rgba(0, 121, 107, .35);
+            letter-spacing: .5px;
+        }
+
+        .exit-inline a:hover {
+            transform: translateY(-2px);
         }
 
         h1 {
@@ -310,7 +334,8 @@
             .btn,
             h1,
             .form-group,
-            .search-wrapper {
+            .search-wrapper,
+            .exit-inline {
                 display: none !important;
             }
 
@@ -360,6 +385,10 @@
         </div>
 
         <button class="btn" onclick="imprimirFactura()">🖨 Imprimir Factura</button>
+
+        <div class="exit-inline">
+            <a href="agendacion.html" title="Regresar a agenda">Salir</a>
+        </div>
 
         <div class="factura-preview" id="facturaPreview">
             <div class="factura-header">

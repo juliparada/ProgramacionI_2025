@@ -68,10 +68,9 @@
              border-color: #00796b;
          }
 
-     button {
+     .btn-primary {
          width: 100%;
-         background-color: #00796b;
-         color: white;
+
          font-size: 16px;
          font-weight: bold;
          padding: 10px;
@@ -81,10 +80,40 @@
          cursor: pointer;
          transition: background-color 0.3s;
          box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+         display: inline-block;
+         text-align: center;
+         background: #00796b;
+         color: white;
      }
 
-         button:hover {
-             background-color: #23a0a0;
+         .btn-primary:hover {
+             background: #23a0a0;
+         }
+
+         /* Botón salir más pequeño y centrado */
+         .btn-exit {
+             width: auto;
+             min-width: 160px;
+             display: block;
+             margin: 12px auto 0 auto;
+             background: linear-gradient(90deg, #004d40, #00796b);
+             color: white;
+             padding: 8px 20px;
+             border: none;
+             border-radius: 999px;
+             font-size: 0.7rem;
+             letter-spacing: 0.4px;
+             font-weight: 600;
+             text-decoration: none;
+             text-align: center;
+             box-shadow: 0 4px 12px rgba(0, 121, 107, 0.3);
+             transition: 0.25s;
+             cursor: pointer;
+         }
+
+         .btn-exit:hover {
+             transform: translateY(-2px);
+             box-shadow: 0 8px 20px rgba(0, 121, 107, 0.4);
          }
  </style>
 
@@ -114,13 +143,14 @@
                 <option value="">Seleccione una hora</option>
             </select>
 
-            <button type="submit">Agendar Cita</button>
+            <button type="submit" class="btn-primary">Agendar Cita</button>
+            <a href="home_pacientes.html" class="btn-exit" title="Regresar al inicio">Salir</a>
         </form>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        const filas = 6;
+
         const columnas = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]; // sin Domingo
         const franjasHorarias = [
             "09:00 - 09:30",
@@ -161,90 +191,90 @@
             localStorage.setItem('citas_sync', Date.now().toString());
         }
 
-        function obtenerDiaDeLaSemana(fechaStr) {
+        function obtenerDia(fechaStr) {
             const dias = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
             const fecha = new Date(fechaStr + 'T00:00:00');
             const dia = fecha.getDay();
-            if (dia === 0) return null;
-            return dias[dia];
+            return dia === 0 ? null : dias[dia];
         }
 
         function mostrarHoras(fecha) {
-            const horaSelect = document.getElementById("hora");
-            horaSelect.innerHTML = '<option value="">Seleccione una hora</option>';
+            const sel = document.getElementById('hora');
+            sel.innerHTML = '<option value="">Seleccione una hora</option>';
             if (!fecha) return;
 
-            const diaSeleccionado = obtenerDiaDeLaSemana(fecha);
-            if (!diaSeleccionado || !columnas.includes(diaSeleccionado)) return;
+            const dia = obtenerDia(fecha);
+            if (!dia || !columnas.includes(dia)) return;
 
-            const citasLocales = loadCitas();
-            const ocupadasLocales = [];
+            const citas = loadCitas();
+            const ocupadas = [];
 
-            Object.entries(citasLocales).forEach(([clave]) => {
+            Object.keys(citas).forEach(clave => {
                 const partes = clave.split('_');
-                if (partes.length !== 3) return;
-                const [fechaClave, diaClave, indiceClave] = partes;
-                if (fechaClave === fecha && diaClave === diaSeleccionado) {
-                    const franja = franjasHorarias[parseInt(indiceClave)];
-                    if (franja) ocupadasLocales.push(franja);
+                if (partes.length === 3) {
+                    const [f, d, i] = partes;
+                    if (f === fecha && d === dia) {
+                        const fr = franjasHorarias[parseInt(i)];
+                        if (fr) ocupadas.push(fr);
+                    }
                 }
             });
 
             franjasHorarias.forEach(h => {
-                const option = document.createElement("option");
-                option.value = h;
-                const ocupado = ocupadasLocales.includes(h);
-                option.textContent = ocupado ? `${h} (Ocupado)` : h;
-                option.disabled = ocupado;
-                horaSelect.appendChild(option);
+                const opt = document.createElement('option');
+                opt.value = h;
+                const ocupado = ocupadas.includes(h);
+                opt.textContent = ocupado ? `${h} (Ocupado)` : h;
+                opt.disabled = ocupado;
+                sel.appendChild(opt);
             });
         }
 
         window.onload = () => {
-            const fechaInput = document.getElementById("fecha");
+            const fechaInput = document.getElementById('fecha');
             const hoy = formatDate(new Date());
             fechaInput.value = hoy;
             mostrarHoras(hoy);
-            fechaInput.addEventListener("change", () => mostrarHoras(fechaInput.value));
+            fechaInput.addEventListener('change', () => mostrarHoras(fechaInput.value));
         };
 
-        flatpickr("#fecha", {
-            locale: "es",
-            dateFormat: "Y-m-d",
-            disable: [date => date.getDay() === 0]
+        flatpickr('#fecha', {
+            locale: 'es',
+            dateFormat: 'Y-m-d',
+            disable: [d => d.getDay() === 0]
         });
 
-        document.getElementById("formCita").addEventListener("submit", e => {
+        document.getElementById('formCita').addEventListener('submit', e => {
             e.preventDefault();
 
-            const nombre = document.getElementById("nombre").value.trim();
-            const edad = document.getElementById("edad").value.trim();
-            const motivo = document.getElementById("motivo").value.trim();
-            const fecha = document.getElementById("fecha").value;
-            const hora = document.getElementById("hora").value;
+            const nombre = nombreInput.value.trim();
+            const edad = edadInput.value.trim();
+            const motivo = motivoInput.value.trim();
+            const fecha = fechaInput.value;
+            const hora = horaSelect.value;
 
             if (!nombre || !edad || !motivo || !fecha || !hora) {
-                alert("Por favor complete todos los campos.");
+                alert('Por favor complete todos los campos.');
                 return;
             }
 
-            const dia = obtenerDiaDeLaSemana(fecha);
+            const dia = obtenerDia(fecha);
             if (!dia || !columnas.includes(dia)) {
-                alert("La fecha seleccionada no corresponde a un día hábil.");
+                alert('La fecha seleccionada no corresponde a un día hábil.');
                 return;
             }
 
-            const horaLimpia = hora.replace(" (Ocupado)", "").trim();
-            const indice = franjasHorarias.indexOf(horaLimpia);
-            if (indice === -1) {
-                alert("Seleccione una franja horaria válida.");
+            const horaLimpia = hora.replace(' (Ocupado)', '').trim();
+            const idx = franjasHorarias.indexOf(horaLimpia);
+            if (idx === -1) {
+                alert('Seleccione una franja horaria válida.');
                 return;
             }
 
-            const clave = `${fecha}_${dia}_${indice}`;
+            const clave = `${fecha}_${dia}_${idx}`;
             const citas = loadCitas();
             if (citas[clave]) {
-                alert("Ya existe una cita para ese día y hora.");
+                alert('Ya existe una cita para ese día y hora.');
                 return;
             }
 
@@ -274,16 +304,22 @@
                 })
                 .catch(err => console.error('Error en fetch:', err));
 
-            alert("Cita agendada correctamente.");
+            alert('Cita agendada correctamente.');
             mostrarHoras(fecha);
-            document.getElementById("formCita").reset();
+            e.target.reset();
         });
 
-        window.addEventListener("storage", e => {
-            if (e.key === "citas" || e.key === "citas_sync") {
-                mostrarHoras(document.getElementById("fecha").value);
+        window.addEventListener('storage', e => {
+            if (e.key === 'citas' || e.key === 'citas_sync') {
+                mostrarHoras(fechaInput.value);
             }
         });
+
+        const nombreInput = document.getElementById('nombre');
+        const edadInput = document.getElementById('edad');
+        const motivoInput = document.getElementById('motivo');
+        const fechaInput = document.getElementById('fecha');
+        const horaSelect = document.getElementById('hora');
     </script>
 </body>
 </html>

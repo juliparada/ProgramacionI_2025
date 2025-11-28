@@ -21,6 +21,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             padding: 40px 100px 80px 40px;
+            position: relative;
         }
 
         /* 🔷 TÍTULO */
@@ -30,6 +31,28 @@
             margin-bottom: 28px;
             color: #00796b;
             font-size: 1.8rem;
+        }
+
+        /* 🔷 ACCIONES INFERIORES */
+        .actions-bottom {
+            margin-top: 24px;
+            text-align: center;
+        }
+
+        .actions-bottom a {
+            background: linear-gradient(90deg, #00796b, #004d40);
+            color: #fff;
+            padding: 10px 22px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 6px 16px rgba(0, 121, 107, 0.35);
+        }
+
+        .actions-bottom a:hover {
+            transform: translateY(-2px);
         }
 
         /* 🔷 CAMPOS DE TEXTO (Nombre, Motivo, etc.) */
@@ -143,6 +166,9 @@
             </tbody>
         </table>
         <div id="noResultados" class="no-results" style="display:none;">No se encontraron pacientes.</div>
+        <div class="actions-bottom">
+            <a href="agendacion.html" title="Regresar a agenda">Salir</a>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

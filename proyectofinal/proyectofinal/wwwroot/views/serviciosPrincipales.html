@@ -353,6 +353,8 @@
                 this.style.transform = 'scale(0.95)';
                 setTimeout(() => {
                     this.style.transform = '';
+                    // Redirigir al inicio de sesión después del efecto
+                    window.location.href = 'UsuarioPacientes.html';
                 }, 180);
             });
         });

@@ -396,5 +396,39 @@ namespace proyectofinal.Controllers
             }
             catch (Exception ex) { return StatusCode(500, new { mensaje = "Error interno", detalle = ex.Message }); }
         }
+
+        // Nuevo endpoint para obtener datos de la secretaria y mostrar en perfil administrativo
+        [HttpGet("obtenerDatosSecretaria/{id}")]
+        public async Task<IActionResult> ObtenerDatosSecretaria(int id)
+        {
+            if (id <=0) return BadRequest(new { mensaje = "Id inválido" });
+            try
+            {
+                using var con = new SqlConnection(_connString);
+                await con.OpenAsync();
+                using var cmd = new SqlCommand(@"SELECT TOP(1) idSecretaria,nombre,apellido,dui,especialidad,telefono,fecha,correo,direccion,fotoRuta FROM dbo.DatosSecretaria WHERE idSecretaria=@id", con);
+                cmd.Parameters.AddWithValue("@id", id);
+                using var reader = await cmd.ExecuteReaderAsync();
+                if (!await reader.ReadAsync()) return NotFound(new { mensaje = "No hay datos" });
+                var resp = new Dictionary<string, object?>
+                {
+                    ["idSecretaria"] = reader.GetInt32(0),
+                    ["nombre"] = reader.IsDBNull(1) ? null : reader.GetString(1),
+                    ["apellido"] = reader.IsDBNull(2) ? null : reader.GetString(2),
+                    ["dui"] = reader.IsDBNull(3) ? null : reader.GetString(3),
+                    ["especialidad"] = reader.IsDBNull(4) ? null : reader.GetString(4),
+                    ["telefono"] = reader.IsDBNull(5) ? null : reader.GetString(5),
+                    ["fecha"] = reader.IsDBNull(6) ? null : reader.GetDateTime(6).ToString("yyyy-MM-dd"),
+                    ["correo"] = reader.IsDBNull(7) ? null : reader.GetString(7),
+                    ["direccion"] = reader.IsDBNull(8) ? null : reader.GetString(8),
+                    ["fotoRuta"] = reader.IsDBNull(9) ? null : reader.GetString(9)
+                };
+                return Ok(resp);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { mensaje = "Error interno", detalle = ex.Message });
+            }
+        }
     }
 }
