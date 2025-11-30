@@ -1,2 +1,0 @@
-C:\Users\jeffe\OneDrive\Desktop\Proyetcooriginal\proyectofinal\proyectofinal\wwwroot\views\agenda_Administracion.html
-C:\Users\jeffe\OneDrive\Desktop\Proyetcooriginal\proyectofinal\proyectofinal\wwwroot\views\registro_pacientes.html

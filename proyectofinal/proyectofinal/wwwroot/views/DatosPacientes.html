@@ -154,6 +154,14 @@
         #foto:hover {
             border-color: #00796b;
         }
+
+        /* Aviso de menor de edad */
+        #avisoMenor {
+            font-size: 12px;
+            color: #c62828;
+            display: none;
+            margin-top: -6px;
+        }
     </style>
 </head>
 <body>
@@ -169,6 +177,7 @@
 
             <label for="dui">DUI:</label>
             <input type="text" id="dui" name="dui" required>
+            <div id="avisoMenor">Menor de edad: campo DUI deshabilitado.</div>
 
             <label for="fecha">Fecha de Nacimiento:</label>
             <input type="date" id="fecha" name="fecha" required>
@@ -223,6 +232,40 @@
             } catch { /* ignore */ }
         });
 
+        // --------- Control de menor de edad ---------
+        const fechaInput = document.getElementById('fecha');
+        const duiInput = document.getElementById('dui');
+        const avisoMenor = document.getElementById('avisoMenor');
+
+        function calcularEdad(fechaStr) {
+            if (!fechaStr) return null;
+            const hoy = new Date();
+            const f = new Date(fechaStr + 'T00:00:00');
+            if (isNaN(f.getTime())) return null;
+            let edad = hoy.getFullYear() - f.getFullYear();
+            const m = hoy.getMonth() - f.getMonth();
+            if (m < 0 || (m === 0 && hoy.getDate() < f.getDate())) edad--;
+            return edad;
+        }
+
+        function aplicarReglasEdad() {
+            const edad = calcularEdad(fechaInput.value);
+            if (edad !== null && edad < 18) {
+                duiInput.value = '';
+                duiInput.disabled = true;
+                avisoMenor.style.display = 'block';
+            } else {
+                duiInput.disabled = false;
+                avisoMenor.style.display = 'none';
+            }
+        }
+
+        fechaInput.addEventListener('change', aplicarReglasEdad);
+
+        // Ejecutar por si ya viene con valor (edición)
+        aplicarReglasEdad();
+        // -------------------------------------------
+
         document.getElementById("guardarBtn").addEventListener("click", async function (e) {
             e.preventDefault();
 
@@ -254,9 +297,9 @@
             if (!apellido) mostrarError("apellido");
             if (!direccion) mostrarError("direccion");
 
-            const fechaInput = document.getElementById("fecha").value.trim();
-            if (fechaInput) {
-                const fechaObj = new Date(fechaInput);
+            const fechaInputVal = document.getElementById("fecha").value.trim();
+            if (fechaInputVal) {
+                const fechaObj = new Date(fechaInputVal);
                 if (!isNaN(fechaObj)) {
                     fecha = fechaObj.toISOString();
                 } else {
