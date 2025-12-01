@@ -178,6 +178,11 @@
             "10:30 - 11:00", "11:00 - 11:30", "11:30 - 12:00"
         ];
         const columnas = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+        const MOTIVOS = [
+            "Consulta General", "Pediatría", "Cardiología",
+            "Analisis de Laboratorio", "Vacunacion",
+            "Chequeo Medico", "Emergencias", "Radiología"
+        ];
 
         // Parsea el string de la cita y extrae nombre, edad, motivo y hora
         function parseCitaString(valor) {
@@ -278,7 +283,11 @@
             if (!fila) return;
             fila.innerHTML = `
                         <td><input type="text" id="editNombre" value="${paciente.nombre}" /></td>
-                        <td><input type="text" id="editMotivo" value="${paciente.motivo}" /></td>
+                        <td>
+                            <select id="editMotivo">
+                                ${MOTIVOS.map(m => `<option value="${m}" ${m === paciente.motivo ? 'selected' : ''}>${m}</option>`).join('')}
+                            </select>
+                        </td>
                         <td><input type="text" id="editEdad" value="${paciente.edad}" /></td>
                         <td><input type="text" id="editFecha" class="flatpickr-input" value="${paciente.fecha}" /></td>
                         <td>
