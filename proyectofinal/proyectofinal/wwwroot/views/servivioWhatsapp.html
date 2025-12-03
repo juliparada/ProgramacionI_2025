@@ -189,11 +189,13 @@
 
         <div id="estado" class="status"></div>
 
+        <button onclick="enviarNotificacion()">📲 Probar notificación</button>
+
         <details class="help">
             <summary>¿Cómo funciona?</summary>
             <ul>
                 <li>Conecta tu número en Datos del Paciente y activa las notificaciones.</li>
-                <li>Cuando registres una cita, se abrirá WhatsApp con el mensaje listo para enviar.</li>
+                <li>Cuando registres una cita, se enviará un mensaje de WhatsApp desde el número 69953071.</li>
                 <li>El Recordarme 24h guarda tu preferencia para mostrar avisos más adelante.</li>
             </ul>
         </details>
@@ -250,6 +252,33 @@
         function toggleReminder(checked) {
             localStorage.setItem('wa_reminder_24h', checked ? 'true' : 'false');
             setEstado();
+        }
+
+        function enviarNotificacion() {
+            const datos = readDatosPaciente();
+            const tel = (datos.telefono || '').trim();
+            if (!tel) {
+                alert("No hay número configurado");
+                return;
+            }
+
+            fetch("http://localhost:3000/send-wa", {   // tu backend Node.js
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    to: tel,
+                    message: "Hola, tu cita ha sido confirmada ✅"
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log("WhatsApp enviado:", data);
+                    alert("Notificación enviada a " + tel);
+                })
+                .catch(err => {
+                    console.error("Error:", err);
+                    alert("Error al enviar notificación");
+                });
         }
 
         (function init() {

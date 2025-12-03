@@ -121,30 +121,18 @@
         }
 
         /* 🔷 BOTÓN ELIMINAR */
-        .btn-eliminar {
+        .btn-eliminar 
+        {
             background: #c9e553;
             color: #221717;
         }
-
-        /* 🔷 BOTÓN MODIFICAR */
-        .btn-modificar {
-            background: #7bb6dd;
-            color: #fefefe;
-        }
-
-        /* 🔷 BOTÓN GUARDAR */
-        .btn-guardar {
-            background: #4caf50;
-            color: #fff;
-        }
-
-        /* 🔷 BOTÓN CANCELAR */
-        .btn-cancelar {
-            background: #bdbdbd;
-            color: #333;
-        }
     </style>
+
 </head>
+
+
+
+
 <body>
     <div class="container">
         <h2>Búsqueda de Pacientes 👤</h2>
@@ -153,6 +141,7 @@
         <table>
             <thead>
                 <tr>
+                    <th style="width:38px;"><input type="checkbox" id="selectAll" title="Seleccionar todo"></th>
                     <th>Nombre</th>
                     <th>Motivo</th>
                     <th>Edad</th>
@@ -166,16 +155,21 @@
             </tbody>
         </table>
         <div id="noResultados" class="no-results" style="display:none;">No se encontraron pacientes.</div>
-        <div class="actions-bottom">
-            <a href="agendacion.html" title="Regresar a agenda">Salir</a>
+        <div class="actions-bottom" style="margin-top:16px;display:flex;gap:12px;justify-content:center;align-items:center;">
+            <button id="deleteSelected" class="btn" style="background: linear-gradient(90deg, #00796b, #004d40); color: #fff; padding:10px 22px; border-radius:999px; font-size:0.8rem; font-weight:600; text-decoration: none; display: inline-block; box-shadow:06px16px rgba(0,121,107,0.35);">Eliminar citas seleccionadas</button>
+            <a href="agendacion.html" title="Regresar a agenda" style="background: linear-gradient(90deg, #00796b, #004d40); color: #fff; padding:10px 22px; border-radius:999px; font-size:0.8rem; font-weight:600; text-decoration: none; display: inline-block; box-shadow:06px16px rgba(0,121,107,0.35);">Salir</a>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         const franjasHorarias = [
-            "09:00 - 09:30", "09:30 - 10:00", "10:00 - 10:30",
-            "10:30 - 11:00", "11:00 - 11:30", "11:30 - 12:00"
+            "09:00 - 09:30",
+            "09:30 - 10:00",
+            "10:00 - 10:30",
+            "10:30 - 11:00",
+            "11:00 - 11:30",
+            "11:30 - 12:00"
         ];
         const columnas = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
         const MOTIVOS = [
@@ -192,10 +186,14 @@
             let edad = "-";
             let motivo = "-";
             let hora = "-";
+            const horaRegex = /^\d{2}:\d{2}\s*-\s*\d{2}:\d{2}$/; // detecta HH:MM - HH:MM con espacios opcionales
             partes.forEach(p => {
                 if (p.startsWith("Edad:")) edad = p.replace("Edad:", "").trim();
                 if (p.startsWith("Motivo:")) motivo = p.replace("Motivo:", "").trim();
-                if (franjasHorarias.includes(p)) hora = p;
+                if (franjasHorarias.includes(p) || horaRegex.test(p)) {
+                    const [ini, fin] = p.split('-').map(x => x.trim());
+                    hora = `${ini} - ${fin}`; // normaliza el formato
+                }
             });
             return { nombre, motivo, edad, hora };
         }
@@ -227,6 +225,8 @@
         const inputBusqueda = document.getElementById('busqueda');
         const tbody = document.getElementById('resultados');
         const noResultados = document.getElementById('noResultados');
+        const selectAll = document.getElementById('selectAll');
+        const btnDeleteSelected = document.getElementById('deleteSelected');
 
         function mostrarResultados(filtrados) {
             tbody.innerHTML = '';
@@ -238,16 +238,17 @@
             filtrados.forEach((p, idx) => {
                 const fila = document.createElement('tr');
                 fila.innerHTML = `
-                            <td>${p.nombre}</td>
-                            <td>${p.motivo}</td>
-                            <td>${p.edad}</td>
-                            <td>${p.fecha}</td>
-                            <td>${p.hora}</td>
-                            <td>
-                                <button class="btn btn-modificar" data-idx="${idx}">Modificar</button>
-                                <button class="btn btn-eliminar" data-idx="${idx}">Eliminar</button>
-                            </td>
-                        `;
+                    <td><input type="checkbox" class="row-select" data-clave="${p.clave}"></td>
+                    <td>${p.nombre}</td>
+                    <td>${p.motivo}</td>
+                    <td>${p.edad}</td>
+                    <td>${p.fecha}</td>
+                    <td>${p.hora}</td>
+                    <td>
+
+                        <button class="btn btn-eliminar" data-idx="${idx}">Eliminar</button>
+                    </td>
+                `;
                 tbody.appendChild(fila);
             });
 
@@ -258,12 +259,7 @@
                     eliminarCita(filtrados[idx].clave);
                 };
             });
-            document.querySelectorAll('.btn-modificar').forEach(btn => {
-                btn.onclick = function () {
-                    const idx = this.getAttribute('data-idx');
-                    mostrarFormularioEdicion(filtrados[idx]);
-                };
-            });
+
         }
 
         function eliminarCita(clave) {
@@ -276,73 +272,17 @@
             filtrarPacientes();
         }
 
-        function mostrarFormularioEdicion(paciente) {
-            // Reemplaza la fila por inputs editables
-            const filas = Array.from(tbody.children);
-            const fila = filas.find(f => f.children[0].textContent === paciente.nombre && f.children[3].textContent === paciente.fecha && f.children[4].textContent === paciente.hora);
-            if (!fila) return;
-            fila.innerHTML = `
-                        <td><input type="text" id="editNombre" value="${paciente.nombre}" /></td>
-                        <td>
-                            <select id="editMotivo">
-                                ${MOTIVOS.map(m => `<option value="${m}" ${m === paciente.motivo ? 'selected' : ''}>${m}</option>`).join('')}
-                            </select>
-                        </td>
-                        <td><input type="text" id="editEdad" value="${paciente.edad}" /></td>
-                        <td><input type="text" id="editFecha" class="flatpickr-input" value="${paciente.fecha}" /></td>
-                        <td>
-                            <select id="editHora">
-                                ${franjasHorarias.map(h => `<option value="${h}" ${h === paciente.hora ? 'selected' : ''}>${h}</option>`).join('')}
-                            </select>
-                        </td>
-                        <td>
-                            <button class="btn btn-guardar">Guardar</button>
-                            <button class="btn btn-cancelar">Cancelar</button>
-                        </td>
-                    `;
-            flatpickr("#editFecha", {
-                locale: "es",
-                dateFormat: "Y-m-d",
-                disable: [date => date.getDay() === 0]
-            });
-
-            fila.querySelector('.btn-guardar').onclick = function () {
-                guardarEdicion(paciente);
-            };
-            fila.querySelector('.btn-cancelar').onclick = function () {
-                filtrarPacientes();
-            };
-        }
-
-        function guardarEdicion(paciente) {
-            const nuevoNombre = document.getElementById('editNombre').value.trim();
-            const nuevoMotivo = document.getElementById('editMotivo').value.trim();
-            const nuevaEdad = document.getElementById('editEdad').value.trim();
-            const nuevaFecha = document.getElementById('editFecha').value;
-            const nuevaHora = document.getElementById('editHora').value;
-
-            if (!nuevoNombre || !nuevoMotivo || !nuevaEdad || !nuevaFecha || !nuevaHora) {
-                alert('Todos los campos son obligatorios.');
+        function eliminarSeleccionadas() {
+            const checks = Array.from(document.querySelectorAll('.row-select'));
+            const seleccionadas = checks.filter(c => c.checked).map(c => c.getAttribute('data-clave'));
+            if (seleccionadas.length === 0) {
+                alert('No hay citas seleccionadas.');
                 return;
             }
-
-            // Validar franja horaria disponible
+            if (!confirm(`Eliminar ${seleccionadas.length} citas seleccionadas?`)) return;
             const raw = localStorage.getItem('citas');
             const citas = raw ? JSON.parse(raw) : {};
-            const dia = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"][new Date(nuevaFecha).getDay()];
-            if (!columnas.includes(dia)) {
-                alert("La fecha seleccionada no corresponde a un día hábil.");
-                return;
-            }
-            const nuevoIndice = franjasHorarias.indexOf(nuevaHora);
-            const nuevaClave = `${nuevaFecha}_${dia}_${nuevoIndice}`;
-            if (nuevaClave !== paciente.clave && citas[nuevaClave]) {
-                alert('Ya existe una cita para ese día y hora.');
-                return;
-            }
-            // Actualizar
-            delete citas[paciente.clave];
-            citas[nuevaClave] = `${nuevoNombre} · Edad: ${nuevaEdad} · Motivo: ${nuevoMotivo} · ${nuevaHora}`;
+            seleccionadas.forEach(clave => { delete citas[clave]; });
             localStorage.setItem('citas', JSON.stringify(citas));
             filtrarPacientes();
         }
@@ -354,9 +294,16 @@
                 p.nombre.toLowerCase().includes(texto)
             );
             mostrarResultados(filtrados);
+            // reset select-all state after refresh
+            selectAll.checked = false;
         }
 
         inputBusqueda.addEventListener('input', filtrarPacientes);
+        selectAll.addEventListener('change', () => {
+            const checks = document.querySelectorAll('.row-select');
+            checks.forEach(c => c.checked = selectAll.checked);
+        });
+        btnDeleteSelected.addEventListener('click', eliminarSeleccionadas);
 
         // Mostrar todos al cargar
         filtrarPacientes();

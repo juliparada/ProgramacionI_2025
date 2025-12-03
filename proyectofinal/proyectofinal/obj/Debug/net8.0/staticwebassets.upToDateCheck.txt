@@ -17,11 +17,12 @@ wwwroot\uploads\secretarias\2009.png
 wwwroot\uploads\secretarias\2010.jpg
 wwwroot\uploads\secretarias\3005.png
 wwwroot\views\agenda.html
-wwwroot\views\busqueda_Pacientes.html
+wwwroot\views\agendacion.html
 wwwroot\views\cuenta_Secretaria.html
 wwwroot\views\DatosPacientes.html
 wwwroot\views\Datos_administracion.html
 wwwroot\views\factura_pacientes.html
+wwwroot\views\graficos.html
 wwwroot\views\historial_de_citas.html
 wwwroot\views\home_pacientes.html
 wwwroot\views\inicio_Secretaria.html
@@ -29,9 +30,7 @@ wwwroot\views\perfil.html
 wwwroot\views\perfil_administrativo.html
 wwwroot\views\registrate.html
 wwwroot\views\serviciosPrincipales.html
-wwwroot\views\servivioWhatsapp.html
 wwwroot\views\subAgenda.html
 wwwroot\views\UsuarioPacientes.html
-wwwroot\views\agendacion.html
-wwwroot\views\graficos.html
-wwwroot\views\panel_analitico.html
+wwwroot\views\busqueda_Pacientes.html
+wwwroot\views\servivioWhatsapp.html
