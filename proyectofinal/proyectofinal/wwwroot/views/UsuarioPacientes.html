@@ -152,6 +152,8 @@
 
                 if (respuesta.ok && resultado.valido) {
                     localStorage.setItem("idPacienteUsuario", resultado.idPacienteUsuario);
+                    // Guardar email para precarga en DatosPacientes.html
+                    localStorage.setItem("emailPaciente", email);
                     window.location.href = "home_pacientes.html";
                 } else if (resultado.error === "email") {
                     mostrarError("email", "Email inválido");

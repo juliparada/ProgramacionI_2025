@@ -212,6 +212,45 @@
             font-size: 22px;
             box-shadow: 0 4px 10px rgba(0,0,0,.15);
         }
+
+        .icon-chip {
+            display: inline-flex;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            background: #b2dfdb;
+            color: #004d40;
+            font-size: 22px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Botón para Mensajería interna con el mismo estilo */
+        .Mensajes-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #ffffff;
+            color: #333;
+            border: 1px solid #b2dfdb;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+            font-size: 0.95rem;
+        }
+
+        .Mensajes-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+        }
+
+        .Mensajes-btn .label-text {
+            text-decoration: none;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -224,9 +263,16 @@
             <span class="chip">📊</span>
             <span>Gráficos</span>
         </a>
+        <a href="msj_Administracion.html" class="chip-link" title="Mensajes internos">
+            <span class="chip">📞</span>
+            <span>Mensajería interna</span>
+        </a>
         <div style="margin-left:auto;">
-            <label for="calendario" style="font-weight:bold;color:#00695c;">Seleccionar semana: </label>
-            <input id="calendario" type="text" style="padding:8px12px;border-radius:6px;border:1px solid #b2dfdb;font-size:1rem;">
+            <label for="calendario" style="font-weight:bold;color:#00695c;">
+                Seleccionar semana:
+            </label>
+            <input id="calendario" type="text"
+                   style="padding:8px 12px;border-radius:6px;border:1px solid #b2dfdb;font-size:1rem;" />
         </div>
     </div>
 
@@ -377,6 +423,14 @@
             });
         }
 
+        // Helper para formatear edad (solo números) a "N Años"
+        function formatEdad(input) {
+            const n = String(input || '').match(/\d+/);
+            return n ? `${n[0]} Años` : '';
+        }
+
+        let selectedDate = new Date();
+
         function renderTable() {
             const tbody = document.getElementById('agenda-body');
             tbody.innerHTML = '';
@@ -427,8 +481,9 @@
             const nombre = prompt(`Nueva cita para ${dia} ${franjasHorarias[indice]}\nNombre del paciente:`);
             if (!nombre?.trim()) return;
 
-            const edad = prompt(`Edad de ${nombre.trim()}:`);
-            if (edad === null) return;
+            const edadRaw = prompt(`Ingrese la edad de ${nombre.trim()}:`);
+            if (!edadRaw) return;
+            const edad = formatEdad(edadRaw);
 
             const motivo = await seleccionarMotivo(`Motivo de la consulta para ${nombre.trim()}:`);
             if (!motivo) return;

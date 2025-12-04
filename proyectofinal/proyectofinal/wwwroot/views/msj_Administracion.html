@@ -1,0 +1,606 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mensajería Interna - Administración</title>
+    <style>
+        :root {
+            --bg: #e0f7fa;
+            --panel: #a1eaf3;
+            --accent: #00695c;
+            --accent-dark: #004d40;
+            --chip: #b2dfdb;
+            --text: #033;
+            --bubble-admin: #c8fff4;
+            --bubble-patient: #ffe7d9;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+        }
+
+        .container {
+            width: 92%;
+            margin: 24px auto;
+        }
+
+        .header {
+            background: var(--panel);
+            color: var(--accent);
+            padding: 16px;
+            border-radius: 16px;
+            box-shadow: 8px 22px rgba(0, 0, 0, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: "";
+            position: absolute;
+            right: -40px;
+            top: -40px;
+            width: 160px;
+            height: 160px;
+            background: radial-gradient(closest-side, #b2dfdb0%, transparent 70%);
+            opacity: .45;
+        }
+
+        .title {
+            font-family: "Brush Script MT", cursive;
+            font-size: 1.9rem;
+            font-style: italic;
+            margin: 0;
+            letter-spacing: .4px;
+        }
+
+        .chip-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .chip {
+            display: inline-flex;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            background: var(--chip);
+            color: var(--accent-dark);
+            box-shadow: 4px 10px rgba(0, 0, 0, .15);
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-top: 12px;
+        }
+
+        .search {
+            flex: 1;
+            display: flex;
+            gap: 8px;
+        }
+
+        .search input {
+            flex: 1;
+            border: 1px solid #b2dfdb;
+            border-radius: 999px;
+            padding: 10px 14px;
+            font-size: .95rem;
+            outline: none;
+        }
+
+        .filter {
+            display: inline-flex;
+            gap: 8px;
+        }
+
+        .pill {
+            border: 1px solid #b2dfdb;
+            background: #fff;
+            color: #044;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .stats {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .stat-card {
+            background: #f5fdff;
+            border: 1px solid #b2dfdb;
+            border-radius: 12px;
+            padding: 8px 12px;
+            color: #044;
+            font-weight: 700;
+        }
+
+        .chat-panel {
+            background: var(--panel);
+            border-radius: 16px;
+            box-shadow: 10px 24px rgba(0, 0, 0, 0.12);
+            margin-top: 18px;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            height: calc(100vh - 240px);
+            /* reducir altura total para adelgazar área blanca */
+            min-height: 420px;
+            /* también un poco más baja */
+        }
+
+        .chat-header {
+            padding: 10px 39px;
+            border-bottom: 1px solid #b2dfdb;
+            color: var(--accent-dark);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .chat-header .left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #b2dfdb;
+            color: #004d40;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            box-shadow: 3px 10px rgba(0, 0, 0, .15);
+            font-size: .85rem;
+        }
+
+        .chat-header .sub {
+            font-weight: 600;
+            color: #044;
+            font-size: .9rem;
+            opacity: .9;
+        }
+
+        .actions {
+            display: inline-flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            border: none;
+            background: #ffffff;
+            color: #044;
+            border: 1px solid #b2dfdb;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .messages {
+            padding: 8px;
+            /* menos padding para adelgazar área blanca */
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            background: #f5fdff;
+        }
+
+        .day-sep {
+            text-align: center;
+            font-size: .8rem;
+            color: #066;
+            opacity: .7;
+            margin: 8px 0;
+        }
+
+        .msg {
+            max-width: 72%;
+            padding: 10px 12px 8px;
+            border-radius: 14px;
+            box-shadow: 2px 6px rgba(0, 0, 0, 0.08);
+            line-height: 1.35;
+            word-wrap: break-word;
+            position: relative;
+        }
+
+        .from-admin {
+            background: var(--bubble-admin);
+            align-self: flex-end;
+        }
+
+        .from-patient {
+            background: var(--bubble-patient);
+            align-self: flex-start;
+        }
+
+        .meta {
+            font-size: .75rem;
+            color: #355;
+            margin-top: 6px;
+            opacity: .85;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .msg-actions {
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        .msg-actions button {
+            border: none;
+            background: transparent;
+            color: #044;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .typing {
+            font-size: .85rem;
+            color: #066;
+            opacity: .8;
+            padding: 0 16px 10px;
+        }
+
+        .quick {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 8px 12px;
+        }
+
+        .quick button {
+            background: #fff;
+            border: 1px solid #b2dfdb;
+            color: #044;
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+            padding: 12px;
+            border-top: 1px solid #b2dfdb;
+            background: #f0fbfd;
+            align-items: center;
+        }
+
+        .text-input {
+            flex: 1;
+            border: 1px solid #b2dfdb;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(90deg, #00796b, #004d40);
+            color: #fff;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 6px 14px rgba(0, 0, 0, 0.1);
+            transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+            text-decoration: none;
+            white-space: nowrap;
+            font-size: .95rem;
+        }
+
+        .btn.secondary {
+            background: #ffffff;
+            color: #333;
+            border: 1px solid #b2dfdb;
+            box-shadow: 4px 8px rgba(0, 0, 0, 0.06);
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1 class="title">Mensajería Interna</h1>
+                <div class="toolbar">
+                    <div class="search">
+                        <input id="searchBox" type="text" placeholder="Buscar en mensajes..." />
+                    </div>
+                    <div class="filter">
+                        <button class="pill" id="filterAll" type="button">Todos</button>
+                        <button class="pill" id="filterPatient" type="button">Paciente</button>
+                        <button class="pill" id="filterAdmin" type="button">Admin</button>
+                    </div>
+                </div>
+            </div>
+            <a href="agendacion.html" class="chip-link" title="Volver a Agenda">
+                <span class="chip">📅</span>
+                <span>Agenda</span>
+            </a>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">Hoy: <span id="statToday">0</span></div>
+            <div class="stat-card">Total: <span id="statTotal">0</span></div>
+            <div class="stat-card">Paciente: <span id="statPatient">0</span></div>
+        </div>
+
+        <div class="chat-panel" aria-live="polite">
+            <div class="chat-header">
+                <div class="left">
+                    <span class="avatar" id="patientAvatar">👤</span>
+                    <span>Comunícate con la administración de nuestro consultorio</span>
+                    <span class="sub" id="chatPatientName"></span>
+                </div>
+                <div class="actions">
+                    <button class="action-btn" id="clearChat" type="button">Limpiar chat</button>
+                    <button class="action-btn" id="exportChat" type="button">Exportar</button>
+                </div>
+            </div>
+
+            <div id="messages" class="messages"></div>
+            <div id="typing" class="typing" style="display:none;">El paciente está escribiendo…</div>
+
+            <div class="quick">
+                <button type="button" data-q="Hola, ¿en qué podemos ayudarte?">Hola, ¿en qué podemos ayudarte?</button>
+                <button type="button" data-q="Tu cita está confirmada.">Tu cita está confirmada.</button>
+                <button type="button" data-q="¿Deseas reprogramar tu cita?">¿Deseas reprogramar tu cita?</button>
+                <button type="button" data-q="Por favor, comparte tu DUI para verificar.">Por favor, comparte tu DUI para verificar.</button>
+            </div>
+
+            <form id="chatForm" class="input-row">
+                <input id="msgInput" class="text-input" type="text" placeholder="Escribe un mensaje... 😊" autocomplete="off"
+                    required />
+                <button class="btn" type="submit">Enviar ▶</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const CHAT_KEY = 'chat_admin_paciente';
+        const SENDER = 'Administración';
+        const TYPING_KEY = 'chat_typing';
+        let filter = 'all';
+        let searchQuery = '';
+
+        function loadChat() {
+            try {
+                const raw = localStorage.getItem(CHAT_KEY);
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) {
+                console.warn('Error leyendo chat:', e);
+                return [];
+            }
+        }
+
+        function saveChat(list) {
+            localStorage.setItem(CHAT_KEY, JSON.stringify(list));
+        }
+
+        function formatTime(d) {
+            const dt = new Date(d);
+            return dt.toLocaleString('es-ES', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            }) + ' · ' + dt.toLocaleDateString('es-ES');
+        }
+
+        function dayKey(d) {
+            const t = new Date(d);
+            return t.toDateString();
+        }
+
+        async function getPatientName() {
+            //1) localStorage datosPaciente
+            try {
+                const ls = localStorage.getItem('datosPaciente');
+                if (ls) {
+                    const obj = JSON.parse(ls);
+                    if (obj?.nombre) return obj.nombre;
+                }
+            } catch { }
+            //2) API si hay idPacienteUsuario
+            try {
+                const id = localStorage.getItem('idPacienteUsuario');
+                if (id) {
+                    const resp = await fetch(`https://localhost:7289/api/usuarioPacientes/obtenerDatosPaciente/${id}`);
+                    if (resp.ok) {
+                        const json = await resp.json();
+                        if (json?.nombre) return json.nombre;
+                    }
+                }
+            } catch { }
+            //3) fallback
+            return 'Paciente';
+        }
+
+        async function setHeaderPatientName() {
+            const el = document.getElementById('chatPatientName');
+            const name = await getPatientName();
+            el.textContent = ` · Conversando con: ${name}`;
+            const avatar = document.getElementById('patientAvatar');
+            const initials = name.split(' ').map(p => p[0]).slice(0, 2).join('').toUpperCase();
+            avatar.textContent = initials || '👤';
+        }
+
+        function renderStats(chat) {
+            const today = new Date().toDateString();
+            const todayCount = chat.filter(m => new Date(m.at).toDateString() === today).length;
+            const patientCount = chat.filter(m => m.sender !== 'Administración').length;
+            document.getElementById('statToday').textContent = String(todayCount);
+            document.getElementById('statTotal').textContent = String(chat.length);
+            document.getElementById('statPatient').textContent = String(patientCount);
+        }
+
+        function render() {
+            const box = document.getElementById('messages');
+            const all = loadChat();
+            renderStats(all);
+            const chat = all.filter(m => {
+                if (filter === 'admin' && m.sender !== 'Administración') return false;
+                if (filter === 'patient' && m.sender === 'Administración') return false;
+                if (searchQuery && !m.text.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+                return true;
+            });
+            box.innerHTML = '';
+            let lastDay = null;
+            chat.forEach((m, idx) => {
+                const dk = dayKey(m.at);
+                if (dk !== lastDay) {
+                    const sep = document.createElement('div');
+                    sep.className = 'day-sep';
+                    sep.textContent = new Date(m.at).toLocaleDateString('es-ES');
+                    box.appendChild(sep);
+                    lastDay = dk;
+                }
+                const wrap = document.createElement('div');
+                wrap.className = 'msg ' + (m.sender === 'Administración' ? 'from-admin' : 'from-patient');
+                const idAttr = `msg-${idx}`;
+                wrap.setAttribute('data-id', idAttr);
+                const metaLeft = `${m.sender} · ${formatTime(m.at)}`;
+                wrap.innerHTML = `<div>${m.text}</div>
+                <div class='meta'>
+                    <span>${metaLeft}</span>
+                    <span class='msg-actions'>
+                        <button type='button' data-act='copy'>Copiar</button>
+                        <button type='button' data-act='delete'>Eliminar</button>
+                    </span>
+                </div>`;
+                box.appendChild(wrap);
+            });
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function copyText(text) {
+            try { navigator.clipboard.writeText(text); } catch { }
+        }
+
+        document.getElementById('messages').addEventListener('click', e => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            const act = btn.getAttribute('data-act');
+            const msgEl = btn.closest('.msg');
+            const text = msgEl?.firstChild?.textContent || '';
+            const id = msgEl?.getAttribute('data-id');
+            if (act === 'copy') {
+                copyText(text);
+            } else if (act === 'delete') {
+                const all = loadChat();
+                const idx = Array.from(document.querySelectorAll('.msg')).findIndex(x => x.getAttribute('data-id') === id);
+                if (idx >= 0) {
+                    // Find corresponding message index respecting separators
+                    const actualIndex = idx; // best-effort
+                    all.splice(actualIndex, 1);
+                    saveChat(all);
+                    render();
+                }
+            }
+        });
+
+        document.getElementById('chatForm').addEventListener('submit', e => {
+            e.preventDefault();
+            const input = document.getElementById('msgInput');
+            const text = input.value.trim();
+            if (!text) return;
+            const chat = loadChat();
+            chat.push({
+                sender: SENDER,
+                text,
+                at: new Date().toISOString()
+            });
+            saveChat(chat);
+            input.value = '';
+            localStorage.setItem(TYPING_KEY, '');
+            render();
+        });
+
+        // Quick replies
+        document.querySelectorAll('.quick button').forEach(b => {
+            b.addEventListener('click', () => {
+                const input = document.getElementById('msgInput');
+                input.value = b.getAttribute('data-q');
+                input.focus();
+            });
+        });
+
+        // Typing indicator listener
+        document.getElementById('msgInput').addEventListener('input', () => {
+            localStorage.setItem(TYPING_KEY, 'admin');
+        });
+
+        document.getElementById('searchBox').addEventListener('input', e => {
+            searchQuery = e.target.value || '';
+            render();
+        });
+
+        document.getElementById('filterAll').addEventListener('click', () => { filter = 'all'; render(); });
+        document.getElementById('filterPatient').addEventListener('click', () => { filter = 'patient'; render(); });
+        document.getElementById('filterAdmin').addEventListener('click', () => { filter = 'admin'; render(); });
+
+        document.getElementById('clearChat').addEventListener('click', () => {
+            if (confirm('¿Limpiar todo el chat?')) { saveChat([]); render(); }
+        });
+
+        document.getElementById('exportChat').addEventListener('click', () => {
+            const data = loadChat();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'chat_admin_paciente.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        window.addEventListener('storage', e => {
+            if (e.key === CHAT_KEY) render();
+            if (e.key === TYPING_KEY) {
+                const t = document.getElementById('typing');
+                t.style.display = (e.newValue === 'patient') ? '' : 'none';
+            }
+        });
+
+        setHeaderPatientName();
+        render();
+    </script>
+</body>
+
+</html>

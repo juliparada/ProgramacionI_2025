@@ -197,6 +197,30 @@
 
         const form = document.getElementById('formDatos');
         const estado = document.getElementById('estado');
+        const fotoInput = document.getElementById('foto');
+        const correoInput = document.getElementById('correo');
+
+        // Prellenar correo con el usado en inicio_Secretaria.html
+        (function precargarCorreo(){
+            const emailSesion = localStorage.getItem('emailSecretaria');
+            if (emailSesion) {
+                correoInput.value = emailSesion;
+            }
+        })();
+
+        function guardarLocal(nombre, apellido, dui, especialidad, telefono, fecha, correo, direccion, fotoFile) {
+            localStorage.setItem('datosAdministracion', JSON.stringify({ nombre, apellido, dui, especialidad, telefono, fecha, correo, direccion }));
+            return new Promise(resolve => {
+                if (fotoFile) {
+                    const r = new FileReader();
+                    r.onload = () => { try { localStorage.setItem('fotoSecretaria', r.result); } catch { } resolve(); };
+                    r.onerror = () => resolve();
+                    r.readAsDataURL(fotoFile);
+                } else {
+                    resolve();
+                }
+            });
+        }
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -244,6 +268,13 @@
                     const d = await res.json();
                     estado.className = 'err';
                     estado.textContent = d.mensaje || 'Ya existen datos.';
+                    // Persistir localmente también en conflicto
+                    localStorage.setItem('datosAdministracion', JSON.stringify({ nombre, apellido, dui, especialidad, telefono, fecha, correo, direccion }));
+                    if (fotoInput.files && fotoInput.files[0]) {
+                        const r = new FileReader();
+                        r.onload = () => localStorage.setItem('fotoSecretaria', r.result);
+                        r.readAsDataURL(fotoInput.files[0]);
+                    }
                     window.location.href = 'inicio_Secretaria.html';
                     return;
                 }
@@ -253,6 +284,17 @@
                     estado.className = 'err';
                     estado.textContent = d.detalle || d.mensaje || 'Error al guardar.';
                     return;
+                }
+
+                // Guardar primero en localStorage (para que el perfil pueda leer incluso si el API falla)
+                await guardarLocal(nombre, apellido, dui, especialidad, telefono, fecha, correo, direccion, (fotoInput.files && fotoInput.files[0]) ? fotoInput.files[0] : null);
+
+                // Guardar en localStorage para que perfil_administrativo.html pueda leer
+                localStorage.setItem('datosAdministracion', JSON.stringify({ nombre, apellido, dui, especialidad, telefono, fecha, correo, direccion }));
+                if (fotoInput.files && fotoInput.files[0]) {
+                    const r = new FileReader();
+                    r.onload = () => localStorage.setItem('fotoSecretaria', r.result);
+                    r.readAsDataURL(fotoInput.files[0]);
                 }
 
                 window.location.href = 'inicio_Secretaria.html';

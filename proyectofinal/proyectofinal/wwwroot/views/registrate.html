@@ -41,12 +41,14 @@
             font-weight: bold;
         }
 
+        /* Igualar tamaño visual de las cajas */
         input {
-            width: 95%;
+            width: 100%;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
             margin-top: 5px;
+            box-sizing: border-box;
         }
 
         .nota {
@@ -86,11 +88,12 @@
         /* Contenedor contraseña con botón ojo clickable */
         .password-wrapper {
             position: relative;
-            width: 95%;
+            width: 100%;
         }
         .password-wrapper input {
             width: 100%;
             padding-right: 44px; /* espacio para el botón */
+            box-sizing: border-box;
         }
         .toggle-visibility {
             position: absolute;
@@ -103,10 +106,9 @@
             padding: 4px;
             line-height: 1;
         }
-        .toggle-visibility svg {
-            width: 22px;
-            height: 22px;
-            fill: #182c4f; /* azul oscuro similar al ejemplo */
+        .toggle-visibility .icon {
+            font-size: 18px;
+            color: #182c4f; /* azul oscuro similar al ejemplo */
         }
 
         /* Alinear botones en la misma dirección (en línea, con separación) */
@@ -130,11 +132,9 @@
                 <label>Contraseña:</label>
                 <div class="password-wrapper">
                     <input type="password" id="password" name="password" placeholder="Introduce tu contraseña" required>
-                    <!-- Ícono ojo SVG estilo sólido -->
+                    <!-- Ícono ojo simple -->
                     <button type="button" id="togglePwd" class="toggle-visibility" aria-label="Mostrar u ocultar contraseña">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                            <path d="M12 4.2c-3.9 0-7.7 2.5-9.4 6.3-.2.5-.2 1.1 0 1.6C4.3 17.3 8.1 20 12 20c3.9 0 7.7-2.5 9.4-6.3.2-.5.2-1.1 0-1.6C19.7 6.7 16 4.2 12 4.2zm0 11.6c-3.2 0-5.7-2.6-5.7-5.7S8.8 4.4 12 4.4c3.2 0 5.7 2.6 5.7 5.7s-2.5 5.7-5.7 5.7zM12 6c-3.3 0-6 2.7-6 6s2.7 6 6 6 6-2.7 6-6-2.7-6-6-6z"/>
-                        </svg>
+                        <span class="icon">👁️</span>
                     </button>
                 </div>
 
@@ -157,8 +157,8 @@
             const isPassword = input.type === 'password';
             input.type = isPassword ? 'text' : 'password';
             // Cambiar color del ícono para dar feedback
-            const svg = this.querySelector('svg');
-            svg.style.fill = isPassword ? '#00796b' : '#182c4f';
+            const icon = this.querySelector('.icon');
+            icon.style.color = isPassword ? '#00796b' : '#182c4f';
         });
     </script>
 

@@ -188,13 +188,15 @@
             <label for="direccion">Dirección:</label>
             <input type="text" id="direccion" name="direccion" required>
 
-            <!-- Nuevo campo foto (no altera lógica existente) -->
             <div class="foto-wrapper">
                 <label for="foto">Foto:</label>
                 <input type="file" id="foto" name="foto" accept="image/*">
                 <!-- Hidden para evitar error en script existente y opcionalmente almacenar base64 -->
                 <input type="hidden" id="fotoPaciente" value="" />
             </div>
+
+            <!-- Campo oculto de correo para respaldo en localStorage -->
+            <input type="hidden" id="correoPacienteHidden" />
 
             <button id="guardarBtn">Guardar datos</button>
 
@@ -209,6 +211,16 @@
         </div>
     </div>
     <script>
+        // Precargar correo desde inicio de sesión
+        (function precargarCorreoPaciente(){
+            try {
+                const correo = localStorage.getItem('emailPaciente');
+                if (correo) {
+                    document.getElementById('correoPacienteHidden').value = correo;
+                }
+            } catch { /* ignore */ }
+        })();
+
         // Utilidad: convertir File a dataURL
         function fileToDataUrl(file) {
             return new Promise((resolve, reject) => {
@@ -278,6 +290,7 @@
             const telefono = document.getElementById("telefono").value.trim();
             const direccion = document.getElementById("direccion").value.trim();
             const fotoHidden = document.getElementById("fotoPaciente").value.trim();
+            const correoPaciente = document.getElementById('correoPacienteHidden').value.trim();
 
             let fecha;
             let valido = true;
@@ -339,8 +352,8 @@
 
                 if (respuesta.ok) {
                     alert("DATOS GUARDADOS");
-                    // Respaldo para perfil.html (por si API no está disponible)
-                    localStorage.setItem("datosPaciente", JSON.stringify({ nombre, apellido, dui, fecha, telefono, direccion }));
+                    // Respaldo para perfil.html
+                    localStorage.setItem("datosPaciente", JSON.stringify({ nombre, apellido, dui, fecha, telefono, direccion, correo: correoPaciente }));
                     const siguienteBtn = document.getElementById("siguienteBtn");
                     siguienteBtn.style.pointerEvents = "auto";
                     siguienteBtn.style.opacity = "1";

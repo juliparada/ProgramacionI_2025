@@ -221,7 +221,7 @@
         document.getElementById('formCita').addEventListener('submit', function(e){
             e.preventDefault();
             const nombre = document.getElementById('nombre').value.trim();
-            const edad = document.getElementById('edad').value.trim();
+            const edad = formatEdad(document.getElementById('edad').value.trim());
             const motivo = document.getElementById('motivo').value.trim();
             const fecha = document.getElementById('fecha').value; // ya formato yyyy-mm-dd
             const hora = document.getElementById('hora').value;
@@ -255,7 +255,13 @@
 
         flatpickr('#fecha', { locale:'es', dateFormat:'Y-m-d', disable:[d=> d.getDay()===0] });
 
-        window.addEventListener('storage', e=>{ if(e.key==='citas'){ mostrarHoras(document.getElementById('fecha').value); } });
+        window.addEventListener('storage', e => { if (e.key === 'citas') { mostrarHoras(document.getElementById('fecha').value); } });
+
+        // Helper para formatear edad (solo números) a "N Años"
+        function formatEdad(input) {
+            const n = String(input || '').match(/\d+/);
+            return n ? `${n[0]} Años` : '';
+        }
     </script>
 
 

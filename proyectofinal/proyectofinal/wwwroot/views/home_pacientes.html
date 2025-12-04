@@ -204,9 +204,9 @@
                 <span class="icon-chip">👤</span>
                 <span class="label-text">Perfil</span>
             </a>
-            <a href="servivioWhatsapp.html" title="Notificaciones WhatsApp" class="whatsapp-btn">
+            <a href="msj_Pacientes.html" title="Mensajes internos" class="mensajes-btn">
                 <span class="icon-chip">📞</span>
-                <span class="label-text">WhatsApp</span>
+                <span class="label-text">Mensajería interna</span>
             </a>
         </div>
 
@@ -323,6 +323,12 @@
             const motivo = parts.find(p => p.startsWith('Motivo:'))?.split(':')[1]?.trim() || '';
             const hora = parts.find(p => p.includes(':') && p.includes('-')) || '';
             return { nombre, edad, motivo, hora };
+        }
+
+        // Helper para formatear edad (solo números) a "N Años"
+        function formatEdad(input) {
+            const n = String(input || '').match(/\d+/);
+            return n ? `${n[0]} Años` : '';
         }
 
         let selectedDate = new Date();
@@ -443,14 +449,15 @@
                 const nuevoNombre = prompt('Editar nombre del paciente:', parsed.nombre);
                 if (nuevoNombre === null) return;
 
-                const nuevaEdad = prompt('Editar edad del paciente:', parsed.edad);
-                if (nuevaEdad === null) return;
+                const nuevaEdadRaw = prompt('Editar edad del paciente:', parsed.edad);
+                if (nuevaEdadRaw === null) return;
+                const nuevaEdad = formatEdad(nuevaEdadRaw);
 
                 const nuevoMotivo = await seleccionarMotivo('Editar motivo de la cita:', parsed.motivo);
                 if (nuevoMotivo === null) return;
 
                 citas[clave] = {
-                    valor: `${nuevoNombre.trim()} · Edad: ${nuevaEdad.trim()} · Motivo: ${nuevoMotivo.trim()} · ${parsed.hora}`
+                    valor: `${nuevoNombre.trim()} · Edad: ${nuevaEdad} · Motivo: ${nuevoMotivo.trim()} · ${parsed.hora}`
                 };
             } else {
                 if (confirm('¿Eliminar esta cita permanentemente?')) {
@@ -470,8 +477,9 @@
             );
             if (!nombre) return;
 
-            const edad = prompt(`Ingrese la edad de ${nombre.trim()}:`);
-            if (!edad) return;
+            const edadRaw = prompt(`Ingrese la edad de ${nombre.trim()}:`);
+            if (!edadRaw) return;
+            const edad = formatEdad(edadRaw);
 
             const motivo = await seleccionarMotivo(`Seleccione el motivo de la cita para ${nombre.trim()}:`);
             if (!motivo) return;
@@ -481,7 +489,7 @@
             const clave = `${fechaClave}_${dia}_${indice}`;
 
             citas[clave] = {
-                valor: `${nombre.trim()} · Edad: ${edad.trim()} · Motivo: ${motivo.trim()} · ${franjasHorarias[indice]}`
+                valor: `${nombre.trim()} · Edad: ${edad} · Motivo: ${motivo.trim()} · ${franjasHorarias[indice]}`
             };
 
             saveCitas(citas);

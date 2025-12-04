@@ -258,7 +258,7 @@
             e.preventDefault();
 
             const nombre = nombreInput.value.trim();
-            const edad = edadInput.value.trim();
+            const edad = formatEdad(edadInput.value.trim());
             const motivo = motivoInput.value.trim();
             const fecha = fechaInput.value;
             const hora = horaSelect.value;
@@ -330,6 +330,12 @@
         const motivoInput = document.getElementById('motivo');
         const fechaInput = document.getElementById('fecha');
         const horaSelect = document.getElementById('hora');
+
+        // Helper para formatear edad (solo números) a "N Años"
+        function formatEdad(input) {
+            const n = String(input || '').match(/\d+/);
+            return n ? `${n[0]} Años` : '';
+        }
     </script>
 </body>
 </html>

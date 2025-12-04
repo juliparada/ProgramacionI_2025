@@ -196,14 +196,38 @@
         <div id="estadoFoto" class="estado-foto"></div>
 
         <div class="datos">
-            <div class="fila"><span class="label">Nombre</span><span class="valor" id="val-nombre">-</span></div>
-            <div class="fila"><span class="label">Apellido</span><span class="valor" id="val-apellido">-</span></div>
-            <div class="fila"><span class="label">DUI</span><span class="valor" id="val-dui">-</span></div>
-            <div class="fila"><span class="label">Especialidad</span><span class="valor" id="val-especialidad">-</span></div>
-            <div class="fila"><span class="label">Teléfono</span><span class="valor" id="val-telefono">-</span></div>
-            <div class="fila"><span class="label">Fecha</span><span class="valor" id="val-fecha">-</span></div>
-            <div class="fila"><span class="label">Correo</span><span class="valor" id="val-correo">-</span></div>
-            <div class="fila"><span class="label">Dirección</span><span class="valor" id="val-direccion">-</span></div>
+            <div class="fila">
+                <span class="label">Nombre</span>
+                <span class="valor" id="val-nombre">-</span>
+            </div>
+            <div class="fila">
+                 <span class="label">Apellido</span>
+                 <span class="valor" id="val-apellido">-</span>
+            </div>
+            <div class="fila">
+                 <span class="label">DUI</span>
+                 <span class="valor" id="val-dui">-</span>
+            </div>
+            <div class="fila">
+                 <span class="label">Especialidad</span>
+                 <span class="valor" id="val-especialidad">-</span>
+            </div>
+            <div class="fila">
+                 <span class="label">Teléfono</span>
+                 <span class="valor" id="val-telefono">-</span>
+            </div>
+            <div class="fila">
+                 <span class="label">Fecha</span>
+                 <span class="valor" id="val-fecha">-</span>
+            </div>
+            <div class="fila">
+                  <span class="label">Correo</span>
+                  <span class="valor" id="val-correo">-</span>
+            </div>
+            <div class="fila">
+                  <span class="label">Dirección</span>
+                  <span class="valor" id="val-direccion">-</span>
+            </div>
         </div>
     </div>
 
@@ -223,21 +247,47 @@
         const estadoFoto = document.getElementById('estadoFoto');
         const idSecretaria = localStorage.getItem('idSecretaria');
 
-        async function cargarDatos() {
-            if (!idSecretaria) return;
+        function fillFromLocalStorage() {
+            try {
+                const raw = localStorage.getItem('datosAdministracion');
+                if (!raw) return false;
+                const data = JSON.parse(raw);
+                if (!data) return false;
+                campos.nombre.textContent = data.nombre || campos.nombre.textContent;
+                campos.apellido.textContent = data.apellido || campos.apellido.textContent;
+                campos.dui.textContent = data.dui || campos.dui.textContent;
+                campos.especialidad.textContent = data.especialidad || campos.especialidad.textContent;
+                campos.telefono.textContent = data.telefono || campos.telefono.textContent;
+                campos.fecha.textContent = data.fecha || campos.fecha.textContent;
+                campos.correo.textContent = data.correo || campos.correo.textContent;
+                campos.direccion.textContent = data.direccion || campos.direccion.textContent;
+                return true;
+            } catch { return false; }
+        }
 
+        async function cargarDatos() {
+            // Primero intentamos desde localStorage (Datos_administracion.html)
+            const filled = fillFromLocalStorage();
+            if (filled) {
+                // si hay foto guardada localmente, mantenerla
+                const fotoLocal = localStorage.getItem('fotoSecretaria');
+                if (fotoLocal) establecerFoto(fotoLocal);
+            }
+
+            // Si existe idSecretaria, intentamos sobre-escribir con datos del backend
+            if (!idSecretaria) return;
             try {
                 const resp = await fetch(`/api/UsuarioSecretaria/obtenerDatosSecretaria/${idSecretaria}`);
                 if (resp.ok) {
                     const data = await resp.json();
-                    campos.nombre.textContent = data.nombre || '-';
-                    campos.apellido.textContent = data.apellido || '-';
-                    campos.dui.textContent = data.dui || '-';
-                    campos.especialidad.textContent = data.especialidad || '-';
-                    campos.telefono.textContent = data.telefono || '-';
-                    campos.fecha.textContent = data.fecha || '-';
-                    campos.correo.textContent = data.correo || '-';
-                    campos.direccion.textContent = data.direccion || '-';
+                    campos.nombre.textContent = data.nombre || campos.nombre.textContent;
+                    campos.apellido.textContent = data.apellido || campos.apellido.textContent;
+                    campos.dui.textContent = data.dui || campos.dui.textContent;
+                    campos.especialidad.textContent = data.especialidad || campos.especialidad.textContent;
+                    campos.telefono.textContent = data.telefono || campos.telefono.textContent;
+                    campos.fecha.textContent = data.fecha || campos.fecha.textContent;
+                    campos.correo.textContent = data.correo || campos.correo.textContent;
+                    campos.direccion.textContent = data.direccion || campos.direccion.textContent;
 
                     if (data.fotoRuta) {
                         avatar.style.backgroundImage = `url(${data.fotoRuta})`;
