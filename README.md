@@ -22,3 +22,8 @@ Bases de datos
 10 reportes (salida de informacion o precentacion de informacion al usuario)
 Menus y accesos rapidos, barras de herramientas, cuadros de dialogo.
 Creatividad e innovacion.
+
+
+Práctica y ejercicios de Programación I
+
+Subi los últimos archivos con diferencia en las fechas ya que he estado teniendo problemas con el programa Visual Studio, ya que no estaba funcionando bien y tuve que reinstalarlo, así que no alcancé a terminar en las fechas que usted ha subido las confirmaciones. 
