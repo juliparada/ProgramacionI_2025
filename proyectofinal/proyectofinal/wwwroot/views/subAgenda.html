@@ -119,15 +119,15 @@
             <h1> 📝 </h1>
         </div>
 
-        <form id="formCita">
+        <form id="formCita" autocomplete="off">
             <label for="nombre">Nombre del paciente:</label>
-            <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
+            <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false">
 
             <label for="edad">Edad:</label>
-            <input type="text" id="edad" name="edad" placeholder="Ingrese su edad" required>
+            <input type="text" id="edad" name="edad" placeholder="Ingrese su edad" required autocomplete="off" inputmode="numeric" pattern="[0-9]*" autocapitalize="none" autocorrect="off" spellcheck="false">
 
             <label for="motivo">Motivo:</label>
-            <select id="motivo" name="motivo" required>
+            <select id="motivo" name="motivo" required autocomplete="off">
                 <option value="">Seleccione un motivo</option>
                 <option>Consulta General</option>
                 <option>Pediatría</option>
@@ -140,10 +140,10 @@
             </select>
 
             <label for="fecha">Fecha:</label>
-            <input type="text" id="fecha" name="fecha" required>
+            <input type="text" id="fecha" name="fecha" required autocomplete="off">
 
             <label for="hora">Hora:</label>
-            <select id="hora" name="hora" required>
+            <select id="hora" name="hora" required autocomplete="off">
                 <option value="">Seleccione una hora</option>
             </select>
 

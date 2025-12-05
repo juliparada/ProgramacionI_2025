@@ -170,27 +170,27 @@
             <h2>Datos Pacientes</h2>
 
             <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" required>
+            <input type="text" id="nombre" name="nombre" required autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false">
 
             <label for="apellido">Apellido:</label>
-            <input type="text" id="apellido" name="apellido" required>
+            <input type="text" id="apellido" name="apellido" required autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false">
 
             <label for="dui">DUI:</label>
-            <input type="text" id="dui" name="dui" required>
+            <input type="text" id="dui" name="dui" required autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false">
             <div id="avisoMenor">Menor de edad: campo DUI deshabilitado.</div>
 
             <label for="fecha">Fecha de Nacimiento:</label>
-            <input type="date" id="fecha" name="fecha" required>
+            <input type="date" id="fecha" name="fecha" required autocomplete="off">
 
             <label for="telefono">Teléfono:</label>
-            <input type="text" id="telefono" name="telefono" required>
+            <input type="text" id="telefono" name="telefono" required autocomplete="off">
 
             <label for="direccion">Dirección:</label>
-            <input type="text" id="direccion" name="direccion" required>
+            <input type="text" id="direccion" name="direccion" required autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false">
 
             <div class="foto-wrapper">
                 <label for="foto">Foto:</label>
-                <input type="file" id="foto" name="foto" accept="image/*">
+                <input type="file" id="foto" name="foto" accept="image/*" autocomplete="off">
                 <!-- Hidden para evitar error en script existente y opcionalmente almacenar base64 -->
                 <input type="hidden" id="fotoPaciente" value="" />
             </div>
