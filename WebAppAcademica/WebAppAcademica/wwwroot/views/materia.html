@@ -1,4 +1,15 @@
 ﻿<form id="frmMateria">
+    <style>
+        /* Entradas uniformes para formulario de materias */
+        .materia-input {
+            width: 100%;
+        }
+
+        .input-group .input-group-text, #btnBuscarMateria {
+            min-width: 110px;
+        }
+    </style>
+
     <div class="card border-secondary mb-3" style="min-width: 700px;">
         <div class="card-header">
             <div class="d-flex">
@@ -11,39 +22,61 @@
         </div>
         <div class="card-body text-secondary">
             <div class="row p-1">
-                <div class="col-3 col-md-2">CODIGO</div>
-                <div class="col-9 col-md-4">
-                    <input required type="text" class="form-control" id="txtCodigoMateria" name="txtCodigoMateria" />
+                <div class="col-12 col-md-2">CODIGO</div>
+                <div class="col-12 col-md-8">
+                    <input required type="text" class="form-control materia-input" id="txtCodigoMateria" name="txtCodigoMateria" />
                 </div>
             </div>
             <div class="row p-1">
-                <div class="col-3 col-md-2">NOMBRE</div>
-                <div class="col-9 col-md-8">
-                    <input required type="text" class="form-control" id="txtNombreMateria" name="txtNombreMateria" />
+                <div class="col-12 col-md-2">NOMBRE</div>
+                <div class="col-12 col-md-8">
+                    <input required type="text" class="form-control materia-input" id="txtNombreMateria" name="txtNombreMateria" />
                 </div>
             </div>
             <div class="row p-1">
-                <div class="col-3 col-md-2">UV</div>
-                <div class="col-9 col-md-10">
-                    <input required type="text" class="form-control" id="txtUvMateria" name="txtUvMateria" />
+                <div class="col-12 col-md-2">UV</div>
+                <div class="col-12 col-md-8">
+                    <input required type="text" class="form-control materia-input" id="txtUvMateria" name="txtUvMateria" />
                 </div>
             </div>
             <div class="row p-1">
                 <div class="col-12 text-center">
                     <input type="submit" class="btn btn-outline-primary" value="Guardar" />
                     <input type="reset" class="btn btn-outline-warning" value="Nuevo" />
-                    <input type="button" class="btn btn-outline-success" value="Buscar" onclick="abrirVentana('busqueda_materia')" />
+                    <button type="button" id="btnBuscarMateria" class="btn btn-outline-success">Buscar</button>
                 </div>
             </div>
         </div>
     </div>
 </form>
-<script>var accion = 'nuevo',
+<script>
+    var accion = 'nuevo',
         idMateria = 0;
-    frmMateria.addEventListener('submit', e => {
+    const frm = document.getElementById('frmMateria');
+    const btnBuscar = document.getElementById('btnBuscarMateria');
+
+    // Aseguramos variable global usada por la búsqueda
+    window.formActivo = window.formActivo || '';
+
+    frm.addEventListener('submit', e => {
         e.preventDefault();
         guardarMateria();
     });
+    frm.addEventListener('reset', e => {
+        e.preventDefault();
+        limpiarDatosMateria();
+    });
+
+    // Evento del botón Buscar (consistente con alumno/docente)
+    btnBuscar.addEventListener('click', () => {
+        window.formActivo = 'materia';
+        if (typeof abrirVentana === 'function') {
+            abrirVentana('busqueda_materia');
+        } else {
+            console.error('abrirVentana no está disponible en el scope global.');
+        }
+    });
+
     async function guardarMateria() {
         let datos = {
             codigo: txtCodigoMateria.value,
@@ -66,7 +99,7 @@
         }), materia = await respuesta.json();
         if ((materia?.idMateria || 0) > 0) {
             limpiarDatosMateria();
-            listarMaterias(txtBuscarMateria.value || '');
+            listarMaterias(txtBuscarMateria?.value || '');
         }
     }
     function limpiarDatosMateria() {
@@ -82,4 +115,5 @@
         txtCodigoMateria.value = materia.codigo;
         txtNombreMateria.value = materia.nombre;
         txtUvMateria.value = materia.uv;
-    }</script>
+    }
+</script>

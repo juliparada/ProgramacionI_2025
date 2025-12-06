@@ -1,4 +1,15 @@
 ﻿<form id="frmPeriodo">
+    <style>
+        /* Entradas uniformes para formulario de periodos */
+        .periodo-input {
+            width: 100%;
+        }
+
+        .input-group .input-group-text, #btnBuscarPeriodo {
+            min-width: 110px;
+        }
+    </style>
+
     <div class="card border-secondary mb-3" style="min-width: 700px;">
         <div class="card-header">
             <div class="d-flex">
@@ -11,15 +22,15 @@
         </div>
         <div class="card-body text-secondary">
             <div class="row p-1">
-                <div class="col-3 col-md-2">FECHA</div>
-                <div class="col-9 col-md-4">
-                    <input required type="date" class="form-control" id="txtFechaPeriodo" name="txtFechaPeriodo" />
+                <div class="col-12 col-md-2">FECHA</div>
+                <div class="col-12 col-md-8">
+                    <input required type="date" class="form-control periodo-input" id="txtFechaPeriodo" name="txtFechaPeriodo" />
                 </div>
             </div>
             <div class="row p-1">
-                <div class="col-3 col-md-2">PERIODO</div>
-                <div class="col-9 col-md-8">
-                    <select class="form-control" id="cboPeriodo" name="cboPeriodo">
+                <div class="col-12 col-md-2">PERIODO</div>
+                <div class="col-12 col-md-8">
+                    <select class="form-control periodo-input" id="cboPeriodo" name="cboPeriodo">
                         <option value="ciclo i">Ciclo I</option>
                         <option value="ciclo ii">Ciclo II</option>
                     </select>
@@ -29,18 +40,41 @@
                 <div class="col-12 text-center">
                     <input type="submit" class="btn btn-outline-primary" value="Guardar" />
                     <input type="reset" class="btn btn-outline-warning" value="Nuevo" />
-                    <input type="button" class="btn btn-outline-success" value="Buscar" onclick="abrirVentana('busqueda_periodo')" />
+                    <button type="button" id="btnBuscarPeriodo" class="btn btn-outline-success">Buscar</button>
                 </div>
             </div>
         </div>
     </div>
 </form>
-<script>var accion = 'nuevo',
+<script>
+    var accion = 'nuevo',
         idPeriodo = 0;
-    frmPeriodo.addEventListener('submit', e => {
+
+    const frm = document.getElementById('frmPeriodo');
+    const btnBuscarPeriodo = document.getElementById('btnBuscarPeriodo');
+
+    // Aseguramos variable global usada por la búsqueda
+    window.formActivo = window.formActivo || '';
+
+    frm.addEventListener('submit', e => {
         e.preventDefault();
         guardarPeriodo();
     });
+    frm.addEventListener('reset', e => {
+        e.preventDefault();
+        limpiarDatosPeriodo();
+    });
+
+    // Evento del botón Buscar (consistente con otras vistas)
+    btnBuscarPeriodo.addEventListener('click', () => {
+        window.formActivo = 'periodo';
+        if (typeof abrirVentana === 'function') {
+            abrirVentana('busqueda_periodo');
+        } else {
+            console.error('abrirVentana no está disponible en el scope global.');
+        }
+    });
+
     async function guardarPeriodo() {
         let datos = {
             fecha: txtFechaPeriodo.value,
@@ -62,7 +96,7 @@
         }), periodo = await respuesta.json();
         if ((periodo?.idPeriodo || 0) > 0) {
             limpiarDatosPeriodo();
-            listarPeriodos(txtBuscarPeriodo.value || '');
+            listarPeriodos(txtBuscarPeriodo?.value || '');
         }
     }
     function limpiarDatosPeriodo() {
@@ -74,6 +108,12 @@
     function modificarPeriodo(periodo) {
         accion = "modificar";
         idPeriodo = periodo.idPeriodo;
-        txtFechaPeriodo.value = periodo.fecha;
-        cboPeriodo.value = periodo.periodo;
-    }</script>
+        // si periodo.fecha viene en ISO, asignar yyyy-MM-dd
+        try {
+            txtFechaPeriodo.value = new Date(periodo.fecha).toISOString().split('T')[0];
+        } catch (e) {
+            txtFechaPeriodo.value = periodo.fecha || "";
+        }
+        cboPeriodo.value = periodo.periodo || "ciclo i";
+    }
+</script>

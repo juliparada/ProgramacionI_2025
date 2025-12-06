@@ -1,34 +1,46 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+
 using WebAppAcademica.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Servicios
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
+// Configura MyDbContext (ajusta la cadena en appsettings.json)
 builder.Services.AddDbContext<MyDbContext>(options =>
-       options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Swagger solo en desarrollo
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseStaticFiles();
+// Forzar HTTPS primero (recomendado)
 app.UseHttpsRedirection();
+
+// Servir index.html por defecto y archivos estáticos desde wwwroot
+var defaultFilesOptions = new DefaultFilesOptions();
+defaultFilesOptions.DefaultFileNames.Clear();
+defaultFilesOptions.DefaultFileNames.Add("index.html");
+app.UseDefaultFiles(defaultFilesOptions);
+app.UseStaticFiles();
+
+app.UseRouting();
 
 app.UseAuthorization();
 
+// Endpoints de API
 app.MapControllers();
+
+// Fallback para SPA: cualquier ruta no manejada devuelve index.html
+app.MapFallbackToFile("index.html");
 
 app.Run();

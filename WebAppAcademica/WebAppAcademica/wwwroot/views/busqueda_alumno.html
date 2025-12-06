@@ -30,53 +30,72 @@
         </div>
     </div>
 </form>
-<script>listarAlumnos();
+<script>
+    // Arranca la lista
+    listarAlumnos();
 
+    // Búsqueda en tiempo real
     txtBuscarAlumno.addEventListener('keyup', e => {
         listarAlumnos(txtBuscarAlumno.value);
     });
 
-
+    // Lista alumnos (usa la función común)
     async function listarAlumnos(buscar = '') {
-        const respuesta = await fetch(`/api/Alumnos/buscar?buscar=${buscar}`, {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }), alumnos = await respuesta.json();
+        const alumnos = await obtenerAlumnos(buscar);
         let filas = '';
-        let alumnos = await obtenerAlumnos(buscar),
-            filas = '';
+
         alumnos.forEach(alumno => {
             filas += `
-                <tr onClick='modificarAlumno(${JSON.stringify(alumno)})'>
-                    <td>${alumno.codigo}</td>
-                    <td>${alumno.nombre}</td>
-                    <td>${alumno.direccion}</td>
-                    <td>${alumno.telefono}</td>
-                    <td><button type="button" class="btn btn-outline-danger btn-sm" onClick='eliminarAlumno(${JSON.stringify(alumno)}, event)'>DEL</button>
+                <tr>
+                    <td>${alumno.codigo ?? ''}</td>
+                    <td>${alumno.nombre ?? ''}</td>
+                    <td>${alumno.direccion ?? ''}</td>
+                    <td>${alumno.telefono ?? ''}</td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-primary" onClick='seleccionarAlumno(${JSON.stringify(alumno)})'>OK</button>
+                        <button type="button" class="btn btn-outline-danger btn-sm" onClick='eliminarAlumno(${JSON.stringify(alumno)}, event)'>DEL</button>
+                    </td>
                 </tr>
             `;
         });
         document.querySelector("#tblConsultaAlumnos > tbody").innerHTML = filas;
     }
 
-
-
-    async function eliminarAlumno(alumno, event) {
+    async function eliminarAlumno(alumno, event)
+    {
         event.preventDefault();
-
-        if (confirm(`Esta seguro de eliminar a ${alumno.nombre.trim()}?`) ) {
-            const respuesta = await fetch(`/api/Alumnos/${alumno.idAlumno}`, {
-                method: 'DELETE',
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            }), data = await respuesta.text();
-            if (data && data.length > 0) {
-                alert(`Error, nose pudo eliminar el alumno ${alumno.nombre}, error: ${data}`);
+        if (!confirm(`Está seguro de eliminar a ${alumno.nombre?.trim() || ''}?`)) return;
+        try {
+            const resp = await fetch(`/api/Alumnos/${alumno.idAlumno}`, { method: 'DELETE' });
+            if (!resp.ok) {
+                const txt = await resp.text();
+                alert(`Error al eliminar: ${txt}`);
                 return;
             }
-            listarAlumnos();
+            listarAlumnos(txtBuscarAlumno.value || '');
+        } catch (err) {
+            console.error('eliminarAlumno error:', err);
+            alert('Error de conexión');
         }
-    }</script>
+    }
+
+    // Selección centralizada: respeta formActivo
+    function seleccionarAlumno(alumno) {
+        // Si el formulario activo es la matricula, rellenamos el campo correspondiente
+        if (window.formActivo === 'matricula') {
+            // Si existe el control en la vista de matricula lo rellenamos
+            if (typeof txtAlumnoMatricula !== 'undefined') {
+                txtAlumnoMatricula.value = alumno.nombre ?? '';
+            }
+        } else {
+            // Si estamos en el formulario alumno, usamos la función modificarAlumno si existe
+            if (typeof modificarAlumno === 'function') {
+                modificarAlumno(alumno);
+            }
+
+        }
+        // Ocultamos la ventana de búsqueda
+        const el = document.getElementById('busqueda_alumno');
+        if (el) el.style.display = 'none';
+    }
+</script>

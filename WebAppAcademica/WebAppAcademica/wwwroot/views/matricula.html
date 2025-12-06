@@ -1,4 +1,15 @@
 ﻿<form id="frmMatricula">
+    <style>
+        /* Entradas uniformes para formulario de matrículas */
+        .matricula-input {
+            width: 100%;
+        }
+
+        .input-group .input-group-text, #btnBuscarAlumnoMatricula, #btnBuscarMatricula {
+            min-width: 110px;
+        }
+    </style>
+
     <div class="card border-secondary mb-3" style="min-width: 700px;">
         <div class="card-header">
             <div class="d-flex">
@@ -10,31 +21,36 @@
             </div>
         </div>
         <div class="card-body text-secondary">
-            <div class="row p-1">
-                <div class="col-3 col-md-2">ALUMNO:</div>
-                <div class="col-9 col-md-4">
-                    <input list="dlsAlumnos" autocomplete="off" type="text" class="form-control" id="txtAlumnoMatricula" name="txtAlumnoMatricula" />
+            <div class="row p-1 align-items-center">
+                <div class="col-12 col-md-2">ALUMNO:</div>
+                <div class="col-12 col-md-8">
+                    <input list="dlsAlumnos" required autocomplete="off" type="text" class="form-control matricula-input" id="txtAlumnoMatricula" name="txtAlumnoMatricula" />
                     <datalist id="dlsAlumnos"></datalist>
+                </div>
+                <div class="col-12 col-md-2 text-center">
+                    <button type="button" id="btnBuscarAlumnoMatricula" class="btn btn-outline-secondary" title="Buscar Alumno">
+                        <span class="material-symbols-outlined">person_search</span>
+                    </button>
                 </div>
             </div>
             <div class="row p-1">
-                <div class="col-3 col-md-2">PERIODO:</div>
-                <div class="col-9 col-md-4">
-                    <input list="dlsPeriodos" autocomplete="off" type="text" class="form-control" id="txtPeriodoMatricula" name="txtPeriodoMatricula" />
+                <div class="col-12 col-md-2">PERIODO:</div>
+                <div class="col-12 col-md-8">
+                    <input list="dlsPeriodos" required autocomplete="off" type="text" class="form-control matricula-input" id="txtPeriodoMatricula" name="txtPeriodoMatricula" />
                     <datalist id="dlsPeriodos"></datalist>
                 </div>
             </div>
             <div class="row p-1">
-                <div class="col-3 col-md-2">FECHA</div>
-                <div class="col-9 col-md-4">
-                    <input required type="date" class="form-control" id="txtFechaMatricula" name="txtFechaMatricula" />
+                <div class="col-12 col-md-2">FECHA</div>
+                <div class="col-12 col-md-8">
+                    <input required type="date" class="form-control matricula-input" id="txtFechaMatricula" name="txtFechaMatricula" />
                 </div>
             </div>
             <div class="row p-1">
                 <div class="col-12 text-center">
                     <input type="submit" class="btn btn-outline-primary" value="Guardar" />
                     <input type="reset" class="btn btn-outline-warning" value="Nuevo" />
-                    <input type="button" class="btn btn-outline-success" value="Buscar" onclick="abrirVentana('busqueda_matricula')" />
+                    <button type="button" id="btnBuscarMatricula" class="btn btn-outline-success">Buscar</button>
                 </div>
             </div>
         </div>
@@ -43,12 +59,40 @@
 <script>
     var accion = 'nuevo',
         idMatricula = 0;
-    frmMatricula.addEventListener('submit', e => {
+
+    const frm = document.getElementById('frmMatricula');
+    const btnBuscarAlumno = document.getElementById('btnBuscarAlumnoMatricula');
+    const btnBuscarMatricula = document.getElementById('btnBuscarMatricula');
+
+    frm.addEventListener('submit', e => {
         e.preventDefault();
         guardarMatricula();
     });
+    frm.addEventListener('reset', e => {
+        e.preventDefault();
+        limpiarDatosMatricula();
+    });
+
+    // Inicializaciones
     mostrarAlumnosMatricula();
     mostrarPeriodosMatricula();
+
+    // Eventos de búsqueda
+    btnBuscarAlumno.addEventListener('click', () => {
+        window.formActivo = 'matricula';
+        if (typeof abrirVentana === 'function') {
+            abrirVentana('busqueda_alumno');
+        } else {
+            console.error('abrirVentana no está disponible en el scope global.');
+        }
+    });
+    btnBuscarMatricula.addEventListener('click', () => {
+        if (typeof abrirVentana === 'function') {
+            abrirVentana('busqueda_matricula');
+        } else {
+            console.error('abrirVentana no está disponible en el scope global.');
+        }
+    });
 
     async function mostrarAlumnosMatricula() {
         let alumnos = await obtenerAlumnos(),
@@ -81,6 +125,14 @@
         },
             url = 'https://localhost:7254/api/Matriculas',
             method = 'POST';
+        if (datos.idAlumno <= 0) {
+            alertify.error("Por favor seleccione el alumno a matricular");
+            return;
+        }
+        if (datos.idPeriodo <= 0) {
+            alertify.error("Por favor seleccione el periodo en el cual se ha de matricular");
+            return;
+        }
         if (accion == "modificar") {
             method = 'PUT';
             url = `https://localhost:7254/api/Matriculas/${idMatricula}`;
@@ -95,7 +147,7 @@
         }), matricula = await respuesta.json();
         if ((matricula?.idMatricula || 0) > 0) {
             limpiarDatosMatricula();
-            listarMatriculas(txtBuscarMatricula.value || '');
+            listarMatriculas(txtBuscarMatricula?.value || '');
         }
     }
     function limpiarDatosMatricula() {
@@ -108,8 +160,10 @@
     function modificarMatricula(matricula) {
         accion = "modificar";
         idMatricula = matricula.idMatricula;
-        txtFechaMatricula.value = new Date(matricula.fecha).toLocaleDateString("en-GB").split("/").reverse().join("-");
-        txtAlumnoMatricula.value = matricula.alumno.trim();
-        txtPeriodoMatricula.value = matricula.periodo.trim();
+        // fecha en formato yyyy-MM-dd
+        txtFechaMatricula.value = new Date(matricula.fecha).toISOString().split('T')[0];
+        // soporta estructura matricula.alumno.nombre o string plano
+        txtAlumnoMatricula.value = matricula.alumno?.nombre?.trim() || `${matricula.alumno}`.trim() || '';
+        txtPeriodoMatricula.value = matricula.periodo?.periodo?.trim() || `${matricula.periodo}`.trim() || '';
     }
 </script>

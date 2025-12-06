@@ -1,4 +1,15 @@
 ﻿<form id="frmAlumno">
+    <style>
+        /* Entradas uniformes para formulario de alumnos */
+        .alumno-input {
+            width: 100%;
+        }
+
+        .input-group .input-group-text, #btnBuscarAlumno {
+            min-width: 110px;
+        }
+    </style>
+
     <div class="card border-secondary mb-3" style="min-width: 700px;">
         <div class="card-header">
             <div class="d-flex">
@@ -11,34 +22,34 @@
         </div>
         <div class="card-body text-secondary">
             <div class="row p-1">
-                <div class="col-3 col-md-2">CODIGO</div>
-                <div class="col-9 col-md-4">
-                    <input required type="text" class="form-control" id="txtCodigoAlumno" name="txtCodigoAlumno" />
+                <div class="col-12 col-md-2">CODIGO</div>
+                <div class="col-12 col-md-8">
+                    <input required type="text" class="form-control alumno-input" id="txtCodigoAlumno" name="txtCodigoAlumno" />
                 </div>
             </div>
             <div class="row p-1">
-                <div class="col-3 col-md-2">NOMBRE</div>
-                <div class="col-9 col-md-8">
-                    <input required type="text" class="form-control" id="txtNombreAlumno" name="txtNombreAlumno" />
+                <div class="col-12 col-md-2">NOMBRE</div>
+                <div class="col-12 col-md-8">
+                    <input required type="text" class="form-control alumno-input" id="txtNombreAlumno" name="txtNombreAlumno" />
                 </div>
             </div>
             <div class="row p-1">
-                <div class="col-3 col-md-2">DIRECCION</div>
-                <div class="col-9 col-md-10">
-                    <input required type="text" class="form-control" id="txtDireccionAlumno" name="txtDireccionAlumno" />
+                <div class="col-12 col-md-2">DIRECCION</div>
+                <div class="col-12 col-md-8">
+                    <input required type="text" class="form-control alumno-input" id="txtDireccionAlumno" name="txtDireccionAlumno" />
                 </div>
             </div>
             <div class="row p-1">
-                <div class="col-3 col-md-2">TELEFONO</div>
-                <div class="col-9 col-md-4">
-                    <input type="text" class="form-control" id="txtTelefonoAlumno" name="txtTelefonoAlumno" />
+                <div class="col-12 col-md-2">TELEFONO</div>
+                <div class="col-12 col-md-8">
+                    <input type="text" class="form-control alumno-input" id="txtTelefonoAlumno" name="txtTelefonoAlumno" />
                 </div>
             </div>
             <div class="row p-1">
                 <div class="col-12 text-center">
                     <input type="submit" class="btn btn-outline-primary" value="Guardar" />
                     <input type="reset" class="btn btn-outline-warning" value="Nuevo" />
-                    <input type="button" class="btn btn-outline-success" value="Buscar" onclick="abrirVentana('busqueda_alumno')" />
+                    <button type="button" id="btnBuscarAlumno" class="btn btn-outline-success">Buscar</button>
                 </div>
             </div>
         </div>
@@ -46,12 +57,35 @@
 </form>
 
 <script>
+    // Variables locales y referencias al DOM
     var accion = 'nuevo',
         idAlumno = 0;
-    frmAlumno.addEventListener('submit', e => {
+    const frm = document.getElementById('frmAlumno');
+    const btnBuscar = document.getElementById('btnBuscarAlumno');
+
+    // Aseguramos una variable global para indicar el formulario activo si la usa tu app
+    window.formActivo = window.formActivo || '';
+
+    // Eventos del formulario
+    frm.addEventListener('submit', e => {
         e.preventDefault();
         guardarAlumno();
     });
+    frm.addEventListener('reset', e => {
+        e.preventDefault();
+        limpiarDatosAlumno();
+    });
+
+    // Evento del botón Buscar (uso consistente con docente.html)
+    btnBuscar.addEventListener('click', () => {
+        window.formActivo = 'alumno';
+        if (typeof abrirVentana === 'function') {
+            abrirVentana('busqueda_alumno');
+        } else {
+            console.error('abrirVentana no está disponible en el scope global.');
+        }
+    });
+
     async function guardarAlumno() {
         let datos = {
             codigo: txtCodigoAlumno.value,
